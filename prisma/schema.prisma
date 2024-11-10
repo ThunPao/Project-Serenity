@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String         @unique
+  email         String?        @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  agentIp       String?
+  createdAt     DateTime?      @default(now())
+  UserInfo      UserInfo?      @relation(fields: [userInfoId], references: [id])
+  userInfoId    Int?
+  TopupHistory  TopupHistory[]
+}
+
+model UserInfo {
+  id            Int             @id @default(autoincrement())
+  playerName    String          @unique
+  points        Int             @default(0)
+  coins         Int             @default(0)
+  isBanned      Boolean         @default(false)
+  User          User[]
+  ShopHistory   ShopHistory[]
+  RedeemHistory RedeemHistory[]
+}
+
+model ShopItems {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String?
+  imageUrl    String
+  price       Int            @default(0)
+  saleCount   Int            @default(0)
+  startDate   DateTime?
+  expireDate  DateTime?
+  createdAt   DateTime       @default(now())
+  catty       ShopCategories @relation(fields: [catId], references: [id], onDelete: Cascade)
+  catId       Int
+  isActive    Boolean        @default(false)
+}
+
+model ShopCategories {
+  id       Int         @id @default(autoincrement())
+  title    String
+  isActive Boolean     @default(true)
+  shopItem ShopItems[]
+}
+
+model ShopHistory {
+  id        Int      @id @default(autoincrement())
+  title     String
+  points    Int
+  email     String?
+  createdAt DateTime @default(now())
+  UserInfo  UserInfo @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+}
+
+model TopupRating {
+  id        Int       @id @default(autoincrement())
+  price     Int
+  points    Int
+  isActive  Boolean   @default(true)
+}
+
+model TopupHistory {
+  id          Int      @id @default(autoincrement())
+  topupAmount Int
+  createdAt   DateTime @default(now())
+  userId      String
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RedeemCoupons {
+  id            Int             @id @default(autoincrement())
+  title         String
+  redeemCode    String          @unique
+  rewardPoint   Int?
+  rewardCommand String?
+  redeemCount   Int             @default(0)
+  useLimits     Int?
+  startDate     DateTime?
+  expireDate    DateTime?
+  isActive      Boolean         @default(false)
+  RedeemHistory RedeemHistory[]
+}
+
+model RedeemHistory {
+  id        Int           @id @default(autoincrement())
+  couponId  Int
+  Coupon    RedeemCoupons @relation(fields: [couponId], references: [id])
+  createdAt DateTime      @default(now())
+  UserInfo  UserInfo      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+}
