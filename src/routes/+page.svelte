@@ -1,42 +1,71 @@
 <script lang="ts">
-	export let data;
-</script>
+	import { goto } from '$app/navigation';
+	import ActionCard from '$lib/Widgets/ActionCard.svelte';
+	import { onMount } from 'svelte';
 
+	let { data } = $props();
+	let curVert = $state(0);
+	function handleScroll() {
+		curVert = window.scrollY;
+	}
+	onMount(() => {
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
+	});
+</script>
 <!-- Content -->
-<div class="container mx-auto border-2 p-3 py-10">
+<div class="container mx-auto p-2 py-10">
 	<div class="space-y-2">
-		<div class="xl:flex gap-4">
-			<img
-				class="border-br-2 max-w-screen-lg rounded-md border-primary-500"
-				src="/background/bg.webp"
-				alt=""
-				draggable="false"
-			/>
-			<div class="flex xl:grid items-center justify-center gap-2">
-				{#each [1, 2, 3] as row}
-					<button disabled class="btn h-full w-96 min-h-32 bg-surface-500 text-center shadow-md">
-						<div
-							class="flex h-full items-center justify-center font-bold text-white"
-						>
-							CONTENT
+		<div class="gap-4 space-y-2 xl:flex">
+			<div class="relative">
+				<img
+					class="border-br-2 rounded-md border-primary-500 max-w-screen-lg duration-200"
+					class:max-w-screen-md={curVert > 30}
+					src="/background/bg.webp"
+					alt=""
+					width="1024"
+					height="500"
+					draggable="false"
+				/>
+				<div
+					class="z-1 absolute bottom-0 w-full rounded-b-lg bg-gradient-to-t from-surface-600 from-40% to-transparent text-white"
+				>
+					<div class="p-2 pl-4">
+						<div class="text-2xl font-semibold">Example</div>
+						<div class="italic">
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, necessitatibus.
+{curVert}
+
 						</div>
-					</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="flex items-center justify-center gap-2 xl:grid">
+				{#each [1, 2, 3] as row}
+					<ActionCard text={row} />
 				{/each}
 			</div>
 		</div>
 		<div class="container mx-auto space-y-4">
-			<div class="p-2">ค้นหา</div>
-			<div class="grid justify-center gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+			<div class="p-2"></div>
+
+			<div class="grid justify-center gap-4 pb-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
 				{#each data.colla as row}
-					<a href={'/view/' + row.catId} class="card-hover rounded-lg shadow-md">
+					<button onclick={() => goto('/view/' + row.id)} class="card-hover rounded-lg">
 						<div class="card-header">
-							<img draggable="false" class="w-96" src={'/items/' + row.imageUrl} alt="1" />
+							<img
+								draggable="false"
+								class="w-96 duration-100 active:scale-105"
+								src={'/items/' + row.imageUrl}
+								alt="1"
+							/>
 						</div>
-						<div class="flex justify-between p-4 card-footer text-surface-400">
+						<div class="card-footer flex justify-between p-4 text-surface-400">
 							<div>Title</div>
 							<div>Content</div>
 						</div>
-					</a>
+					</button>
 				{/each}
 			</div>
 		</div>
