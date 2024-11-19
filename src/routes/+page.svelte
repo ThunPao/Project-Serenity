@@ -13,14 +13,15 @@
 		return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
 	});
 </script>
+
 <!-- Content -->
 <div class="container mx-auto p-2 py-10">
 	<div class="space-y-2">
-		<div class="gap-4 space-y-2 xl:flex">
+		<div class="justify-center gap-4 space-y-2 xl:flex">
 			<div class="relative">
+				<!-- class:lg:max-w-screen-md={curVert > 30} -->
 				<img
-					class="border-br-2 rounded-md border-primary-500 max-w-screen-lg duration-200"
-					class:max-w-screen-md={curVert > 30}
+					class="border-br-2 rounded-md border-primary-500 duration-100 lg:max-w-screen-md"
 					src="/background/bg.webp"
 					alt=""
 					width="1024"
@@ -34,39 +35,70 @@
 						<div class="text-2xl font-semibold">Example</div>
 						<div class="italic">
 							Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, necessitatibus.
-{curVert}
-
+							{curVert}
 						</div>
 					</div>
 				</div>
 			</div>
 
 			<div class="flex items-center justify-center gap-2 xl:grid">
-				{#each [1, 2, 3] as row}
+				{#each [1, 2] as row}
 					<ActionCard text={row} />
 				{/each}
 			</div>
 		</div>
 		<div class="container mx-auto space-y-4">
 			<div class="p-2"></div>
-
-			<div class="grid justify-center gap-4 pb-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+			<!-- <div class="alert flex justify-center text-2xl">สินค้ายอดนิยม</div>
+			<div
+				class="grid grid-cols-6 p-2 lg:p-10 bg-white bg-opacity-80 pb-10 dark:bg-opacity-10 lg:rounded-full"
+			>
 				{#each data.colla as row}
-					<button onclick={() => goto('/view/' + row.id)} class="card-hover rounded-lg">
-						<div class="card-header">
+					<button
+						onclick={() => goto('/view/' + row.id)}
+						class="col-span-2 rounded-lg hover:scale-[101%] lg:col-span-2"
+					>
+						<div class="card-header flex justify-center">
 							<img
 								draggable="false"
-								class="w-96 duration-100 active:scale-105"
+								class="w-64 duration-100 active:scale-105"
 								src={'/items/' + row.imageUrl}
 								alt="1"
 							/>
 						</div>
-						<div class="card-footer flex justify-between p-4 text-surface-400">
-							<div>Title</div>
-							<div>Content</div>
+						<div class="card-footer grid justify-center p-4 text-surface-400">
+							<div>{row.title}</div>
+							<div class="text-surface-400">{row.price}$</div>
 						</div>
 					</button>
 				{/each}
+			</div> -->
+			<div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div>
+			<div class="grid grid-cols-4">
+				<div class="col-span-3">
+					<div class="grid grid-cols-6 justify-center gap-4 pb-10">
+						{#each data.colla as row}
+							<button
+								onclick={() => goto('/view/' + row.id)}
+								class="col-span-3 rounded-lg hover:scale-[101%] lg:col-span-1"
+							>
+								<div class="card-header">
+									<img
+										draggable="false"
+										class="w-96 duration-100 active:scale-105"
+										src={'/items/' + row.imageUrl}
+										alt="1"
+									/>
+								</div>
+								<div class="card-footer grid justify-center p-4 text-surface-400">
+									<div>{row.title}</div>
+									<div class="text-surface-400">{row.price}$</div>
+								</div>
+							</button>
+						{/each}
+					</div>
+				</div>
+				<div class="grid-cols-2">Content</div>
 			</div>
 		</div>
 	</div>

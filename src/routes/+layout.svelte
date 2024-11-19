@@ -5,7 +5,7 @@
 	let { children } = $props();
 </script>
 
-<main data-theme="julia" class="bg-surface-50-900-token select-none">
+<main data-theme="julia" class="bg-surface-50-900-token select-none font-custom">
 	<NavTop />
 	{@render children()}
 	<!-- <FooterBar/> -->

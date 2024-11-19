@@ -14,6 +14,13 @@ const config = {
       '../**/*.{html,js,svelte,ts}'
     )
   ],
+  theme:{
+    extend: {
+			fontFamily: {
+				custom: ["'Noto Sans Thai'", 'serif']
+			}
+		}
+  },
   plugins: [
     skeleton({
       themes: {
