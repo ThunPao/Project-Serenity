@@ -2,8 +2,9 @@
 	import { goto } from '$app/navigation';
 	import ActionCard from '$lib/Widgets/ActionCard.svelte';
 	import { onMount } from 'svelte';
-
+	import Icon from '@iconify/svelte';
 	let { data } = $props();
+	// console.log(data)
 	let curVert = $state(0);
 	function handleScroll() {
 		curVert = window.scrollY;
@@ -15,13 +16,15 @@
 </script>
 
 <!-- Content -->
-<div class="container mx-auto p-2 py-10">
+<div class="container mx-auto p-2 lg:py-10">
 	<div class="space-y-2">
 		<div class="justify-center gap-4 space-y-2 xl:flex">
-			<div class="relative">
-				<!-- class:lg:max-w-screen-md={curVert > 30} -->
+			<div class="relative duration-300 max-w-screen-lg"
+			class:max-w-screen-md={curVert > 30}
+			
+			>
 				<img
-					class="border-br-2 rounded-md border-primary-500 duration-100 lg:max-w-screen-md"
+					class="border-br-2 rounded-md border-primary-500"
 					src="/background/bg.webp"
 					alt=""
 					width="1024"
@@ -42,7 +45,7 @@
 			</div>
 
 			<div class="flex items-center justify-center gap-2 xl:grid">
-				{#each [1, 2] as row}
+				{#each [1, 2,3] as row}
 					<ActionCard text={row} />
 				{/each}
 			</div>
@@ -74,8 +77,10 @@
 				{/each}
 			</div> -->
 			<div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div>
-			<div class="grid grid-cols-4">
-				<div class="col-span-3">
+			<div class="grid grid-cols-4 gap-4">
+				<div
+					class="order-2 col-span-full rounded-xl card bg-white lg:order-1 lg:col-span-3 p-3"
+				>
 					<div class="grid grid-cols-6 justify-center gap-4 pb-10">
 						{#each data.colla as row}
 							<button
@@ -83,10 +88,12 @@
 								class="col-span-3 rounded-lg hover:scale-[101%] lg:col-span-1"
 							>
 								<div class="card-header">
+									<!-- src={'/items/' + row.imageUrl} -->
+
 									<img
+										src={row.imageUrl}
 										draggable="false"
 										class="w-96 duration-100 active:scale-105"
-										src={'/items/' + row.imageUrl}
 										alt="1"
 									/>
 								</div>
@@ -98,7 +105,21 @@
 						{/each}
 					</div>
 				</div>
-				<div class="grid-cols-2">Content</div>
+				<div class="order-1 lg:order-2 col-span-full lg:col-span-1">
+					<div class="card bg-white p-3 dark:text-white">
+						<div class="text-2xl font-semibold p-5">Menu</div>
+						<nav class="list-nav">
+							<ul>
+								<li>
+									<a href="/">
+										<Icon icon="lucide:house" width="1.2em" height="1.2em" />
+										<span class="flex-auto">หน้าหลัก</span>
+									</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

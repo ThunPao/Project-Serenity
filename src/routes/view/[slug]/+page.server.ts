@@ -11,8 +11,14 @@ export const load: PageServerLoad = async (req) => {
     const data = await db.shopItems.findFirst({
         where: {
             id: Number(slug)
+        },
+        select: {
+            // id: true,
+            title: true,
+            imageUrl: true
         }
     })
+    if (!data) return error(404, "ไม่พบสินค้า")
     if (!slug) return error(404, "ไม่พบสินค้า")
-    return { data, slug }
+    return { colla: data, slug }
 }
