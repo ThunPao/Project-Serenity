@@ -19,10 +19,7 @@
 <div class="container mx-auto p-2 lg:py-10">
 	<div class="space-y-2">
 		<div class="justify-center gap-4 space-y-2 xl:flex">
-			<div class="relative duration-300 max-w-screen-lg"
-			class:max-w-screen-md={curVert > 30}
-			
-			>
+			<div class="relative max-w-screen-lg duration-300" class:max-w-screen-md={curVert > 30}>
 				<img
 					class="border-br-2 rounded-md border-primary-500"
 					src="/background/bg.webp"
@@ -45,7 +42,7 @@
 			</div>
 
 			<div class="flex items-center justify-center gap-2 xl:grid">
-				{#each [1, 2,3] as row}
+				{#each [1, 2, 3] as row}
 					<ActionCard text={row} />
 				{/each}
 			</div>
@@ -78,9 +75,7 @@
 			</div> -->
 			<div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div>
 			<div class="grid grid-cols-4 gap-4">
-				<div
-					class="order-2 col-span-full rounded-xl card bg-white lg:order-1 lg:col-span-3 p-3"
-				>
+				<div class="card order-2 col-span-full rounded-xl bg-white p-3 lg:order-1 lg:col-span-3">
 					<div class="grid grid-cols-6 justify-center gap-4 pb-10">
 						{#each data.colla as row}
 							<button
@@ -105,19 +100,52 @@
 						{/each}
 					</div>
 				</div>
-				<div class="order-1 lg:order-2 col-span-full lg:col-span-1">
+				<div class="order-1 col-span-full lg:order-2 lg:col-span-1">
 					<div class="card bg-white p-3 dark:text-white">
-						<div class="text-2xl font-semibold p-5">Menu</div>
-						<nav class="list-nav">
+						<div class="p-5">
+							<div class="text-2xl font-semibold">Filters / ตัวกรอง</div>
+							<div class="text-sm font-light">ท่านสามารถค้นหาสินค้าแบบละเอียดได้จากด้านล่าง</div>
+						</div>
+
+						<input
+							class="input border-2 border-surface-100 bg-white p-3 py-4 text-lg"
+							type="text"
+							placeholder="🔍ค้นหาไอเทม"
+						/>
+						<div class="pt-3 px-2">ประเภทสินค้า</div>
+						<nav class="list-nav py-2">
 							<ul>
 								<li>
 									<a href="/">
-										<Icon icon="lucide:house" width="1.2em" height="1.2em" />
-										<span class="flex-auto">หน้าหลัก</span>
+										<Icon icon="lucide:crown" width="1.2em" height="1.2em" />
+										<span class="flex-auto">ยอดนิยม</span>
 									</a>
 								</li>
 							</ul>
 						</nav>
+						<nav class="list-nav py-2">
+							<ul>
+								<li>
+									<a href="/">
+										<Icon icon="lucide:crosshair" width="1.2em" height="1.2em" />
+
+										<span class="flex-auto">เป็นที่จับตามอง</span>
+									</a>
+								</li>
+							</ul>
+						</nav>
+						{#each [1, 2, 3] as row}
+							<nav class="list-nav py-2">
+								<ul>
+									<li>
+										<a href="/">
+											<Icon icon="lucide:container" width="1.2em" height="1.2em" />
+											<span class="flex-auto">Item</span>
+										</a>
+									</li>
+								</ul>
+							</nav>
+						{/each}
 					</div>
 				</div>
 			</div>
