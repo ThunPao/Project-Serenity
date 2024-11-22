@@ -75,7 +75,11 @@
 			</div> -->
 			<div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div>
 			<div class="grid grid-cols-4 gap-4">
-				<div class="card order-2 col-span-full rounded-xl bg-white p-3 lg:order-1 lg:col-span-3">
+				<div class="card order-2 col-span-full rounded-xl bg-white p-3 lg:order-1 lg:col-span-3 hover:shadow-md duration-200">
+					<div class="flex justify-between p-3 dark:text-white">
+						<div class="text-lg">รายการสินค้า</div>
+						<div>Grid/List Toggle</div>
+					</div>
 					<div class="grid grid-cols-6 justify-center gap-4 pb-10">
 						{#each data.colla as row}
 							<button
@@ -101,7 +105,7 @@
 					</div>
 				</div>
 				<div class="order-1 col-span-full lg:order-2 lg:col-span-1">
-					<div class="card bg-white p-3 dark:text-white">
+					<div class="card bg-white p-3 dark:text-white hover:shadow-md duration-200">
 						<div class="p-5">
 							<div class="text-2xl font-semibold">Filters / ตัวกรอง</div>
 							<div class="text-sm font-light">ท่านสามารถค้นหาสินค้าแบบละเอียดได้จากด้านล่าง</div>
