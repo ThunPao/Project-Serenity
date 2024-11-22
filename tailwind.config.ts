@@ -14,12 +14,14 @@ const config = {
       '../**/*.{html,js,svelte,ts}'
     )
   ],
-  theme:{
+  theme: {
     extend: {
-			fontFamily: {
-				custom: ["'Noto Sans Thai'", 'serif']
-			}
-		}
+      fontFamily: {
+        noto: ["'Noto Sans Thai'", 'serif'],
+        noto2: ["'Noto Sans Thai Looped'", 'serif']
+
+      }
+    }
   },
   plugins: [
     skeleton({

@@ -12,7 +12,11 @@ export const load: PageServerLoad = async (req) => {
         // console.log('Cache hit: Data retrieved from cache');
     } else {
         console.log('Cache miss: Querying Prisma');
-        data = await db.shopItems.findMany();
+        data = await db.shopItems.findMany({
+            orderBy: {
+                saleCount: "desc"
+            }
+        });
 
         if (data) {
             await setCache(cacheKey, data, 60000); // Cache for 1 minute

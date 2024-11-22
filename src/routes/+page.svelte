@@ -13,6 +13,8 @@
 		window.addEventListener('scroll', handleScroll);
 		return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
 	});
+	let isGrid = $state(true);
+	let inputSearch = $state('');
 </script>
 
 <!-- Content -->
@@ -75,24 +77,62 @@
 			</div> -->
 			<div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div>
 			<div class="grid grid-cols-4 gap-4">
-				<div class="card order-2 col-span-full rounded-xl bg-white p-3 lg:order-1 lg:col-span-3 hover:shadow-md duration-200">
+				<div
+					class="card order-2 col-span-full rounded-xl bg-white p-3 duration-200 hover:shadow-md lg:order-1 lg:col-span-3"
+				>
 					<div class="flex justify-between p-3 dark:text-white">
-						<div class="text-lg">รายการสินค้า</div>
-						<div>Grid/List Toggle</div>
+						<!-- <div class="font-noto text-xl">รายการสินค้า</div> -->
+						<div class="relative">
+							<input
+								bind:value={inputSearch}
+								class="input border-2 border-surface-100 bg-white p-3"
+								type="text"
+								placeholder="🔍ค้นหาไอเทม"
+							/>
+							<div class="absolute right-0 top-0 h-full">
+								<button
+									title="Clear Text"
+									onclick={() => (inputSearch = '')}
+									class:hidden={inputSearch.length < 3}
+									class="flex h-full items-center p-3 text-surface-300">ล้าง</button
+								>
+							</div>
+						</div>
+
+						<div class="group text-surface-300 hover:text-surface-500">
+							<button
+								title="Toggle Grid/List View"
+								class="duration-200 group-hover:scale-105 group-active:scale-125"
+								onclick={() => {
+									isGrid = !isGrid;
+								}}
+							>
+								<Icon
+									icon={`lucide:${isGrid ? 'grid-2x2' : 'layout-list'}`}
+									width="1.75em"
+									height="1.75em"
+								/>
+							</button>
+						</div>
 					</div>
-					<div class="grid grid-cols-6 justify-center gap-4 pb-10">
+
+					<div
+						class="flex flex-col justify-center gap-4 pb-10"
+						class:grid={isGrid}
+						class:grid-cols-6={isGrid}
+					>
 						{#each data.colla as row}
 							<button
 								onclick={() => goto('/view/' + row.id)}
 								class="col-span-3 rounded-lg hover:scale-[101%] lg:col-span-1"
+								class:flex={!isGrid}
 							>
 								<div class="card-header">
 									<!-- src={'/items/' + row.imageUrl} -->
-
 									<img
 										src={row.imageUrl}
 										draggable="false"
-										class="w-96 duration-100 active:scale-105"
+										class="duration-100 active:scale-105"
 										alt="1"
 									/>
 								</div>
@@ -105,24 +145,19 @@
 					</div>
 				</div>
 				<div class="order-1 col-span-full lg:order-2 lg:col-span-1">
-					<div class="card bg-white p-3 dark:text-white hover:shadow-md duration-200">
-						<div class="p-5">
+					<div class="card bg-white p-3 duration-200 hover:shadow-md dark:text-white">
+						<div class="p-4">
 							<div class="text-2xl font-semibold">Filters / ตัวกรอง</div>
-							<div class="text-sm font-light">ท่านสามารถค้นหาสินค้าแบบละเอียดได้จากด้านล่าง</div>
+							<div class="text-sm font-light">เลือกหมวดหมู่สินค้า</div>
 						</div>
-
-						<input
-							class="input border-2 border-surface-100 bg-white p-3 py-4 text-lg"
-							type="text"
-							placeholder="🔍ค้นหาไอเทม"
-						/>
-						<div class="pt-3 px-2">ประเภทสินค้า</div>
+						<hr class="!border-t-2" />
+						<!-- <div class="text-surface-300">ประเภทสินค้า</div> -->
 						<nav class="list-nav py-2">
 							<ul>
 								<li>
 									<a href="/">
 										<Icon icon="lucide:crown" width="1.2em" height="1.2em" />
-										<span class="flex-auto">ยอดนิยม</span>
+										<span class="flex-auto">สินค้าขายดี</span>
 									</a>
 								</li>
 							</ul>
@@ -133,11 +168,12 @@
 									<a href="/">
 										<Icon icon="lucide:crosshair" width="1.2em" height="1.2em" />
 
-										<span class="flex-auto">เป็นที่จับตามอง</span>
+										<span class="flex-auto">โปรโมชั่นพิเศษ</span>
 									</a>
 								</li>
 							</ul>
 						</nav>
+
 						{#each [1, 2, 3] as row}
 							<nav class="list-nav py-2">
 								<ul>
