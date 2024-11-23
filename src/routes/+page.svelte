@@ -13,17 +13,17 @@
 		window.addEventListener('scroll', handleScroll);
 		return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
 	});
-	let isGrid = $state(true);
+	let isGrid = $state(false);
 	let inputSearch = $state('');
 </script>
 
 <!-- Content -->
-<div class="container mx-auto p-2 lg:py-10">
+<div class="container mx-auto lg:p-2 lg:py-10">
 	<div class="space-y-2">
 		<div class="justify-center gap-4 space-y-2 xl:flex">
 			<div class="relative max-w-screen-lg duration-300" class:max-w-screen-md={curVert > 30}>
 				<img
-					class="border-br-2 rounded-md border-primary-500"
+					class="border-br-2 border-primary-500 lg:rounded-md"
 					src="/background/bg.webp"
 					alt=""
 					width="1024"
@@ -80,22 +80,25 @@
 				<div
 					class="card order-2 col-span-full rounded-xl bg-white p-3 duration-200 hover:shadow-md lg:order-1 lg:col-span-3"
 				>
+					<!-- Filter -->
 					<div class="flex justify-between p-3 dark:text-white">
 						<!-- <div class="font-noto text-xl">รายการสินค้า</div> -->
-						<div class="relative">
-							<input
-								bind:value={inputSearch}
-								class="input border-2 border-surface-100 bg-white p-3"
-								type="text"
-								placeholder="🔍ค้นหาไอเทม"
-							/>
-							<div class="absolute right-0 top-0 h-full">
-								<button
-									title="Clear Text"
-									onclick={() => (inputSearch = '')}
-									class:hidden={inputSearch.length < 3}
-									class="flex h-full items-center p-3 text-surface-300">ล้าง</button
-								>
+						<div class="relative z-10">
+							<div class="sticky bottom-10">
+								<input
+									bind:value={inputSearch}
+									class="input border-2 border-surface-100 bg-white p-3"
+									type="text"
+									placeholder="🔍ค้นหาไอเทม"
+								/>
+								<div class="absolute right-0 top-0 ">
+									<button
+										title="Clear Text"
+										onclick={() => (inputSearch = '')}
+										class:hidden={inputSearch.length < 3}
+										class="flex h-full select-none items-center p-3 text-surface-300">ล้าง</button
+									>
+								</div>
 							</div>
 						</div>
 
@@ -115,9 +118,9 @@
 							</button>
 						</div>
 					</div>
-
+					<!-- Item -->
 					<div
-						class="flex flex-col justify-center gap-4 pb-10"
+						class="max-h-[80dvh] gap-4 overflow-y-auto pb-10"
 						class:grid={isGrid}
 						class:grid-cols-6={isGrid}
 					>
@@ -132,7 +135,7 @@
 									<img
 										src={row.imageUrl}
 										draggable="false"
-										class="duration-100 active:scale-105"
+										class="rounded-md duration-100 active:scale-105"
 										alt="1"
 									/>
 								</div>
@@ -147,7 +150,7 @@
 				<div class="order-1 col-span-full lg:order-2 lg:col-span-1">
 					<div class="card bg-white p-3 duration-200 hover:shadow-md dark:text-white">
 						<div class="p-4">
-							<div class="text-2xl font-semibold">Filters / ตัวกรอง</div>
+							<div class="text-2xl font-semibold">หมวดหมู่</div>
 							<div class="text-sm font-light">เลือกหมวดหมู่สินค้า</div>
 						</div>
 						<hr class="!border-t-2" />
