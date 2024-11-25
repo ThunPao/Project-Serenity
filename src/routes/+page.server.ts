@@ -1,11 +1,17 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/db';
-import { getCache, setCache } from '$lib/cache';
+import { getCache, setCache,genCacheKey } from '$lib/cache';
+import { valla } from '$lib/variableStore';
 
-export const load: PageServerLoad = async (req) => {
-    req.depends('shopitems');
+export const load: PageServerLoad = async (event) => {
+    event.depends(valla.shop.ITEMS);
+    const title = event.url.searchParams.get('title')
+    if (title) {
+        console.log(title)
+    }
 
-    const cacheKey = 'shopitems';
+    const cacheKey = genCacheKey(valla.shop.ITEMS, { title });
+
     let data = await getCache(cacheKey);
 
     if (data) {
@@ -13,6 +19,9 @@ export const load: PageServerLoad = async (req) => {
     } else {
         console.log('Cache miss: Querying Prisma');
         data = await db.shopItems.findMany({
+            where: {
+                ...(title && { title: { contains: title } }),
+            },
             orderBy: {
                 saleCount: "desc"
             }

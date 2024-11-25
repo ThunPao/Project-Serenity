@@ -13,7 +13,7 @@
 		window.addEventListener('scroll', handleScroll);
 		return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
 	});
-	let isGrid = $state(false);
+	let isGrid = $state(true);
 	let inputSearch = $state('');
 </script>
 
@@ -21,7 +21,7 @@
 <div class="container mx-auto lg:p-2 lg:py-10">
 	<div class="space-y-2">
 		<div class="justify-center gap-4 space-y-2 xl:flex">
-			<div class="relative max-w-screen-lg duration-300" class:max-w-screen-md={curVert > 30}>
+			<div class="relative max-w-screen-lg duration-300" class:xl:max-w-screen-md={curVert > 30}>
 				<img
 					class="border-br-2 border-primary-500 lg:rounded-md"
 					src="/background/bg.webp"
@@ -78,7 +78,7 @@
 			<div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div>
 			<div class="grid grid-cols-4 gap-4">
 				<div
-					class="card order-2 col-span-full rounded-xl bg-white p-3 duration-200 hover:shadow-md lg:order-1 lg:col-span-3"
+					class="card order-2 col-span-full rounded-xl bg-white p-3 duration-200 hover:shadow-md xl:order-1 xl:col-span-3"
 				>
 					<!-- Filter -->
 					<div class="flex justify-between p-3 dark:text-white">
@@ -147,7 +147,7 @@
 						{/each}
 					</div>
 				</div>
-				<div class="order-1 col-span-full lg:order-2 lg:col-span-1">
+				<div class="order-1 col-span-full xl:order-2 xl:col-span-1">
 					<div class="card bg-white p-3 duration-200 hover:shadow-md dark:text-white">
 						<div class="p-4">
 							<div class="text-2xl font-semibold">หมวดหมู่</div>
