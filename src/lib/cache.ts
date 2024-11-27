@@ -4,7 +4,11 @@ const cache: { [key: string]: { data: any; expiry: number } } = {};
 export async function getCache(key: string) {
     const cached = cache[key];
     if (cached && cached.expiry > Date.now()) {
-        return cached.data;
+        return cached.data; // Cache hit
+    }
+    if (cached) {
+        // Cache expired, clear it
+        delete cache[key];
     }
     return null; // Cache miss or expired
 }

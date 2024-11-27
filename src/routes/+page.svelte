@@ -91,7 +91,7 @@
 									type="text"
 									placeholder="🔍ค้นหาไอเทม"
 								/>
-								<div class="absolute right-0 top-0 ">
+								<div class="absolute right-0 top-0">
 									<button
 										title="Clear Text"
 										onclick={() => (inputSearch = '')}
@@ -132,8 +132,10 @@
 							>
 								<div class="card-header">
 									<!-- src={'/items/' + row.imageUrl} -->
+									<!-- src={row.imageUrl} -->
+
 									<img
-										src={row.imageUrl}
+										src="/items/coalore.webp"
 										draggable="false"
 										class="rounded-md duration-100 active:scale-105"
 										alt="1"
