@@ -7,3 +7,15 @@ export const valla = {
         ALL_TITLES: "SERENITY:ALL_TITLES",
     }
 }
+export const sideBarList = [
+    {
+        title: 'สินค้าขายดี',
+        cat: '',
+        icon: 'crown'
+    },
+    {
+        title: 'โปรโมชั่นพิเศษ',
+        cat: 'Books',
+        icon: 'crosshair'
+    }
+];

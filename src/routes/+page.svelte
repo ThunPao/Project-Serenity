@@ -3,18 +3,40 @@
 	import ActionCard from '$lib/Widgets/ActionCard.svelte';
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
+	import { sideBarList } from '$lib/variableStore/index.js';
+	import { page } from '$app/stores';
+
 	let { data } = $props();
-	// console.log(data)
 	let curVert = $state(0);
 	function handleScroll() {
 		curVert = window.scrollY;
 	}
 	onMount(() => {
 		window.addEventListener('scroll', handleScroll);
-		return () => window.removeEventListener('scroll', handleScroll); // Cleanup on unmount
+		return () => window.removeEventListener('scroll', handleScroll);
 	});
 	let isGrid = $state(true);
 	let inputSearch = $state('');
+	let selectedCategory = $state('');
+	let curCat = $state(0);
+	interface FilterList {
+		title?: String;
+		cat?: String;
+	}
+
+	function setFilter(filter: Partial<FilterList>): void {
+		const currentParams = new URLSearchParams($page.url.search);
+		Object.entries(filter).forEach(([key, value]) => {
+			if (value) {
+				currentParams.set(key, String(value));
+			} else {
+				currentParams.delete(key);
+			}
+		});
+		goto(`/?${currentParams.toString()}`, {
+			noScroll: true
+		});
+	}
 </script>
 
 <!-- Content -->
@@ -87,6 +109,11 @@
 							<div class="sticky bottom-10">
 								<input
 									bind:value={inputSearch}
+									onkeydown={(e: KeyboardEvent) => {
+										if (e.key === 'Enter') {
+											setFilter({ title: inputSearch, cat: selectedCategory }); // Pass multiple parameters
+										}
+									}}
 									class="input border-2 border-surface-100 bg-white p-3"
 									type="text"
 									placeholder="🔍ค้นหาไอเทม"
@@ -155,38 +182,36 @@
 							<div class="text-2xl font-semibold">หมวดหมู่</div>
 							<div class="text-sm font-light">เลือกหมวดหมู่สินค้า</div>
 						</div>
-						<hr class="!border-t-2" />
-						<!-- <div class="text-surface-300">ประเภทสินค้า</div> -->
-						<nav class="list-nav py-2">
-							<ul>
-								<li>
-									<a href="/">
-										<Icon icon="lucide:crown" width="1.2em" height="1.2em" />
-										<span class="flex-auto">สินค้าขายดี</span>
-									</a>
-								</li>
-							</ul>
-						</nav>
-						<nav class="list-nav py-2">
-							<ul>
-								<li>
-									<a href="/">
-										<Icon icon="lucide:crosshair" width="1.2em" height="1.2em" />
-
-										<span class="flex-auto">โปรโมชั่นพิเศษ</span>
-									</a>
-								</li>
-							</ul>
-						</nav>
+						<hr class="!border-t-2 opacity-40" />
+						<div class="flex flex-col space-y-2 rounded-lg p-3 py-2">
+							{#each sideBarList as row, index}
+								<button
+									class="inline-flex w-full items-center gap-2 rounded-lg p-2 text-start duration-100"
+									class:bg-surface-50-900-token={curCat === index}
+									class:text-base={curCat === index}
+									class:font-bold={curCat === index}
+									class:text-sm={curCat !== index}
+									type="button"
+									onclick={() => {
+										curCat = index;
+										selectedCategory = row.cat;
+										setFilter({ cat: row.cat });
+									}}
+								>
+									<Icon icon={`lucide:${row.icon}`} width="1.3em" height="1.3em" />
+									<span class="flex-auto">{row.title}</span>
+								</button>
+							{/each}
+						</div>
 
 						{#each [1, 2, 3] as row}
 							<nav class="list-nav py-2">
 								<ul>
 									<li>
-										<a href="/">
+										<button type="button">
 											<Icon icon="lucide:container" width="1.2em" height="1.2em" />
 											<span class="flex-auto">Item</span>
-										</a>
+										</button>
 									</li>
 								</ul>
 							</nav>

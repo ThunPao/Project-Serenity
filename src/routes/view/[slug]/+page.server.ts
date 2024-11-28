@@ -4,11 +4,13 @@ import { db } from '$lib/db';
 import { getCache, setCache, genCacheKey } from '$lib/cache';
 import { valla } from '$lib/variableStore';
 import { error } from '@sveltejs/kit';
+import { limiter } from '$lib/services/rateLimiter';
 
 // Zod schema for ID validation
 const IdSchema = z.coerce.number().int().positive();
 
 export const load: PageServerLoad = async (event) => {
+
     const rawSlug = event.params.slug;
 
     // Validate ID format
@@ -23,9 +25,9 @@ export const load: PageServerLoad = async (event) => {
     // Cache key for all item IDs
     const allIdsCacheKey = genCacheKey(valla.shop.ALL_IDS, {});
     let allItemIds = await getCache(allIdsCacheKey);
-
     // Fetch and cache all item IDs if not cached
     if (!allItemIds) {
+        if (await limiter.isLimited(event)) throw error(429);
         // console.log('Cache miss: Fetching all item IDs');
         const ids = await db.shopItems.findMany({ select: { id: true } });
         allItemIds = ids.map((item) => item.id);
@@ -42,6 +44,7 @@ export const load: PageServerLoad = async (event) => {
     let cachedItem = await getCache(itemCacheKey);
 
     if (!cachedItem) {
+        if (await limiter.isLimited(event)) throw error(429);
         // console.log('Cache miss: Fetching item details');
         const dbData = await db.shopItems.findUnique({
             where: { id: slug },

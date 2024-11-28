@@ -9,6 +9,9 @@ export const load: PageServerLoad = async (event) => {
 
     // Get the title from query parameters
     const title = event.url.searchParams.get('title') || '';
+    const shopCategory = event.url.searchParams.get('cat') || '';
+
+
     // console.log(`Requested title: ${title}`);
 
     // Cache key for all item titles
@@ -36,7 +39,14 @@ export const load: PageServerLoad = async (event) => {
         // console.log('Cache miss: Querying Prisma for items');
         data = await db.shopItems.findMany({
             where: {
-                ...(title && { title: { contains: title} }), // Case-insensitive search
+                ...(title && { title: { contains: title } }), // Case-insensitive search
+                ...(shopCategory && {
+                    catty: {
+                        title: {
+                            contains: shopCategory
+                        }
+                    }
+                })
             },
             orderBy: {
                 saleCount: 'desc',
