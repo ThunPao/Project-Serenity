@@ -3,11 +3,15 @@
 	import ActionCard from '$lib/Widgets/ActionCard.svelte';
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
-	import { sideBarList } from '$lib/variableStore/index.js';
-	import { page } from '$app/stores';
+	import { sideBarList } from '$lib/variableStore/index.ts';
+	import { enhance, applyAction } from '$app/forms';
+	import type { ActionData, PageData } from './$types';
 
-	let { data } = $props();
-	let curVert = $state(0);
+	let { data, form }: { data: PageData; form: ActionData } = $props();
+
+	let colla = $state(data.colla);
+	let curVert = $state<number>(0);
+
 	function handleScroll() {
 		curVert = window.scrollY;
 	}
@@ -17,26 +21,6 @@
 	});
 	let isGrid = $state(true);
 	let inputSearch = $state('');
-	let selectedCategory = $state('');
-	let curCat = $state(0);
-	interface FilterList {
-		title?: String;
-		cat?: String;
-	}
-
-	function setFilter(filter: Partial<FilterList>): void {
-		const currentParams = new URLSearchParams($page.url.search);
-		Object.entries(filter).forEach(([key, value]) => {
-			if (value) {
-				currentParams.set(key, String(value));
-			} else {
-				currentParams.delete(key);
-			}
-		});
-		goto(`/?${currentParams.toString()}`, {
-			noScroll: true
-		});
-	}
 </script>
 
 <!-- Content -->
@@ -73,30 +57,22 @@
 		</div>
 		<div class="container mx-auto space-y-4">
 			<div class="p-2"></div>
-			<!-- <div class="alert flex justify-center text-2xl">สินค้ายอดนิยม</div>
-			<div
-				class="grid grid-cols-6 p-2 lg:p-10 bg-white bg-opacity-80 pb-10 dark:bg-opacity-10 lg:rounded-full"
+			<!-- <form
+				action="?/doSearch"
+				method="post"
+				use:enhance={({ formElement, formData, action, cancel }) => {
+					return async ({ result }) => {
+						if (result.type === 'redirect') {
+							goto(result.location);
+						} else {
+							await applyAction(result);
+						}
+					};
+				}}
 			>
-				{#each data.colla as row}
-					<button
-						onclick={() => goto('/view/' + row.id)}
-						class="col-span-2 rounded-lg hover:scale-[101%] lg:col-span-2"
-					>
-						<div class="card-header flex justify-center">
-							<img
-								draggable="false"
-								class="w-64 duration-100 active:scale-105"
-								src={'/items/' + row.imageUrl}
-								alt="1"
-							/>
-						</div>
-						<div class="card-footer grid justify-center p-4 text-surface-400">
-							<div>{row.title}</div>
-							<div class="text-surface-400">{row.price}$</div>
-						</div>
-					</button>
-				{/each}
-			</div> -->
+				<input type="text" name="title" placeholder="ttl" />
+				<button type="submit" class="variant-filled-primary btn">Submit</button>
+			</form> -->
 			<div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div>
 			<div class="grid grid-cols-4 gap-4">
 				<div
@@ -107,17 +83,31 @@
 						<!-- <div class="font-noto text-xl">รายการสินค้า</div> -->
 						<div class="relative z-10">
 							<div class="sticky bottom-10">
-								<input
-									bind:value={inputSearch}
-									onkeydown={(e: KeyboardEvent) => {
-										if (e.key === 'Enter') {
-											setFilter({ title: inputSearch, cat: selectedCategory }); // Pass multiple parameters
-										}
+								<form
+									method="POST"
+									action="?/searchItem"
+									use:enhance={({ formElement, formData, action, cancel }) => {
+										return async ({ result }) => {
+											if (result.type === 'success') {
+												colla = result.data;
+											}
+											await applyAction(result);
+										};
 									}}
-									class="input border-2 border-surface-100 bg-white p-3"
-									type="text"
-									placeholder="🔍ค้นหาไอเทม"
-								/>
+								>
+									<input
+										bind:value={inputSearch}
+										class="input border-2 border-surface-100 bg-white p-3"
+										type="text"
+										name="title"
+										placeholder="🔍ค้นหาไอเทม"
+									/>
+									<button hidden title="Submit" type="submit">Send</button>
+									{#if form?.notFound}
+										<p>Item Not Found</p>
+									{/if}
+								</form>
+
 								<div class="absolute right-0 top-0">
 									<button
 										title="Clear Text"
@@ -151,7 +141,7 @@
 						class:grid={isGrid}
 						class:grid-cols-6={isGrid}
 					>
-						{#each data.colla as row}
+						{#each colla as row}
 							<button
 								onclick={() => goto('/view/' + row.id)}
 								class="col-span-3 rounded-lg hover:scale-[101%] lg:col-span-1"
@@ -185,19 +175,19 @@
 						<hr class="!border-t-2 opacity-40" />
 						<div class="flex flex-col space-y-2 rounded-lg p-3 py-2">
 							{#each sideBarList as row, index}
+								<!-- class:bg-surface-50-900-token={curCat === index}
+							class:text-base={curCat === index}
+							class:font-bold={curCat === index}
+							class:text-sm={curCat !== index} -->
 								<button
 									class="inline-flex w-full items-center gap-2 rounded-lg p-2 text-start duration-100"
-									class:bg-surface-50-900-token={curCat === index}
-									class:text-base={curCat === index}
-									class:font-bold={curCat === index}
-									class:text-sm={curCat !== index}
 									type="button"
-									onclick={() => {
-										curCat = index;
-										selectedCategory = row.cat;
-										setFilter({ cat: row.cat });
-									}}
 								>
+									<!-- onclick={() => {
+									curCat = index;
+									selectedCategory = row.cat;
+									setFilter({ cat: row.cat });
+								}} -->
 									<Icon icon={`lucide:${row.icon}`} width="1.3em" height="1.3em" />
 									<span class="flex-auto">{row.title}</span>
 								</button>
