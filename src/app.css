@@ -2,6 +2,20 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+Thai:wght@100..900&display=swap');
+@layer base {
+	h1 {
+	  @apply text-2xl;
+	}
+	h2 {
+	  @apply text-xl;
+	}
+	h3 {
+	  @apply text-lg;
+	}
+	a {
+	  @apply text-blue-600 underline;
+	}
+  }
 body {
 	background: rgb(221, 221, 222);
 }

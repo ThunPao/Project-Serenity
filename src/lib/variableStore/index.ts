@@ -7,15 +7,21 @@ export const valla = {
         ALL_TITLES: "SERENITY:ALL_TITLES",
     }
 }
-export const sideBarList = [
+const sideBarList = [
     {
-        title: 'สินค้าขายดี',
-        cat: '',
-        icon: 'crown'
+        title: 'หน้าหลัก',
+        goto: '',
+        icon: 'mdi:house-circle'
     },
     {
-        title: 'โปรโมชั่นพิเศษ',
-        cat: 'Books',
-        icon: 'crosshair'
+        title: 'เติมเงิน',
+        goto: '/topup',
+        icon: 'mdi:gold'
+    },
+    {
+        title: 'กรอกรหัสคูปอง',
+        goto: '/redeem',
+        icon: 'mdi:ticket-confirmation'
     }
 ];
+export {sideBarList}

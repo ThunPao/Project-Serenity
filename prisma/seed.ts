@@ -1,7 +1,15 @@
 import { PrismaClient } from '@prisma/client';
+import { readReplicas } from '@prisma/extension-read-replicas';
+const replicaDb = process.env.DATABASE_URL_REPLICA;
 
-const prisma = new PrismaClient();
-
+const prisma = new PrismaClient({
+  log: ['query', 'info', 'warn', 'error'], // Enable query logging
+})
+// .$extends(
+//   readReplicas({
+//     url: replicaDb ? replicaDb : "",
+//   }),
+// )
 async function main() {
   // Create a few categories
   const categories = await prisma.shopCategories.createMany({

@@ -11,6 +11,7 @@
 
 	let colla = $state(data.colla);
 	let curVert = $state<number>(0);
+	let curSideTabIndex = $state(0);
 
 	function handleScroll() {
 		curVert = window.scrollY;
@@ -49,31 +50,38 @@
 				</div>
 			</div>
 
-			<div class="flex items-center justify-center gap-2 xl:grid">
-				{#each [1, 2, 3] as row}
-					<ActionCard text={row} />
-				{/each}
+			<div class="grid min-w-96 gap-2 overflow-x-auto">
+				<!-- Topup No1 -->
+				<div class="btn h-full min-h-32 w-full bg-surface-500 text-center shadow-md">
+					<div class="flex h-full flex-col items-center justify-center text-white">
+						<h1>🏆Player</h1>
+						<h5 class="font-bold">เป็นผู้สนับสนุนอันดับหนึ่ง</h5>
+					</div>
+				</div>
+				<!-- Online Ingame -->
+				<a
+					href="#topOnline"
+					class="btn h-full min-h-32 w-full bg-surface-500 text-center no-underline shadow-md"
+				>
+					<div class="flex h-full flex-col items-center justify-center text-white">
+						<h1>🕛Player</h1>
+						<h5 class="font-bold">ออนไลน์สูงสุด 10 ชั่วโมง</h5>
+					</div>
+				</a>
+				<!--  -->
+				<!-- Online -->
+				<div class="btn h-full min-h-32 w-full bg-surface-500 text-center shadow-md">
+					<div class="flex h-full flex-col items-center justify-center text-white">
+						<h1>🍀10</h1>
+						<h5 class="font-bold">ผู้เล่นออนไลน์</h5>
+					</div>
+				</div>
+				<!--  -->
 			</div>
 		</div>
-		<div class="container mx-auto space-y-4">
-			<div class="p-2"></div>
-			<!-- <form
-				action="?/doSearch"
-				method="post"
-				use:enhance={({ formElement, formData, action, cancel }) => {
-					return async ({ result }) => {
-						if (result.type === 'redirect') {
-							goto(result.location);
-						} else {
-							await applyAction(result);
-						}
-					};
-				}}
-			>
-				<input type="text" name="title" placeholder="ttl" />
-				<button type="submit" class="variant-filled-primary btn">Submit</button>
-			</form> -->
-			<div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div>
+		<div class="container mx-auto space-y-12">
+			<div class="hidden p-2 lg:block"></div>
+			<!-- <div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div> -->
 			<div class="grid grid-cols-4 gap-4">
 				<div
 					class="card order-2 col-span-full rounded-xl bg-white p-3 duration-200 hover:shadow-md xl:order-1 xl:col-span-3"
@@ -111,7 +119,10 @@
 								<div class="absolute right-0 top-0">
 									<button
 										title="Clear Text"
-										onclick={() => (inputSearch = '')}
+										onclick={() => {
+											inputSearch = '';
+											colla = data.colla;
+										}}
 										class:hidden={inputSearch.length < 3}
 										class="flex h-full select-none items-center p-3 text-surface-300">ล้าง</button
 									>
@@ -137,7 +148,7 @@
 					</div>
 					<!-- Item -->
 					<div
-						class="max-h-[80dvh] gap-4 overflow-y-auto pb-10"
+						class="max-h-[80dvh] gap-4 overflow-hidden overflow-y-auto pb-10"
 						class:grid={isGrid}
 						class:grid-cols-6={isGrid}
 					>
@@ -169,45 +180,56 @@
 				<div class="order-1 col-span-full xl:order-2 xl:col-span-1">
 					<div class="card bg-white p-3 duration-200 hover:shadow-md dark:text-white">
 						<div class="p-4">
-							<div class="text-2xl font-semibold">หมวดหมู่</div>
-							<div class="text-sm font-light">เลือกหมวดหมู่สินค้า</div>
+							<div class="text-2xl font-semibold">SERENITY SHOP</div>
+							<div class="text-sm font-light">Lorem ipsum dolor sit amet.</div>
 						</div>
 						<hr class="!border-t-2 opacity-40" />
 						<div class="flex flex-col space-y-2 rounded-lg p-3 py-2">
 							{#each sideBarList as row, index}
-								<!-- class:bg-surface-50-900-token={curCat === index}
-							class:text-base={curCat === index}
-							class:font-bold={curCat === index}
-							class:text-sm={curCat !== index} -->
 								<button
 									class="inline-flex w-full items-center gap-2 rounded-lg p-2 text-start duration-100"
 									type="button"
+									class:bg-surface-50-900-token={curSideTabIndex === index}
+									class:text-base={curSideTabIndex === index}
+									class:font-bold={curSideTabIndex === index}
+									class:text-sm={curSideTabIndex !== index}
+									onclick={() => {
+										curSideTabIndex = index;
+									}}
 								>
 									<!-- onclick={() => {
 									curCat = index;
 									selectedCategory = row.cat;
 									setFilter({ cat: row.cat });
 								}} -->
-									<Icon icon={`lucide:${row.icon}`} width="1.3em" height="1.3em" />
+									<Icon icon={row.icon} width="1.5em" height="1.5em" />
 									<span class="flex-auto">{row.title}</span>
 								</button>
 							{/each}
 						</div>
-
-						{#each [1, 2, 3] as row}
-							<nav class="list-nav py-2">
-								<ul>
-									<li>
-										<button type="button">
-											<Icon icon="lucide:container" width="1.2em" height="1.2em" />
-											<span class="flex-auto">Item</span>
-										</button>
-									</li>
-								</ul>
-							</nav>
-						{/each}
 					</div>
 				</div>
+			</div>
+			<div id="topOnline" class="text-center">
+				<h1>อันดับเวลาผู้เล่นออนไลน์สะสมสูงสุด</h1>
+			</div>
+			<div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+				{#each [1, 2, 3] as row}
+					<div class="card w-full bg-white">
+						<div class="card-header">
+							<div class="py-4 text-center">
+								<h1>No.{row}</h1>
+								<h3>Player</h3>
+							</div>
+
+							<img
+								src="https://cdn.pixabay.com/photo/2020/12/10/11/07/creeper-5819992_960_720.png"
+								alt="1"
+							/>
+						</div>
+						<h3 class="card-footer py-4 text-center">"Lorem ipsum dolor sit amet."</h3>
+					</div>
+				{/each}
 			</div>
 		</div>
 	</div>

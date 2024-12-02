@@ -23,7 +23,7 @@ export const load: PageServerLoad = async (event) => {
         // console.log('Cache miss: Fetching all item titles');
         const titles = await db.shopItems.findMany({ select: { title: true } });
         allItemTitles = titles.map((item) => item.title.toLowerCase());
-        await setCache(allTitlesCacheKey, allItemTitles, 60000); // Cache for 1 minute
+        await setCache(allTitlesCacheKey, allItemTitles, 120000); // Cache for 1 minute
     }
 
     // Check if the requested title exists in the cached titles
