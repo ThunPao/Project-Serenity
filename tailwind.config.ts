@@ -24,6 +24,7 @@ const config = {
     }
   },
   plugins: [
+    require('@tailwindcss/typography'),
     skeleton({
       themes: {
         // preset: ["skeleton"],

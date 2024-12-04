@@ -10,7 +10,12 @@ export const valla = {
 const sideBarList = [
     {
         title: 'หน้าหลัก',
-        goto: '',
+        goto: '/',
+        icon: 'mdi:house-circle'
+    },
+    {
+        title: 'ไอเทม',
+        goto: '/shop',
         icon: 'mdi:house-circle'
     },
     {
@@ -22,6 +27,11 @@ const sideBarList = [
         title: 'กรอกรหัสคูปอง',
         goto: '/redeem',
         icon: 'mdi:ticket-confirmation'
+    },
+    {
+        title: 'ประวัติความเป็นมา',
+        goto: '/aboutus',
+        icon: 'mdi:book-open-page-variant'
     }
 ];
 export {sideBarList}
