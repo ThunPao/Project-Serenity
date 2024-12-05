@@ -1,6 +1,5 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/db';
-import { getCache, setCache, genCacheKey } from '$lib/cache';
 import { valla } from '$lib/variableStore';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { cacheFetch } from '$lib/server/niceCache.js';
@@ -82,18 +81,6 @@ let filters = {
     page: 0,
 }
 export const actions = {
-    // doSearch: async (e) => {
-    //     const data = await e.request.formData()
-    //     const title = String(data.get("title"));
-    //     filters = {
-    //         ...filters,
-    //         title: title
-    //     }
-    //     console.log(filters)
-    //     if (e.url.searchParams.has('yeet')) {
-    //         redirect(303, e.url.searchParams.get('yeet'));
-    //     }
-    // },
     searchItem: async (e) => {
         const formData = await e.request.formData();
         const title = String(formData.get('title')).toLowerCase();
@@ -129,14 +116,6 @@ export const actions = {
             { ttl: 60000 }
         );
         if (!result) return fail(404, { notFound: true });
-        // const result = await db.shopItems.findMany({
-        //     where: { title: { contains: title, mode: "insensitive" } },
-        //     select: {
-        //         id: true,
-        //         title: true,
-        //         price: true,
-        //     },
-        // });
         return result
     }
 }

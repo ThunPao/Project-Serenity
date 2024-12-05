@@ -1,15 +1,14 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
-    import Icon from '@iconify/svelte';
-    import { enhance, applyAction } from '$app/forms';
-    import PrimeLayer from '$lib/Widgets/PrimeLayer.svelte';
-    import type { ActionData,PageData } from './$types';
-    let { data, form }: { data: PageData; form: ActionData } = $props();
-    let colla = $state(data.colla);
-    let isGrid = $state(true);
-    let inputSearch = $state('');
+	import { goto } from '$app/navigation';
+	import Icon from '@iconify/svelte';
+	import { enhance, applyAction } from '$app/forms';
+	import PrimeLayer from '$lib/Widgets/PrimeLayer.svelte';
+	import type { ActionData, PageData } from './$types';
+	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let colla = $state(data.colla);
+	let isGrid = $state(true);
+	let inputSearch = $state('');
 </script>
-
 
 <PrimeLayer
 	title="Shop Items"
@@ -26,25 +25,30 @@
 		<!-- <div class="font-noto text-xl">รายการสินค้า</div> -->
 		<div class="relative z-10">
 			<div class="sticky bottom-10">
-                Cat
-                {#each data.catta as cat}
-                <div class="badge">
-                    {cat.title} ({cat.count})
-                </div>
-                {/each}
+				Cat
+				{#each data.catta as cat}
+					<div class="badge">
+						{cat.title} ({cat.count})
+					</div>
+				{/each}
 				<form
 					method="POST"
 					action="?/searchItem"
 					use:enhance={({ formElement, formData, action, cancel }) => {
 						return async ({ result }) => {
-                            console.log(result)
-                            if(result.type === 'failure'){
-                                console.log("Error: " + result.status)
-                            }
-							if (result.type === 'success') {
-								colla = result.data;
-                                console.log("Res D")
-                                console.log(result.data)
+							console.log(result);
+							if (result.type === 'failure') {
+								console.log('Error: ' + result.status);
+							}
+							if (
+								result.type === 'success' &&
+								Array.isArray(result.data) &&
+								result.data.every((item) => 'id' in item && 'title' in item && 'price' in item)
+							) {
+								colla = result.data.map(({ id, title, price }) => ({ id, title, price }));
+								console.log('Res D', colla);
+							} else {
+								console.error('Invalid data or fetch failure');
 							}
 							await applyAction(result);
 						};
@@ -57,7 +61,7 @@
 						name="title"
 						placeholder="🔍ค้นหาไอเทม"
 					/>
-					<button  title="Submit" type="submit">Send</button>
+					<button title="Submit" type="submit">Send</button>
 					{#if form?.notFound}
 						<p>Item Not Found</p>
 					{/if}
