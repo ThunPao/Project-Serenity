@@ -16,7 +16,7 @@ export const load: PageServerLoad = async (e) => {
                 title: true,
             }
         }), {
-        ttl: 50000
+        sec: 120
     }
     );
     return { colla: shopCat }

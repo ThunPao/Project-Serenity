@@ -105,7 +105,7 @@
 	>
 		{#each colla as row}
 			<button
-				onclick={() => goto('/shop/' + row.id)}
+				onclick={() => goto('/shop/' + encodeURIComponent(row.title))}
 				class="col-span-3 rounded-lg hover:scale-[101%] lg:col-span-1"
 				class:flex={!isGrid}
 			>

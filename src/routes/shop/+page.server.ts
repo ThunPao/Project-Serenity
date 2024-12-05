@@ -1,8 +1,8 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/db';
-import { valla } from '$lib/variableStore';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { cacheFetch } from '$lib/server/niceCache.js';
+import { cacheFetch } from '$lib/server/niceCache.ts';
+import { valla } from '$lib/server/variableList.ts';
 
 export const load: PageServerLoad = async (event) => {
     event.depends(valla.shop.ITEMS);
@@ -11,7 +11,7 @@ export const load: PageServerLoad = async (event) => {
 
 
     const allItemTitles = await cacheFetch<string[]>(
-        'all_shop_items_titles',
+        valla.shop.ALL_TITLES,
         async () => {
             console.log('🔍 Fetching all item titles from database');
             const titles = await db.shopItems.findMany({
@@ -20,7 +20,7 @@ export const load: PageServerLoad = async (event) => {
             return titles.map((item) => item.title.toLowerCase());
         },
         {
-            ttl: 120000 // 2 minutes cache
+            sec: 3600
         }
     );
 
@@ -29,15 +29,10 @@ export const load: PageServerLoad = async (event) => {
         throw error(404, 'ไม่พบสินค้า');
     }
 
-
-
     const data = await cacheFetch(
-        `shop_items_${title}`,
+        valla.shop.ITEMS,
         async () => {
             const items = await db.shopItems.findMany({
-                where: {
-                    ...(title && { title: { contains: title } }), // Case-insensitive search
-                },
                 orderBy: {
                     saleCount: 'desc',
                 },
@@ -54,11 +49,8 @@ export const load: PageServerLoad = async (event) => {
 
             return items;
         },
-        {
-            ttl: 60000 // 1 minute cache
-        }
     );
-    const shopCat = await cacheFetch(String(event.url), () => db.shopCategories.findMany({
+    const shopCat = await cacheFetch(valla.shop.ITEMCAT, () => db.shopCategories.findMany({
         select: {
             id: true,
             title: true,
@@ -85,7 +77,7 @@ export const actions = {
         const formData = await e.request.formData();
         const title = String(formData.get('title')).toLowerCase();
         const allItemTitles = await cacheFetch<string[]>(
-            'all_shop_items_titles',
+            valla.shop.ALL_TITLES,
             async () => {
                 console.log('🔍 Fetching all item titles from database');
                 const titles = await db.shopItems.findMany({
@@ -93,7 +85,7 @@ export const actions = {
                 });
                 return titles.map((item) => item.title.toLowerCase());
             },
-            { ttl: 120000 } //2 min cache
+            { sec: 3600 } // 1 hour cache
         );
 
         if (!title || !allItemTitles.includes(title)) {
@@ -113,7 +105,6 @@ export const actions = {
                     },
                 });
             },
-            { ttl: 60000 }
         );
         if (!result) return fail(404, { notFound: true });
         return result
