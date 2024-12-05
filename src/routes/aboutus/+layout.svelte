@@ -3,6 +3,15 @@
 	let { children } = $props();
 </script>
 
-<PrimeLayer>
+<PrimeLayer
+	title="History"
+	subTitle="ประวัติความเป็นมา"
+	linkPaths={[
+		{
+			title: 'ประวัติความเป็นมา',
+			link: ''
+		}
+	]}
+>
 	{@render children()}
 </PrimeLayer>

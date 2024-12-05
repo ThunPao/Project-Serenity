@@ -5,6 +5,7 @@ export const valla = {
         INFO: "SERENITY:SHOPINFO",
         ALL_IDS: "SERENITY:ALL_IDS",
         ALL_TITLES: "SERENITY:ALL_TITLES",
+        ITEMCAT: "SERENITY:ITEM_CATEGORY",
     }
 }
 const sideBarList = [
@@ -14,7 +15,7 @@ const sideBarList = [
         icon: 'mdi:house-circle'
     },
     {
-        title: 'ไอเทม',
+        title: 'ร้านค้า',
         goto: '/shop',
         icon: 'mdi:house-circle'
     },

@@ -2,9 +2,9 @@
 	import History from './History.svx';
 </script>
 
-	<div class="px-4 lg:px-10 pt-6 bg-white">
+	<div class="px-4 lg:px-10 pt-6">
 		<!-- lg:prose-xl -->
-		<article class="prose">
+		<article class="prose dark:text-white">
 			<History />
 		</article>
 	</div>

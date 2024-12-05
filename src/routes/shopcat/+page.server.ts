@@ -1,24 +1,25 @@
 import { db } from "$lib/db";
 import { error, fail } from "@sveltejs/kit";
-import type { PageServerLoad } from "../$types";
-import { getCache, setCache } from "$lib/cache";
+import { cache, cacheFetch } from "$lib/server/niceCache.ts";
+import type { ShopCategories } from "@prisma/client";
+import type { PageServerLoad } from "./$types.ts";
 
-export const load: PageServerLoad = async (req) => {
 
-    const cacheKey = 'shopCategory';
-    let data = await getCache(cacheKey);
+export const load: PageServerLoad = async (e) => {
 
-    if (data) {
-        console.log('Cache hit: Data retrieved from cache');
-    } else {
-        console.log('Cache miss: Querying Prisma');
-        data = await db.shopCategories.findMany();
+    e.depends("shopcat")
+
+    const shopCat = await cacheFetch(String(e.url), () =>
+        db.shopCategories.findMany({
+            select: {
+                id: true,
+                title: true,
+            }
+        }), {
+        ttl: 50000
     }
-    if (data) {
-        await setCache(cacheKey, data, 60000); // Cache for 1 minute
-    }
-    if (!data) return error(404, "ไม่พบข้อมูล")
-    return { colla: data }
+    );
+    return { colla: shopCat }
 }
 
 export const actions = {
@@ -39,10 +40,11 @@ export const actions = {
         const data = await e.request.formData();
         const id = Number(data.get("catId"))
         if (!id) return error(404, "ไม่พบไอดี");
-        await db.shopCategories.delete({
+        const result = await db.shopCategories.delete({
             where: {
                 id: id
             }
         })
+        if (!result) return fail(404)
     }
 }

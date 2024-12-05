@@ -3,73 +3,80 @@ import { db } from '$lib/db';
 import { getCache, setCache, genCacheKey } from '$lib/cache';
 import { valla } from '$lib/variableStore';
 import { error, fail, redirect } from '@sveltejs/kit';
+import { cacheFetch } from '$lib/server/niceCache.js';
 
 export const load: PageServerLoad = async (event) => {
     event.depends(valla.shop.ITEMS);
 
-    // Get the title from query parameters
     const title = event.url.searchParams.get('title') || '';
-    // const shopCategory = event.url.searchParams.get('cat') || '';
 
 
-    // console.log(`Requested title: ${title}`);
+    const allItemTitles = await cacheFetch<string[]>(
+        'all_shop_items_titles',
+        async () => {
+            console.log('🔍 Fetching all item titles from database');
+            const titles = await db.shopItems.findMany({
+                select: { title: true }
+            });
+            return titles.map((item) => item.title.toLowerCase());
+        },
+        {
+            ttl: 120000 // 2 minutes cache
+        }
+    );
 
-    // Cache key for all item titles
-    const allTitlesCacheKey = genCacheKey(valla.shop.ALL_TITLES, {});
-    let allItemTitles = await getCache(allTitlesCacheKey);
-
-    // Fetch and cache all item titles if not cached
-    if (!allItemTitles) {
-        // console.log('Cache miss: Fetching all item titles');
-        const titles = await db.shopItems.findMany({ select: { title: true } });
-        allItemTitles = titles.map((item) => item.title.toLowerCase());
-        await setCache(allTitlesCacheKey, allItemTitles, 120000); // Cache for 1 minute
-    }
-
-    // Check if the requested title exists in the cached titles
+    // Validate title if provided
     if (title && !allItemTitles.includes(title.toLowerCase())) {
         throw error(404, 'ไม่พบสินค้า');
     }
 
-    // Cache key for items matching the title
-    const cacheKey = genCacheKey(valla.shop.ITEMS, { title });
-    let data = await getCache(cacheKey);
 
-    if (!data) {
-        // console.log('Cache miss: Querying Prisma for items');
-        data = await db.shopItems.findMany({
-            where: {
-                ...(title && { title: { contains: title } }), // Case-insensitive search
-                // ...(shopCategory && {
-                //     catty: {
-                //         title: {
-                //             contains: shopCategory
-                //         }
-                //     }
-                // })
-            },
-            orderBy: {
-                saleCount: 'desc',
-            },
-            select: {
-                id: true,
-                title: true,
-                price: true
+
+    const data = await cacheFetch(
+        `shop_items_${title}`,
+        async () => {
+            const items = await db.shopItems.findMany({
+                where: {
+                    ...(title && { title: { contains: title } }), // Case-insensitive search
+                },
+                orderBy: {
+                    saleCount: 'desc',
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    price: true
+                }
+            });
+
+            if (items.length === 0) {
+                throw error(404, 'ไม่พบสินค้า');
             }
-        });
 
-        if (data.length === 0) {
-            throw error(404, 'ไม่พบสินค้า');
+            return items;
+        },
+        {
+            ttl: 60000 // 1 minute cache
         }
-
-        // Cache the queried items
-        await setCache(cacheKey, data, 60000); // Cache for 1 minute
-    }
-
+    );
+    const shopCat = await cacheFetch(String(event.url), () => db.shopCategories.findMany({
+        select: {
+            id: true,
+            title: true,
+            _count: {
+                select: { shopItem: true }
+            }
+        }
+    }));
     return {
         colla: data,
+        catta: shopCat.map((cat) => ({
+            title: cat.title,
+            count: cat._count.shopItem,
+        }))
     };
-};
+}
+
 let filters = {
     title: "",
     page: 0,
@@ -89,31 +96,47 @@ export const actions = {
     // },
     searchItem: async (e) => {
         const formData = await e.request.formData();
-        const title = String(formData.get('title'));
+        const title = String(formData.get('title')).toLowerCase();
+        const allItemTitles = await cacheFetch<string[]>(
+            'all_shop_items_titles',
+            async () => {
+                console.log('🔍 Fetching all item titles from database');
+                const titles = await db.shopItems.findMany({
+                    select: { title: true },
+                });
+                return titles.map((item) => item.title.toLowerCase());
+            },
+            { ttl: 120000 } //2 min cache
+        );
 
-        const cacheKey = genCacheKey(valla.shop.ITEMS, { title });
-        let result = await getCache(cacheKey);
-        if (!result) {
-            console.log("No Cache found")
-            result = await db.shopItems.findMany({
-                where: {
-                    title: { contains: title }
-                },
-                select: {
-                    id: true,
-                    title: true,
-                    price: true
-                }
-            })
-            if (result.length === 0) {
-                return fail(404, {notFound: true});
-                // 'ไม่พบสินค้า'
-            }
-            await setCache(cacheKey, result, 60000); // Cache for 1 minute
-
+        if (!title || !allItemTitles.includes(title)) {
+            return fail(404, { notFound: true });
         }
 
+        const result = await cacheFetch<{ id: number; title: string; price: number }[]>(
+            `shopSearch${title}`,
+            async () => {
+                console.log(`🔍 Fetching search results for title: ${title}`);
+                return await db.shopItems.findMany({
+                    where: { title: { contains: title, mode: "insensitive" } },
+                    select: {
+                        id: true,
+                        title: true,
+                        price: true,
+                    },
+                });
+            },
+            { ttl: 60000 }
+        );
         if (!result) return fail(404, { notFound: true });
+        // const result = await db.shopItems.findMany({
+        //     where: { title: { contains: title, mode: "insensitive" } },
+        //     select: {
+        //         id: true,
+        //         title: true,
+        //         price: true,
+        //     },
+        // });
         return result
     }
 }

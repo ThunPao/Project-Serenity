@@ -9,19 +9,24 @@
 	});
 	let { title = '', subTitle = '', linkPaths = [], children } = $props();
 </script>
+<!-- <style>
+	main {
+		background-image: url("/background/bgcover.webp");
+		background-size: cover;
+	}
+</style> -->
+<main>
 
-<div class="container mx-auto pt-8">
+<div class="container mx-auto pt-8 min-h-screen">
 	<div class="grid gap-4 xl:grid-cols-4">
 		<div class="order-2 space-y-4 xl:order-1 xl:col-span-3">
 			{#if title}
-				<div class="rounded-md bg-white p-6">
+				<div class="rounded-md card bg-white p-6 dark:text-white ">
 					<ol class="breadcrumb">
+						<li class="crumb"><a class="anchor" href="/">หน้าหลัก</a></li>
 						{#each linkPaths as data}
-							<li class="crumb"><a class="anchor" href="/elements/breadcrumbs">{data}</a></li>
-							<li class="crumb-separator" aria-hidden="true">/</li>
-							<li class="crumb"><a class="anchor" href="/elements/breadcrumbs">Blog</a></li>
-							<li class="crumb-separator" aria-hidden="true">/</li>
-							<li>Article</li>
+						<li class="crumb-separator" aria-hidden="true">/</li>
+							<li>{data.title}</li>
 						{/each}
 					</ol>
 
@@ -65,3 +70,4 @@
 		</div>
 	</div>
 </div>
+</main>

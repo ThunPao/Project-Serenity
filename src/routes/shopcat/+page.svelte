@@ -1,11 +1,29 @@
 <script>
+	import { applyAction, enhance } from '$app/forms';
+
 	let { data } = $props();
 </script>
 
 Shop Category Page
 <div class="grid gap-4">
 	{#each data.colla as row}
-		<form method="post" action="?/deleteShopCat">
+		<form
+			method="post"
+			action="?/deleteShopCat"
+			use:enhance={({ formElement, formData, action, cancel }) => {
+				return async ({ result }) => {
+					console.log(result);
+					if (result.type === 'failure') {
+						console.log('Error: ' + result.status);
+					}
+					if (result.type === 'success') {
+						console.log('Res D');
+						console.log(result.data);
+					}
+					await applyAction(result);
+				};
+			}}
+		>
 			<div class="variant-filled-surface badge space-x-4 py-4">
 				<div>{row.title}</div>
 				<input type="hidden" name="catId" value={row.id} />

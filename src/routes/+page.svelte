@@ -13,7 +13,7 @@
 
 <!-- Content -->
 <div class="container mx-auto lg:p-2 lg:py-10">
-	<div class="space-y-2">
+	<div class="space-y-2 ">
 		<div class="justify-center gap-4 space-y-2 xl:flex">
 			<div class="relative max-w-screen-lg duration-300" class:xl:max-w-screen-md={curVert > 30}>
 				<img
@@ -66,13 +66,28 @@
 				<!--  -->
 			</div>
 		</div>
-		<div class="container mx-auto space-y-12">
-			<div class="hidden p-2 lg:block"></div>
-			<!-- <div class="alert flex justify-center text-2xl">เลือกดูสินค้าตามใจชอบ💖</div> -->
-			
-			<div id="topOnline" class="pt-4 text-center">
-				<h1>อันดับเวลาผู้เล่นออนไลน์สะสมสูงสุด</h1>
+		<div class="container mx-auto space-y-8 pt-16 px-4">
+			<!-- <div class="grid grid-cols-3 gap-4 h-96 bg-black">
+
+				{#each [1,2,3] as row}
+				<div class="bg-white rounded-lg">Card</div>
+				{/each}
+			</div> -->
+			<article class="prose-sm">
+				<div class="grid justify-center text-center">
+					<div>
+						<h1>Prologue</h1>
+					</div>
+					<h5>The Legend's Reincarnate</h5>
+				</div>
+			</article>
+
+			<div class="">
+				<article id="topOnline" class="xl:prose-md prose-sm">
+					<h1>⌚อันดับเวลาผู้เล่นออนไลน์สะสมสูงสุด</h1>
+				</article>
 			</div>
+
 			<div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
 				{#each [1, 2, 3] as row}
 					<div class="card w-full bg-white">

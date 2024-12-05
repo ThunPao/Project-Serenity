@@ -1,10 +1,24 @@
 <script lang="ts">
+	import PrimeLayer from '$lib/Widgets/PrimeLayer.svelte';
+
 	export let data;
 	const { title, imageUrl } = data.colla;
 </script>
+<PrimeLayer
+	title={title}
+	subTitle="รายละเอียดสินค้า"
+	linkPaths={[
+		{
+			title: 'ร้านค้า',
+			link: ''
+		},
+		{
+			title: title,
+			link: ''
+		}
+	]}
+>
 
-<div class="container mx-auto">
-	<div class="card">
 		<div class="flex justify-center py-2">
 			<!-- src={'/items/' + imageUrl} -->
 			<img
@@ -16,5 +30,4 @@
 		</div>
 
 		{title}
-	</div>
-</div>
+</PrimeLayer>

@@ -2,20 +2,28 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+Thai:wght@100..900&display=swap');
-/* @layer base {
+@layer base {
 	h1 {
-	  @apply text-2xl;
+		@apply text-2xl dark:text-white;
 	}
 	h2 {
-	  @apply text-xl;
+		@apply text-xl dark:text-white;
 	}
 	h3 {
-	  @apply text-lg;
+		@apply text-lg dark:text-white;
 	}
-	a {
-	  @apply text-blue-600 underline;
+	h4 {
+		@apply text-base dark:text-white;
 	}
-  } */
+	h5 {
+		@apply text-sm dark:text-white;
+	}
+	article {
+		a {
+			@apply text-blue-600 underline dark:text-teal-300;
+		}
+	}
+}
 body {
 	background: rgb(221, 221, 222);
 }
