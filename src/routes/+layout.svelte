@@ -6,6 +6,9 @@
 	import NavTop from '$lib/Widgets/NavTop.svelte';
 	import '../app.css';
 	let { children } = $props();
+	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+	import { storePopup } from '@skeletonlabs/skeleton';
+	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 </script>
 
 <main data-theme="julia" class="bg-surface-50-900-token select-none font-noto">
@@ -13,5 +16,5 @@
 	<NaviNim />
 	<NavTop />
 	{@render children()}
-	<NavBottom/>
+	<NavBottom />
 </main>

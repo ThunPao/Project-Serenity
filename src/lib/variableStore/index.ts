@@ -23,6 +23,6 @@ const sideBarList = [
         title: 'ประวัติความเป็นมา',
         goto: '/aboutus',
         icon: 'mdi:book-open-page-variant'
-    }
+    },
 ];
 export {sideBarList}

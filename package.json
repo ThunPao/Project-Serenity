@@ -39,6 +39,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.3",
     "@auth/sveltekit": "^1.7.3",
+    "@floating-ui/dom": "^1.6.12",
     "@prisma/client": "5.22.0",
     "@prisma/extension-read-replicas": "^0.4.0",
     "rollup-plugin-visualizer": "^5.12.0",
