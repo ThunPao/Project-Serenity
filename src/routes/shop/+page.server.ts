@@ -1,8 +1,8 @@
-import type { PageServerLoad } from './$types';
 import { db } from '$lib/db';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { cacheFetch } from '$lib/server/niceCache.ts';
 import { valla } from '$lib/server/variableList.ts';
+import type { PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = async (event) => {
     event.depends(valla.shop.ITEMS);

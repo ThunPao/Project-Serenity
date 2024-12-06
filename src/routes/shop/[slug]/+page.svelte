@@ -18,7 +18,6 @@
 		}
 	]}
 >
-
 		<div class="flex justify-center py-2">
 			<!-- src={'/items/' + imageUrl} -->
 			<img

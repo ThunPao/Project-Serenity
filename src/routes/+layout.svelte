@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Navido from '$lib/Magic/Navido.svelte';
 	import NaviNim from '$lib/Magic/NaviNim.svelte';
-	import FooterBar from '$lib/Widgets/FooterBar.svelte';
+	// import FooterBar from '$lib/Widgets/FooterBar.svelte';
+	import NavBottom from '$lib/Widgets/NavBottom.svelte';
 	import NavTop from '$lib/Widgets/NavTop.svelte';
 	import '../app.css';
 	let { children } = $props();
@@ -12,5 +13,5 @@
 	<NaviNim />
 	<NavTop />
 	{@render children()}
-	<!-- <FooterBar/> -->
+	<NavBottom/>
 </main>

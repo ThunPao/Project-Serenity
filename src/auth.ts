@@ -1,10 +1,9 @@
 import { SvelteKitAuth, type DefaultSession } from '@auth/sveltekit';
 import { DISCORD_ID, DISCORD_SECRET } from '$env/static/private';
 import Discord from '@auth/sveltekit/providers/discord';
-// import GitHub from "@auth/sveltekit/providers/github"
-// import Google from "@auth/sveltekit/providers/google"
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { db } from '$lib/db';
+import { cacheFetch } from '$lib/server/niceCache';
 declare module '@auth/sveltekit' {
 	interface User {
 		pname: string;
@@ -13,35 +12,66 @@ declare module '@auth/sveltekit' {
 	}
 }
 
+// const originalSignOut = SvelteKitAuth.signOut;
+
+// async function customSignOut(event) {
+// 	console.log('Custom signOut triggered:', event);
+
+// 	// Perform additional logic if needed before calling the original signOut
+// 	const result = await originalSignOut(event);
+
+// 	console.log('SignOut completed:', result);
+// 	return result;
+// }
+
+
 export const { handle, signIn, signOut } = SvelteKitAuth({
 	adapter: PrismaAdapter(db),
 	callbacks: {
 		async session({ session, token }) {
-			// Fetch custom user data from the database
 			if (session.user) {
-				const userData = await db.user.findUnique({
-					where: {
-						id: session.user.id
-					},
-					select: {
-						UserInfo: {
+				const userData = await cacheFetch<{ playerName: string; points: number; coins: number; } | null>(
+					`userInfo:${session.user.id}`,
+					async () => {
+						const userInfo = await db.userInfo.upsert({
+							where: {
+								playerName: session.user.name || 'Player'
+							},
+							update: {}, // No changes if already exists
+							create: {
+								playerName: session.user.name || 'Player',
+								points: 0,
+								coins: 0,
+								User: {
+									connect: {
+										id: session.user.id
+									}
+								}
+							},
 							select: {
 								playerName: true,
 								points: true,
 								coins: true
 							}
-						}
-					}
-				});
+						});
 
-				if (userData?.UserInfo) {
-					session.user.pname = userData.UserInfo.playerName;
-					session.user.points = userData.UserInfo.points
-					session.user.coins = userData.UserInfo.coins
+						console.log('User query result:', userInfo);
+						return userInfo;
+					},
+					{
+						sec: 60
+					}
+				);
+
+				if (userData) {
+					session.user.pname = userData.playerName;
+					session.user.points = userData.points;
+					session.user.coins = userData.coins;
 				}
 			}
 			return session;
-		}
+		},
+		// ... other callbacks
 	},
 	providers: [
 		Discord({

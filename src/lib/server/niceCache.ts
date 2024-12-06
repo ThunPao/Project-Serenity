@@ -104,3 +104,11 @@ export function resetCache(force = true) {
         return purgedCount;
     }
 }
+
+export function getCache(key: string) {
+    return ServerCache.get(key);
+}
+
+export function clearCache(key: string) {
+    return ServerCache.clear(key);
+}

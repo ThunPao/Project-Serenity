@@ -20,9 +20,7 @@ export const load: PageServerLoad = async (event) => {
 
     const slug = parseResult.data;
     event.depends(valla.shop.INFO);
-
     const title = decodeURIComponent(slug.toLowerCase());
-    console.log(title)
     const allItemTitles = await cacheFetch<string[]>(
         valla.shop.ALL_TITLES,
         async () => {
@@ -39,7 +37,7 @@ export const load: PageServerLoad = async (event) => {
     }
 
     const shopInfo = await cacheFetch<{ id: number; title: string;  imageUrl: string } | null>(
-        valla.shop.INFO,
+        `valla.shop.INFO:${title}`,
         () => db.shopItems.findFirst({
             where: { title: { contains: title,mode: "insensitive" } },
             select: {
