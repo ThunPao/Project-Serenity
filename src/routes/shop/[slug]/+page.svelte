@@ -10,7 +10,7 @@
 	linkPaths={[
 		{
 			title: 'ร้านค้า',
-			link: ''
+			link: '/shop'
 		},
 		{
 			title: title,
