@@ -20,8 +20,11 @@
 		<div slot="submitButton" class="buttonPrimary">เข้าสู่ระบบ</div>
 	</SignIn>
 {:else}
-	<button use:popup={popupFeatured}>
-		<Avatar src={session.user.image} width="w-12" rounded="rounded-full" />
+	<button class="flex flex-col items-center justify-center" use:popup={popupFeatured}>
+		<Avatar initials={session.user?.name[0]} src={session.user.image} background="bg-primary-500" width="w-12" rounded="rounded-full" />
+		<small>
+			{session.user?.name}
+		</small>
 	</button>
 {/if}
 <div class="card w-72 bg-white shadow-xl dark:text-white" data-popup="popupFeatured">
@@ -52,7 +55,7 @@
 		<hr class="opacity-40" />
 
 		<SignOut>
-			<div slot="submitButton" class="buttonPrimary">ออกจากระบบ</div>
+			<div slot="submitButton" class="flex items-center space-x-2 p-3 pt-4 hover:bg-surface-50-900-token">ออกจากระบบ</div>
 		</SignOut>
 	</div>
 </div>
