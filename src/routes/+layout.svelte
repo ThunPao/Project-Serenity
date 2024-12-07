@@ -4,6 +4,8 @@
 	// import FooterBar from '$lib/Widgets/FooterBar.svelte';
 	import NavBottom from '$lib/Widgets/NavBottom.svelte';
 	import NavTop from '$lib/Widgets/NavTop.svelte';
+	import { page } from '$app/stores';
+
 	import '../app.css';
 	let { children } = $props();
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
@@ -14,7 +16,8 @@
 <main data-theme="julia" class="bg-surface-50-900-token select-none font-noto">
 	<Navido />
 	<NaviNim />
-	<NavTop />
+	<NavTop session={$page.data.session ? $page.data.session : null} />
 	{@render children()}
 	<NavBottom />
+
 </main>

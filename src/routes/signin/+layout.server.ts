@@ -8,10 +8,6 @@ export const load: LayoutServerLoad = async (event) => {
       `layout_session:anonymous`,
       async () => {
         const authResult = await event.locals.auth();
-        // if (authResult === null) {
-        //     console.log("Authentication is null. Skipping cache.");
-        //     return "anonymous";
-        // }
         return authResult;
       },
       {
