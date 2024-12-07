@@ -10,7 +10,10 @@ export const actions: Actions = {
                 path: "/",
             });
             clearCache("layout_session:anonymous")
+            console.log("perform signout")
         }
+        
+        console.log("Do signout...")
         return await signOut(event);
     }
 };

@@ -3,30 +3,25 @@ import { limiter } from '$lib/services/rateLimiter';
 import { cacheFetch } from '$lib/server/niceCache';
 
 export const load: LayoutServerLoad = async (event) => {
-    await limiter.cookieLimiter?.preflight(event);
-    const isAuth = event.cookies.get('isAuth');
-    if (isAuth) {
-      const session = await cacheFetch(
-        `layout_session:anonymous`,
-        async () => {
-          const authResult = await event.locals.auth();
-          return authResult;
-        },
-        {
-          sec: 3600,
-        }
-      );
-      return {
-        session: session ?? null,
-      };
-    }
+  await limiter.cookieLimiter?.preflight(event);
+  const isAuth = event.cookies.get('isAuth');
+  if (isAuth) {
+    const session = await cacheFetch(
+      `layout_session:${isAuth}`,
+      async () => {
+        return await event.locals.auth();
+      },
+      {
+        sec: 3600,
+      }
+    );
     return {
-      session: null
+      session: session,
     };
-};
+  }
 
-// export const actions: = {
-//     default: async (event) => {
-//         if (await limiter.isLimited(event)) throw error(429);
-//     }
-// };
+  const session = await event.locals.auth();
+  return {
+    session: session,
+  };
+};
