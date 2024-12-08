@@ -4,11 +4,11 @@ import type { Actions } from "./$types";
 
 export const actions: Actions = {
     default: async (event) => {
-        const isAuth = event.cookies.get('isAuth');
+        const isAuth = event.cookies.get('authjs.session-token');
         if (isAuth) {
-            event.cookies.delete("isAuth", {
-                path: "/",
-            });
+            // event.cookies.delete("isAuth", {
+            //     path: "/",
+            // });
             clearCache("layout_session:anonymous")
             console.log("perform signout")
         }

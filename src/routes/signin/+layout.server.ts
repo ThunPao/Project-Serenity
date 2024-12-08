@@ -2,7 +2,7 @@ import { cacheFetch } from "$lib/server/niceCache";
 import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = async (event) => {
-  const isAuth = event.cookies.get('isAuth');
+  const isAuth = event.cookies.get('authjs.session-token');
   if (isAuth) {
     const session = await cacheFetch(
       `layout_session:anonymous`,
