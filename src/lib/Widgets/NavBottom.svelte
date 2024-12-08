@@ -6,19 +6,15 @@
 	const drawerStore = getDrawerStore();
 	const drawerSettings: DrawerSettings = {
 		id: 'ProfilePop',
-		position: "bottom",
+		position: 'bottom',
 		meta: { foo: 'bar', fizz: 'buzz', age: 40 }
 	};
 </script>
 
 <div class="fixed bottom-4 z-30 w-full p-1">
 	<div
-		class="variant-filled-primary flex items-center justify-center rounded-full p-1 text-center lg:hidden"
+		class="bg-white dark:variant-filled-surface flex items-center justify-center rounded-full p-1 py-2 text-center lg:hidden shadow-md shadow-secondary-500"
 	>
-		<div class="grid w-full items-center justify-center">
-			<Icon icon="mdi:user-circle" width="2rem" height="2rem" />
-			<div>Home</div>
-		</div>
 		<div class="grid w-full items-center justify-center">
 			<Icon icon="mdi:user-circle" width="2rem" height="2rem" />
 			<div>Home</div>
@@ -27,10 +23,14 @@
 			<button onclick={() => drawerStore.open(drawerSettings)}>
 				<Avatar
 					src="https://images.unsplash.com/photo-1617296538902-887900d9b592?ixid=M3w0Njc5ODF8MHwxfGFsbHx8fHx8fHx8fDE2ODc5NzExMDB8&ixlib=rb-4.0.3&w=128&h=128&auto=format&fit=crop"
-					width="w-12"
+					width="w-14"
 					rounded="rounded-full"
 				/>
 			</button>
+		</div>
+		<div class="grid w-full items-center justify-center">
+			<Icon icon="mdi:user-circle" width="2rem" height="2rem" />
+			<div>Home</div>
 		</div>
 	</div>
 </div>

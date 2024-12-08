@@ -35,7 +35,7 @@
 		<a href="/shop">ไอเทม</a>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
-		<button onclick={() => drawerStore.open(drawerSettings)} class="px-4 text-xs"
+		<button onclick={() => drawerStore.open(drawerSettings)} class="max-md:hidden px-4 text-xs"
 			>กด <kbd class="kbd variant-filled-primary">Tab</kbd> เพื่อเปิดเมนู</button
 		>
 		<LightSwitch />
