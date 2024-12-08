@@ -5,8 +5,8 @@ export const myJuliaTheme: CustomThemeConfig = {
     name: 'julia',
     properties: {
 		// =~= Theme Properties =~=
-		"--theme-font-family-base": `'Noto Sans Thai', sans-serif`,
-		"--theme-font-family-heading": `'Noto Sans Thai', sans-serif`,
+		"--theme-font-family-base": `system-ui`,
+		"--theme-font-family-heading": `system-ui`,
 		"--theme-font-color-base": "0 0 0",
 		"--theme-font-color-dark": "255 255 255",
 		"--theme-rounded-base": "12px",
@@ -15,23 +15,23 @@ export const myJuliaTheme: CustomThemeConfig = {
 		// =~= Theme On-X Colors =~=
 		"--on-primary": "255 255 255",
 		"--on-secondary": "255 255 255",
-		"--on-tertiary": "255 255 255",
-		"--on-success": "255 255 255",
+		"--on-tertiary": "0 0 0",
+		"--on-success": "0 0 0",
 		"--on-warning": "0 0 0",
 		"--on-error": "255 255 255",
 		"--on-surface": "255 255 255",
 		// =~= Theme Colors  =~=
-		// primary | #03396c 
-		"--color-primary-50": "217 225 233", // #d9e1e9
-		"--color-primary-100": "205 215 226", // #cdd7e2
-		"--color-primary-200": "192 206 218", // #c0ceda
-		"--color-primary-300": "154 176 196", // #9ab0c4
-		"--color-primary-400": "79 116 152", // #4f7498
-		"--color-primary-500": "3 57 108", // #03396c
-		"--color-primary-600": "3 51 97", // #033361
-		"--color-primary-700": "2 43 81", // #022b51
-		"--color-primary-800": "2 34 65", // #022241
-		"--color-primary-900": "1 28 53", // #011c35
+		// primary | #201c4d 
+		"--color-primary-50": "222 221 228", // #dedde4
+		"--color-primary-100": "210 210 219", // #d2d2db
+		"--color-primary-200": "199 198 211", // #c7c6d3
+		"--color-primary-300": "166 164 184", // #a6a4b8
+		"--color-primary-400": "99 96 130", // #636082
+		"--color-primary-500": "32 28 77", // #201c4d
+		"--color-primary-600": "29 25 69", // #1d1945
+		"--color-primary-700": "24 21 58", // #18153a
+		"--color-primary-800": "19 17 46", // #13112e
+		"--color-primary-900": "16 14 38", // #100e26
 		// secondary | #e10975 
 		"--color-secondary-50": "251 218 234", // #fbdaea
 		"--color-secondary-100": "249 206 227", // #f9cee3
@@ -54,17 +54,17 @@ export const myJuliaTheme: CustomThemeConfig = {
 		"--color-tertiary-700": "0 83 179", // #0053b3
 		"--color-tertiary-800": "0 67 143", // #00438f
 		"--color-tertiary-900": "0 54 117", // #003675
-		// success | #265e17 
-		"--color-success-50": "222 231 220", // #dee7dc
-		"--color-success-100": "212 223 209", // #d4dfd1
-		"--color-success-200": "201 215 197", // #c9d7c5
-		"--color-success-300": "168 191 162", // #a8bfa2
-		"--color-success-400": "103 142 93", // #678e5d
-		"--color-success-500": "38 94 23", // #265e17
-		"--color-success-600": "34 85 21", // #225515
-		"--color-success-700": "29 71 17", // #1d4711
-		"--color-success-800": "23 56 14", // #17380e
-		"--color-success-900": "19 46 11", // #132e0b
+		// success | #84cc16 
+		"--color-success-50": "237 247 220", // #edf7dc
+		"--color-success-100": "230 245 208", // #e6f5d0
+		"--color-success-200": "224 242 197", // #e0f2c5
+		"--color-success-300": "206 235 162", // #ceeba2
+		"--color-success-400": "169 219 92", // #a9db5c
+		"--color-success-500": "132 204 22", // #84cc16
+		"--color-success-600": "119 184 20", // #77b814
+		"--color-success-700": "99 153 17", // #639911
+		"--color-success-800": "79 122 13", // #4f7a0d
+		"--color-success-900": "65 100 11", // #41640b
 		// warning | #f17909 
 		"--color-warning-50": "253 235 218", // #fdebda
 		"--color-warning-100": "252 228 206", // #fce4ce

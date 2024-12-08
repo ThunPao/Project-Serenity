@@ -8,16 +8,23 @@
 
 	import '../app.css';
 	let { children } = $props();
-	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
-	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
+	import { initializeStores, Drawer } from '@skeletonlabs/skeleton';
+	import ProfilePop from '$lib/Widgets/ProfilePop.svelte';
+	initializeStores();
+	import { getDrawerStore } from '@skeletonlabs/skeleton';
+
+	const drawerStore = getDrawerStore();
 </script>
 
 <main data-theme="julia" class="bg-surface-50-900-token select-none font-noto">
 	<Navido />
 	<NaviNim />
-	<NavTop session={$page.data.session ? $page.data.session : null} />
+	<Drawer>
+		{#if $drawerStore.id === 'ProfilePop'}
+			<ProfilePop session={$page.data.session ? $page.data.session : null} />
+		{/if}
+	</Drawer>
+	<NavTop />
 	{@render children()}
 	<NavBottom />
-
 </main>

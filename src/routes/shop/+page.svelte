@@ -7,7 +7,7 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 	let colla = $state(data.colla);
 	let isGrid = $state(true);
-	let inputSearch = $state('');
+	let inputSearch = $state('123');
 </script>
 
 <PrimeLayer
@@ -54,30 +54,31 @@
 						};
 					}}
 				>
-					<input
-						bind:value={inputSearch}
-						class="input border-2 border-surface-100 bg-white p-3"
-						type="text"
-						name="title"
-						placeholder="🔍ค้นหาไอเทม"
-					/>
+					<div class="relative">
+						<input
+							bind:value={inputSearch}
+							class="input border-2 border-surface-100 bg-white p-3"
+							type="text"
+							name="title"
+							placeholder="🔍ค้นหาไอเทม"
+						/>
+						<button
+							type="button"
+							title="Clear Text"
+							onclick={() => {
+								inputSearch = '';
+								colla = data.colla;
+							}}
+							class="absolute right-0 top-0 flex h-full items-center px-3 text-surface-300"
+						>
+							ล้าง
+						</button>
+					</div>
 					<button title="Submit" type="submit">Send</button>
 					{#if form?.notFound}
 						<p>Item Not Found</p>
 					{/if}
 				</form>
-
-				<div class="absolute right-0 top-0">
-					<button
-						title="Clear Text"
-						onclick={() => {
-							inputSearch = '';
-							colla = data.colla;
-						}}
-						class:hidden={inputSearch.length < 3}
-						class="flex h-full select-none items-center p-3 text-surface-300">ล้าง</button
-					>
-				</div>
 			</div>
 		</div>
 

@@ -1,15 +1,17 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import { Avatar, popup, type PopupSettings } from '@skeletonlabs/skeleton';
+	import { Avatar, type DrawerSettings } from '@skeletonlabs/skeleton';
+	import { getDrawerStore } from '@skeletonlabs/skeleton';
 
-	const popupFeatured: PopupSettings = {
-		event: 'click',
-		target: 'popupFeatured',
-		placement: 'top'
+	const drawerStore = getDrawerStore();
+	const drawerSettings: DrawerSettings = {
+		id: 'ProfilePop',
+		position: "bottom",
+		meta: { foo: 'bar', fizz: 'buzz', age: 40 }
 	};
 </script>
 
-<div class="fixed bottom-4 z-50 w-full p-1">
+<div class="fixed bottom-4 z-30 w-full p-1">
 	<div
 		class="variant-filled-primary flex items-center justify-center rounded-full p-1 text-center lg:hidden"
 	>
@@ -22,7 +24,7 @@
 			<div>Home</div>
 		</div>
 		<div class="grid w-full items-center justify-center">
-			<button use:popup={popupFeatured}>
+			<button onclick={() => drawerStore.open(drawerSettings)}>
 				<Avatar
 					src="https://images.unsplash.com/photo-1617296538902-887900d9b592?ixid=M3w0Njc5ODF8MHwxfGFsbHx8fHx8fHx8fDE2ODc5NzExMDB8&ixlib=rb-4.0.3&w=128&h=128&auto=format&fit=crop"
 					width="w-12"
