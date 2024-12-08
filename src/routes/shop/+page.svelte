@@ -7,7 +7,8 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 	let colla = $state(data.colla);
 	let isGrid = $state(true);
-	let inputSearch = $state('123');
+	let inputSearch = $state('');
+	let formSearch: HTMLFormElement;
 </script>
 
 <PrimeLayer
@@ -24,14 +25,9 @@
 	<div class="flex justify-between p-3 dark:text-white">
 		<!-- <div class="font-noto text-xl">รายการสินค้า</div> -->
 		<div class="relative z-10">
-			<div class="sticky bottom-10">
-				Cat
-				{#each data.catta as cat}
-					<div class="badge">
-						{cat.title} ({cat.count})
-					</div>
-				{/each}
+			<div class="sticky bottom-10 space-y-2">
 				<form
+					bind:this={formSearch}
 					method="POST"
 					action="?/searchItem"
 					use:enhance={({ formElement, formData, action, cancel }) => {
@@ -54,31 +50,42 @@
 						};
 					}}
 				>
-					<div class="relative">
+					<div class="input-group variant-filled grid-cols-[1fr_auto]">
 						<input
 							bind:value={inputSearch}
-							class="input border-2 border-surface-100 bg-white p-3"
+							class="p-3 max-md:py-6"
 							type="text"
 							name="title"
 							placeholder="🔍ค้นหาไอเทม"
+							onkeydown={(e) => {
+								if (e.key === 'Enter') {
+									e.preventDefault();
+									formSearch.requestSubmit();
+								}
+							}}
 						/>
 						<button
 							type="button"
-							title="Clear Text"
 							onclick={() => {
 								inputSearch = '';
 								colla = data.colla;
 							}}
-							class="absolute right-0 top-0 flex h-full items-center px-3 text-surface-300"
+							title="Clear"
 						>
 							ล้าง
 						</button>
 					</div>
-					<button title="Submit" type="submit">Send</button>
+					<button hidden title="Submit" type="submit">Send</button>
 					{#if form?.notFound}
 						<p>Item Not Found</p>
 					{/if}
 				</form>
+				ประเภทสินค้า
+				{#each data.catta as cat}
+					<div class="variant-filled-surface badge">
+						{cat.title} ({cat.count})
+					</div>
+				{/each}
 			</div>
 		</div>
 

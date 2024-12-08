@@ -29,7 +29,7 @@
 	logOnTabPress();
 </script>
 
-<AppBar background="bg-white dark:variant-filled-primary" padding="py-4 px-2" shadow="shadow-md">
+<AppBar background="bg-white dark:variant-filled-surface" padding="py-4 px-2" shadow="shadow-md">
 	<svelte:fragment slot="lead"
 		><a href="/" class="btn text-2xl font-bold">SERENITY</a>
 		<a href="/shop">ไอเทม</a>
