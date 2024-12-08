@@ -66,6 +66,7 @@
 								<Icon icon={row.icon} width="1.5em" height="1.5em" />
 								<span class="flex-auto">{row.title}</span>
 							</button>
+							<hr/>
 						{/each}
 					</div>
 				</div>

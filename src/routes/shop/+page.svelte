@@ -23,72 +23,7 @@
 >
 	<!-- Filter -->
 	<div class="flex justify-between p-3 dark:text-white">
-		<!-- <div class="font-noto text-xl">รายการสินค้า</div> -->
-		<div class="relative z-10">
-			<div class="sticky bottom-10 space-y-2">
-				<form
-					bind:this={formSearch}
-					method="POST"
-					action="?/searchItem"
-					use:enhance={({ formElement, formData, action, cancel }) => {
-						return async ({ result }) => {
-							console.log(result);
-							if (result.type === 'failure') {
-								console.log('Error: ' + result.status);
-							}
-							if (
-								result.type === 'success' &&
-								Array.isArray(result.data) &&
-								result.data.every((item) => 'id' in item && 'title' in item && 'price' in item)
-							) {
-								colla = result.data.map(({ id, title, price }) => ({ id, title, price }));
-								console.log('Res D', colla);
-							} else {
-								console.error('Invalid data or fetch failure');
-							}
-							await applyAction(result);
-						};
-					}}
-				>
-					<div class="input-group variant-filled grid-cols-[1fr_auto]">
-						<input
-							bind:value={inputSearch}
-							class="p-3 max-md:py-6"
-							type="text"
-							name="title"
-							placeholder="🔍ค้นหาไอเทม"
-							onkeydown={(e) => {
-								if (e.key === 'Enter') {
-									e.preventDefault();
-									formSearch.requestSubmit();
-								}
-							}}
-						/>
-						<button
-							type="button"
-							onclick={() => {
-								inputSearch = '';
-								colla = data.colla;
-							}}
-							title="Clear"
-						>
-							ล้าง
-						</button>
-					</div>
-					<button hidden title="Submit" type="submit">Send</button>
-					{#if form?.notFound}
-						<p>Item Not Found</p>
-					{/if}
-				</form>
-				ประเภทสินค้า
-				{#each data.catta as cat}
-					<div class="variant-filled-surface badge">
-						{cat.title} ({cat.count})
-					</div>
-				{/each}
-			</div>
-		</div>
-
+		<div class="font-noto text-xl">รายการสินค้า</div>
 		<div class="group text-surface-300 hover:text-surface-500">
 			<button
 				title="Toggle Grid/List View"
@@ -105,7 +40,74 @@
 			</button>
 		</div>
 	</div>
+	<div class="flex">
+		<div class="space-y-2 max-md:w-full">
+			<form
+				bind:this={formSearch}
+				method="POST"
+				action="?/searchItem"
+				use:enhance={({ formElement, formData, action, cancel }) => {
+					return async ({ result }) => {
+						console.log(result);
+						if (result.type === 'failure') {
+							console.log('Error: ' + result.status);
+						}
+						if (
+							result.type === 'success' &&
+							Array.isArray(result.data) &&
+							result.data.every((item) => 'id' in item && 'title' in item && 'price' in item)
+						) {
+							colla = result.data.map(({ id, title, price }) => ({ id, title, price }));
+							console.log('Res D', colla);
+						} else {
+							console.error('Invalid data or fetch failure');
+						}
+						await applyAction(result);
+					};
+				}}
+			>
+				<div class="input-group variant-filled grid-cols-[1fr_auto]">
+					<input
+						bind:value={inputSearch}
+						class="p-3 max-md:py-6"
+						type="text"
+						name="title"
+						placeholder="🔍ค้นหาไอเทม"
+						onkeydown={(e) => {
+							if (e.key === 'Enter') {
+								e.preventDefault();
+								formSearch.requestSubmit();
+							}
+						}}
+					/>
+					<button
+						type="button"
+						onclick={() => {
+							inputSearch = '';
+							colla = data.colla;
+						}}
+						title="Clear"
+					>
+						ล้าง
+					</button>
+				</div>
+				<button hidden title="Submit" type="submit">Send</button>
+				{#if form?.notFound}
+					<p>Item Not Found</p>
+				{/if}
+			</form>
+			ประเภทสินค้า
+			{#each data.catta as cat}
+				<div class="variant-filled-surface badge">
+					{cat.title} ({cat.count})
+				</div>
+			{/each}
+		</div>
+	</div>
 	<!-- Item -->
+	<div class="py-4">
+		<hr class="!border-t-1" />
+	</div>
 	<div
 		class="max-h-[80dvh] gap-4 overflow-hidden overflow-y-auto pb-10"
 		class:grid={isGrid}
