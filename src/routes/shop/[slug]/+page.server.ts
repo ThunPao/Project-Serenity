@@ -3,13 +3,14 @@ import { z } from 'zod';
 import { db } from '$lib/db';
 import { valla } from '$lib/server/variableList.ts';
 import { error, fail } from '@sveltejs/kit';
-import { cacheFetch } from '$lib/server/niceCache';
+import { cacheFetch, resetCache } from '$lib/server/niceCache';
+import { Rcon } from "rcon-client"
+import query from '@mcpedb/query';
 
 // Zod schema for ID validation
 const titleSchema = z.string().max(64);
 
 export const load: PageServerLoad = async (event) => {
-
     const rawSlug = event.params.slug;
 
     // Validate ID format
@@ -36,10 +37,10 @@ export const load: PageServerLoad = async (event) => {
         return error(404);
     }
 
-    const shopInfo = await cacheFetch<{ id: number; title: string;  imageUrl: string } | null>(
+    const shopInfo = await cacheFetch<{ id: number; title: string; imageUrl: string } | null>(
         `valla.shop.INFO:${title}`,
         () => db.shopItems.findFirst({
-            where: { title: { contains: title,mode: "insensitive" } },
+            where: { title: { contains: title, mode: "insensitive" } },
             select: {
                 id: true,
                 title: true,
@@ -51,4 +52,47 @@ export const load: PageServerLoad = async (event) => {
     );
     if (!shopInfo) return error(404)
     return { colla: shopInfo }
+}
+const rcon = await Rcon.connect({
+    host: "192.168.1.134", port: 25575, password: "AWD7241"
+})
+
+async function CheckOnline(pname: string) {
+    try {
+        const data = await query("192.168.1.134", 25565);
+        if (!data.players.includes(pname)) {
+            return { type: false, code: 404, message: "กรุณาออนไลน์ในเซิร์ฟเวอร์" }
+        }
+        return { type: true, code: 200, message: "สำเร็จ" }
+    } catch (err) {
+        return { type: false, code: 500, message: "เซิร์ฟเวอร์ออฟไลน์" }
+    }
+}
+
+export const actions = {
+
+    buyItem: async (event) => {
+        const rawShopTitle = event.params.slug;
+        // Validate ID format
+        const parseResult = titleSchema.safeParse(rawShopTitle);
+        if (!parseResult.success) {
+            throw error(400, 'รูปแบบของข้อมูลไม่ถูกต้อง');
+        }
+        const shopTitle = parseResult.data;
+        const isOnline = await CheckOnline("I3a0")
+        if (!isOnline.type) return error(isOnline.code, { message: isOnline.message })
+        const shop = await db.shopItems.findFirst({
+            where: {
+                title: shopTitle
+            },
+            select: {
+                itemCommand: true
+            }
+        })
+        if (!shop) return error(404, { message: "Item not found" })
+        shop.itemCommand.forEach((item) => {
+            rcon.send(String(item.itemCommand))
+        })
+        console.log("Buy Item")
+    }
 }

@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
   // provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
   // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
@@ -68,6 +68,7 @@ model ShopItems {
   title       String
   description String?
   imageUrl    String
+  itemCommand ItemCommands[]
   price       Int            @default(0)
   saleCount   Int            @default(0)
   startDate   DateTime?
@@ -76,6 +77,13 @@ model ShopItems {
   catty       ShopCategories @relation(fields: [catId], references: [id], onDelete: Cascade)
   catId       Int
   isActive    Boolean        @default(false)
+}
+
+model ItemCommands {
+  id          Int     @id @default(autoincrement())
+  itemCommand String? @db.Text
+  ShopItems   ShopItems? @relation(fields: [shopItemsId], references: [id])
+  shopItemsId Int?
 }
 
 model ShopCategories {
@@ -96,10 +104,10 @@ model ShopHistory {
 }
 
 model TopupRating {
-  id        Int       @id @default(autoincrement())
-  price     Int
-  points    Int
-  isActive  Boolean   @default(true)
+  id       Int     @id @default(autoincrement())
+  price    Int
+  points   Int
+  isActive Boolean @default(true)
 }
 
 model TopupHistory {
