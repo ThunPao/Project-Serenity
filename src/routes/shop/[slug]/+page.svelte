@@ -7,17 +7,20 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	const { title, imageUrl, description } = data.colla;
+	const { title, imageUrl, description, price } = data.colla;
 	const tAlert = (msg: string, bgColor: string) => {
 		if (msg) {
 			const t: ToastSettings = {
 				message: String(msg),
-				background: bgColor
+				background: bgColor,
+				hoverable: true,
+				classes: 'max-md:ml-40'
 			};
 			toastStore.trigger(t);
 		}
 	};
 	const toastStore = getToastStore();
+	let isCooldown = $state(false);
 </script>
 
 <PrimeLayer
@@ -61,20 +64,30 @@
 			{title}
 		</h1>
 	</article>
+	<h3 class="text-xl font-bold">
+		${price} Point
+	</h3>
+
 	<hr />
-	<div class="p-2">
+
+	<h5 class="p-6">
 		{description}
-	</div>
+	</h5>
 	<form
 		action="?/buyItem"
 		method="post"
 		use:enhance={({ formElement, formData, action, cancel }) => {
+			isCooldown = true;
 			return async ({ result }) => {
 				if (result.type === 'failure') {
 					tAlert(String(result.data?.message), 'variant-filled-error');
 				}
 				if (result.type === 'success') {
-					tAlert(String(result.data?.message), 'variant-filled-success');
+					isCooldown = false;
+					tAlert(
+						String(result.data?.message),
+						'bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 text-white'
+					);
 				} else {
 					console.error('Invalid data or fetch failure');
 				}
@@ -83,8 +96,16 @@
 			};
 		}}
 	>
-		<div class="flex justify-center">
-			<button type="submit" class="variant-filled-primary btn">Buy Item</button>
+		<div class="flex">
+			<button
+				disabled={isCooldown}
+				title="ซื้อไอเทม"
+				type="submit"
+				class="variant-filled-success btn text-lg font-bold"
+			>
+				<span><Icon icon="mdi:coin" width="36" height="36" /></span>
+				<span>BUY ITEM</span>
+			</button>
 		</div>
 	</form>
 </PrimeLayer>

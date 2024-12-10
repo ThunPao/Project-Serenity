@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { UserSession } from '$lib/variableStore/interModels';
 	import Icon from '@iconify/svelte';
 	import { Avatar, type DrawerSettings } from '@skeletonlabs/skeleton';
 	import { getDrawerStore } from '@skeletonlabs/skeleton';
@@ -9,28 +10,33 @@
 		position: 'bottom',
 		meta: { foo: 'bar', fizz: 'buzz', age: 40 }
 	};
+	const {
+		usrSession = null,
+		isOnline = false
+	}: { usrSession: UserSession | null | undefined; isOnline: Boolean } = $props();
 </script>
 
 <div class="fixed bottom-4 z-30 w-full p-1">
 	<div
-		class="bg-white dark:variant-filled-surface flex items-center justify-center rounded-full p-1 py-2 text-center lg:hidden shadow-md shadow-secondary-500"
+		class="flex items-center justify-center rounded-full bg-white p-1 py-2 text-center shadow-md shadow-secondary-500 dark:variant-filled-surface lg:hidden"
 	>
-		<div class="grid w-full items-center justify-center">
+		<a href="/" class="flex flex-col w-full items-center justify-center">
 			<Icon icon="mdi:user-circle" width="2rem" height="2rem" />
 			<div>Home</div>
-		</div>
-		<div class="grid w-full items-center justify-center">
+		</a>
+		<div class="grid w-full items-center justify-center -mt-6">
 			<button onclick={() => drawerStore.open(drawerSettings)}>
 				<Avatar
-					src="https://images.unsplash.com/photo-1617296538902-887900d9b592?ixid=M3w0Njc5ODF8MHwxfGFsbHx8fHx8fHx8fDE2ODc5NzExMDB8&ixlib=rb-4.0.3&w=128&h=128&auto=format&fit=crop"
-					width="w-14"
-					rounded="rounded-full"
-				/>
+						src={usrSession?.image ?? ''}
+						width="w-20"
+						rounded="rounded-full"
+						border={`border-4 ${isOnline ? 'border-success-500' : 'border-warning-500'}`}
+					/>
 			</button>
 		</div>
-		<div class="grid w-full items-center justify-center">
-			<Icon icon="mdi:user-circle" width="2rem" height="2rem" />
-			<div>Home</div>
-		</div>
+		<a href="/shop" class="flex flex-col w-full items-center justify-center">
+			<Icon icon="mdi:local-grocery-store" width="2rem" height="2rem" />
+			<div>Shop</div>
+		</a>
 	</div>
 </div>

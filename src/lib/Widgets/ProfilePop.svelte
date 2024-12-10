@@ -4,10 +4,12 @@
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
 	import type { UserSession } from '$lib/variableStore/interModels';
 
-	let { usrSession = null, isOnline = false }: { usrSession: UserSession | null | undefined; isOnline: Boolean } =
-		$props();
-
+	const {
+		usrSession = null,
+		isOnline = false
+	}: { usrSession: UserSession | null | undefined; isOnline: Boolean } = $props();
 </script>
+
 <div id="ProfilePop" class="card z-50 h-full bg-white shadow-xl dark:text-white">
 	<div class="flex h-full w-full flex-col justify-between">
 		<div></div>
@@ -24,7 +26,7 @@
 			<div class="flex items-center gap-4 p-4">
 				{#if usrSession}
 					<Avatar
-						src={usrSession.image ?? ""}
+						src={usrSession.image ?? ''}
 						width="w-12"
 						rounded="rounded-full"
 						border={`border-4 ${isOnline ? 'border-success-500' : 'border-warning-500'}`}
@@ -34,24 +36,24 @@
 						<small class="font-semibold"
 							>คงเหลือ {usrSession.points} Points {usrSession.coins} Coins</small
 						>
+						{#if usrSession}
+							<usrSession
+								class="badge gap-1 text-sm font-bold"
+								class:variant-filled-success={isOnline}
+								class:variant-filled-warning={!isOnline}
+								class:animate-pulse={!isOnline}
+							>
+								<Icon
+									icon={isOnline ? 'mdi:check-decagram' : 'mdi:information-box'}
+									width="1.5rem"
+									height="1.5rem"
+								/>
+								{isOnline ? 'ออนไลน์' : 'ออฟไลน์'}
+							</usrSession>
+						{/if}
 					</div>
 				{/if}
 			</div>
-			{#if usrSession}
-				<usrSession
-					class="badge gap-1 text-sm"
-					class:variant-filled-success={isOnline}
-					class:variant-filled-warning={!isOnline}
-					class:animate-pulse={!isOnline}
-				>
-					<Icon
-						icon={isOnline ? 'mdi:check-decagram' : 'mdi:information-box' }
-						width="1.5rem"
-						height="1.5rem"
-					/>
-					สถานะ {isOnline ? 'ออนไลน์' : 'คุณไม่ได้อยู่ในเกมส์'}
-				</usrSession>
-			{/if}
 
 			<hr class="opacity-40" />
 

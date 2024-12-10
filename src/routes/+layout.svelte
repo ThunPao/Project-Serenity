@@ -5,7 +5,7 @@
 	import NavBottom from '$lib/Widgets/NavBottom.svelte';
 	import NavTop from '$lib/Widgets/NavTop.svelte';
 	import ProfilePop from '$lib/Widgets/ProfilePop.svelte';
-	// import FooterBar from '$lib/Widgets/FooterBar.svelte';
+	import FooterBar from '$lib/Widgets/FooterBar.svelte';
 
 	import { page } from '$app/stores';
 	import { initializeStores, Drawer, Toast, getDrawerStore, getToastStore } from '@skeletonlabs/skeleton';
@@ -27,8 +27,8 @@
     : null;
 
 </script>
-
-<main data-theme="julia" class="bg-surface-50-900-token select-none font-noto">
+<!-- bg-surface-50-900-token -->
+<main data-theme="julia" class=" select-none font-noto">
 	<Navido />
 	<NaviNim />
 	<Toast />
@@ -39,5 +39,6 @@
 	</Drawer>
 	<NavTop usrSession={usrSession} isOnline={$page.data.isOnline}/>
 	{@render children()}
-	<NavBottom />
+	<NavBottom usrSession={usrSession} isOnline={$page.data.isOnline} />
+	<FooterBar/>
 </main>

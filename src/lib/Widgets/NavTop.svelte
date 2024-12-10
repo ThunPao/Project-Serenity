@@ -78,7 +78,7 @@
 		<!-- <button onclick={() => drawerStore.open(drawerSettings)} class="px-4 text-xs max-md:hidden"
 			>กด <kbd class="kbd variant-filled-primary">Tab</kbd> เพื่อเปิดเมนู</button
 		> -->
-		<div class="lg:hidden">
+		<div class="hidden">
 			<LightSwitch />
 		</div>
 	</svelte:fragment>

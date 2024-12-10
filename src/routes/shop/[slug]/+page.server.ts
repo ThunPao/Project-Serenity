@@ -38,7 +38,7 @@ export const load: PageServerLoad = async (event) => {
         return error(404);
     }
 
-    const shopInfo = await cacheFetch<{ id: number; title: string; description: string | null; imageUrl: string; checkOnline: boolean } | null>(
+    const shopInfo = await cacheFetch<{ id: number; title: string; description: string | null; imageUrl: string; checkOnline: boolean, price: number } | null>(
         `valla.shop.INFO:${title}`,
         () => db.shopItems.findFirst({
             where: { title: { contains: title, mode: "insensitive" } },
@@ -47,7 +47,8 @@ export const load: PageServerLoad = async (event) => {
                 title: true,
                 description: true,
                 imageUrl: true,
-                checkOnline: true
+                checkOnline: true,
+                price: true
             },
         }), {
         sec: 60
@@ -80,7 +81,7 @@ export const actions = {
             select: {
                 title: true,
                 itemCommand: true,
-                checkOnline: true
+                checkOnline: true,
             }
         })
         if (!shop) return fail(404, { message: "Item not found" })
