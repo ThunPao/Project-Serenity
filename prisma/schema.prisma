@@ -69,6 +69,7 @@ model ShopItems {
   description String?
   imageUrl    String
   itemCommand ItemCommands[]
+  checkOnline Boolean @default(false)
   price       Int            @default(0)
   saleCount   Int            @default(0)
   startDate   DateTime?

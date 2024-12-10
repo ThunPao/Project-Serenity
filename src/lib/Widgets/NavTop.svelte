@@ -1,7 +1,15 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import { AppBar, getDrawerStore, LightSwitch, type DrawerSettings } from '@skeletonlabs/skeleton';
+	import {
+		AppBar,
+		Avatar,
+		getDrawerStore,
+		LightSwitch,
+		type DrawerSettings
+	} from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
+	import { SignIn, SignOut } from '@auth/sveltekit/components';
+
 	const drawerStore = getDrawerStore();
 	const drawerSettings: DrawerSettings = {
 		id: 'ProfilePop',
@@ -28,6 +36,7 @@
 	}
 
 	logOnTabPress();
+	const { session = null, isOnline = false } = $props();
 </script>
 
 <AppBar background="bg-white dark:variant-filled-surface" padding="py-4 px-2" shadow="shadow-md">
@@ -43,9 +52,33 @@
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
-		<button onclick={() => drawerStore.open(drawerSettings)} class="px-4 text-xs max-md:hidden"
+		{#if !session}
+			<SignIn>
+				<div slot="submitButton" class="buttonPrimary">เข้าสู่ระบบ</div>
+			</SignIn>
+		{:else}
+			<button
+				onclick={() => drawerStore.open(drawerSettings)}
+				class="flex flex-col items-center justify-center"
+			>
+				<Avatar
+					initials={session.user.name[0]}
+					src={session.user.image ?? ''}
+					background="bg-primary-500"
+					width="w-12"
+					rounded="rounded-full"
+					border={`border-4 ${isOnline ? "border-success-500" : "border-warning-500"}`}
+				/>
+				<small>
+					{session.user.name}
+				</small>
+			</button>
+		{/if}
+		<!-- <button onclick={() => drawerStore.open(drawerSettings)} class="px-4 text-xs max-md:hidden"
 			>กด <kbd class="kbd variant-filled-primary">Tab</kbd> เพื่อเปิดเมนู</button
-		>
-		<LightSwitch />
+		> -->
+		<div class="lg:hidden">
+			<LightSwitch />
+		</div>
 	</svelte:fragment>
 </AppBar>

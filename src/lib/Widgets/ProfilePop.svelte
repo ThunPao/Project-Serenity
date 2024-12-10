@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { Avatar, LightSwitch } from '@skeletonlabs/skeleton';
-	let { session = null } = $props();
+	let { session = null, isOnline = false } = $props();
 
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
 </script>
@@ -29,9 +29,7 @@
 {/if} -->
 <div id="ProfilePop" class="card z-50 h-full bg-white shadow-xl dark:text-white">
 	<div class="flex h-full w-full flex-col justify-between">
-		<div>
-			
-		</div>
+		<div></div>
 
 		<div>
 			<a
@@ -41,10 +39,15 @@
 				<Icon icon="mdi:account-switch" width="24" height="24" />
 				<div>แลกเปลี่ยนพ้อย</div>
 			</a>
-			
+
 			<div class="flex items-center gap-4 p-4">
 				{#if session}
-					<Avatar src={session.user?.image} width="w-12" rounded="rounded-full" />
+					<Avatar
+						src={session.user?.image}
+						width="w-12"
+						rounded="rounded-full"
+						border={`border-4 ${isOnline ? 'border-success-500' : 'border-warning-500'}`}
+					/>
 					<div class="flex flex-col">
 						<div class="font-bold">{session.user?.name}</div>
 						<small class="font-semibold"
@@ -53,6 +56,22 @@
 					</div>
 				{/if}
 			</div>
+			{#if session}
+				<div
+					class="badge gap-1 text-sm"
+					class:variant-filled-success={isOnline}
+					class:variant-filled-warning={!isOnline}
+					class:animate-pulse={!isOnline}
+				>
+					<Icon
+						icon={isOnline ? 'mdi:information-box' : 'mdi:check-decagram'}
+						width="1.5rem"
+						height="1.5rem"
+					/>
+					สถานะ {isOnline ? 'ออนไลน์' : 'คุณไม่ได้อยู่ในเกมส์'}
+				</div>
+			{/if}
+
 			<hr class="opacity-40" />
 
 			<hr class="opacity-40" />
