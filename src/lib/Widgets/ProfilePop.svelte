@@ -1,32 +1,13 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { Avatar, LightSwitch } from '@skeletonlabs/skeleton';
-	let { session = null, isOnline = false } = $props();
-
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
-</script>
+	import type { UserSession } from '$lib/variableStore/interModels';
 
-<!-- {#if !session}
-	<SignIn>
-		<div slot="submitButton" class="buttonPrimary">เข้าสู่ระบบ</div>
-	</SignIn>
-{:else}
-	<button
-		onclick={() => drawerStore.open(drawerSettings)}
-		class="flex flex-col items-center justify-center"
-	>
-		<Avatar
-			initials={session.user?.name[0]}
-			src={session.user.image}
-			background="bg-primary-500"
-			width="w-12"
-			rounded="rounded-full"
-		/>
-		<small>
-			{session.user?.name}
-		</small>
-	</button>
-{/if} -->
+	let { usrSession = null, isOnline = false }: { usrSession: UserSession | null | undefined; isOnline: Boolean } =
+		$props();
+
+</script>
 <div id="ProfilePop" class="card z-50 h-full bg-white shadow-xl dark:text-white">
 	<div class="flex h-full w-full flex-col justify-between">
 		<div></div>
@@ -41,35 +22,35 @@
 			</a>
 
 			<div class="flex items-center gap-4 p-4">
-				{#if session}
+				{#if usrSession}
 					<Avatar
-						src={session.user?.image}
+						src={usrSession.image ?? ""}
 						width="w-12"
 						rounded="rounded-full"
 						border={`border-4 ${isOnline ? 'border-success-500' : 'border-warning-500'}`}
 					/>
 					<div class="flex flex-col">
-						<div class="font-bold">{session.user?.name}</div>
+						<div class="font-bold">{usrSession.name}</div>
 						<small class="font-semibold"
-							>คงเหลือ {session.user?.points} Points {session.user?.coins} Coins</small
+							>คงเหลือ {usrSession.points} Points {usrSession.coins} Coins</small
 						>
 					</div>
 				{/if}
 			</div>
-			{#if session}
-				<div
+			{#if usrSession}
+				<usrSession
 					class="badge gap-1 text-sm"
 					class:variant-filled-success={isOnline}
 					class:variant-filled-warning={!isOnline}
 					class:animate-pulse={!isOnline}
 				>
 					<Icon
-						icon={isOnline ? 'mdi:information-box' : 'mdi:check-decagram'}
+						icon={isOnline ? 'mdi:check-decagram' : 'mdi:information-box' }
 						width="1.5rem"
 						height="1.5rem"
 					/>
 					สถานะ {isOnline ? 'ออนไลน์' : 'คุณไม่ได้อยู่ในเกมส์'}
-				</div>
+				</usrSession>
 			{/if}
 
 			<hr class="opacity-40" />
@@ -81,7 +62,7 @@
 					<LightSwitch />
 				</div>
 				<hr class="opacity-40" />
-				{#if !session}
+				{#if !usrSession}
 					<SignIn>
 						<div slot="submitButton" class="buttonPrimary">เข้าสู่ระบบ</div>
 					</SignIn>

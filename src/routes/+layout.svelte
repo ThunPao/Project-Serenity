@@ -10,11 +10,22 @@
 	import { page } from '$app/stores';
 	import { initializeStores, Drawer, Toast, getDrawerStore, getToastStore } from '@skeletonlabs/skeleton';
 	import '../app.css';
+	import type { UserSession } from '$lib/variableStore/interModels';
 	initializeStores();
 
 	let { children } = $props();
 	const drawerStore = getDrawerStore();
 	export const toastStore = getToastStore();
+
+	const usrSession: UserSession | null = $page.data.session?.user
+    ? {
+        name: $page.data.session.user.name,
+        image: $page.data.session.user.image,
+        points: $page.data.session.user.points ?? 0,
+        coins: $page.data.session.user.coins ?? 0,
+      }
+    : null;
+
 </script>
 
 <main data-theme="julia" class="bg-surface-50-900-token select-none font-noto">
@@ -23,10 +34,10 @@
 	<Toast />
 	<Drawer>
 		{#if $drawerStore.id === 'ProfilePop'}
-			<ProfilePop session={$page.data.session ? $page.data.session : null} isOnline={$page.data.isOnline}  />
+			<ProfilePop usrSession={usrSession} isOnline={$page.data.isOnline}  />
 		{/if}
 	</Drawer>
-	<NavTop session={$page.data.session ? $page.data.session : null} isOnline={$page.data.isOnline}/>
+	<NavTop usrSession={usrSession} isOnline={$page.data.isOnline}/>
 	{@render children()}
 	<NavBottom />
 </main>

@@ -1,13 +1,20 @@
-<script>
+<script lang="ts">
 	import { sideBarList } from '$lib/variableStore';
 	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/stores';
+	import type { LinkPath } from '$lib/variableStore/interModels';
 	let currentPath = $state('');
 	$effect(() => {
 		currentPath = $page.url.pathname;
 	});
-	let { title = '', subTitle = '', linkPaths = [], children } = $props();
+
+	let {
+		title,
+		subTitle,
+		linkPaths,
+		children
+	}: { title: String; subTitle: string; linkPaths: LinkPath[]; children: any } = $props();
 </script>
 
 <!-- <style>
@@ -66,7 +73,7 @@
 								<Icon icon={row.icon} width="1.5em" height="1.5em" />
 								<span class="flex-auto">{row.title}</span>
 							</button>
-							<hr class="opacity-40 bg-surface-50 mx-4" />
+							<hr class="mx-4 bg-surface-50 opacity-40" />
 						{/each}
 					</div>
 				</div>

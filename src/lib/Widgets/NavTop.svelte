@@ -9,6 +9,7 @@
 	} from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
+	import type { UserSession } from '$lib/variableStore/interModels';
 
 	const drawerStore = getDrawerStore();
 	const drawerSettings: DrawerSettings = {
@@ -36,7 +37,7 @@
 	}
 
 	logOnTabPress();
-	const { session = null, isOnline = false } = $props();
+	const { usrSession = null, isOnline = false }: {usrSession: UserSession | null | undefined,isOnline: Boolean} = $props();
 </script>
 
 <AppBar background="bg-white dark:variant-filled-surface" padding="py-4 px-2" shadow="shadow-md">
@@ -52,7 +53,7 @@
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
-		{#if !session}
+		{#if !usrSession}
 			<SignIn>
 				<div slot="submitButton" class="buttonPrimary">เข้าสู่ระบบ</div>
 			</SignIn>
@@ -62,15 +63,15 @@
 				class="flex flex-col items-center justify-center"
 			>
 				<Avatar
-					initials={session.user.name[0]}
-					src={session.user.image ?? ''}
+					initials={usrSession.name ? usrSession.name[0] : ''}
+					src={usrSession.image ?? ''}
 					background="bg-primary-500"
 					width="w-12"
 					rounded="rounded-full"
 					border={`border-4 ${isOnline ? "border-success-500" : "border-warning-500"}`}
 				/>
 				<small>
-					{session.user.name}
+					{usrSession.name}
 				</small>
 			</button>
 		{/if}
