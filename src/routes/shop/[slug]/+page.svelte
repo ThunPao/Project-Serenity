@@ -5,7 +5,7 @@
 	import { applyAction, enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
 
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+	const { data, form }: { data: PageData; form: ActionData } = $props();
 
 	const { title, imageUrl, description, price } = data.colla;
 	const tAlert = (msg: string, bgColor: string) => {

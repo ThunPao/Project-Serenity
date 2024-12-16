@@ -1,5 +1,8 @@
 // valla = variable colla
 export const valla = {
+    server: {
+        PLAYER_COUNT: "SERENITY:PLAYER_COUNT",
+    },
     shop: {
         ITEMS: "SERENITY:SHOPITEMS",
         INFO: "SERENITY:SHOPINFO",
@@ -7,4 +10,6 @@ export const valla = {
         ALL_TITLES: "SERENITY:ALL_TITLES",
         ITEMCAT: "SERENITY:ITEM_CATEGORY",
     }
+
+
 }

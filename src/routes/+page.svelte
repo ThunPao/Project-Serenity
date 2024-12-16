@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
+	const { data }: { data: PageData } = $props();
 	let curVert = $state<number>(0);
-
 	function handleScroll() {
 		curVert = window.scrollY;
 	}
@@ -13,7 +14,7 @@
 
 <!-- Content -->
 <div class="container mx-auto lg:p-2 lg:py-10">
-	<div class="space-y-2 ">
+	<div class="space-y-2">
 		<div class="justify-center gap-4 space-y-2 xl:flex">
 			<div class="relative max-w-screen-lg duration-300" class:xl:max-w-screen-md={curVert > 30}>
 				<img
@@ -59,14 +60,14 @@
 				<!-- Online -->
 				<div class="btn h-full min-h-32 w-full bg-surface-500 text-center shadow-md">
 					<div class="flex h-full flex-col items-center justify-center text-white">
-						<h1>🍀10</h1>
+						<h1>🍀{data.pAll}</h1>
 						<h5 class="font-bold">ผู้เล่นออนไลน์</h5>
 					</div>
 				</div>
 				<!--  -->
 			</div>
 		</div>
-		<div class="container mx-auto space-y-8 pt-16 px-4">
+		<div class="container mx-auto space-y-8 px-4 pt-16">
 			<!-- <div class="grid grid-cols-3 gap-4 h-96 bg-black">
 
 				{#each [1,2,3] as row}

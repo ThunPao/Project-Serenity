@@ -12,3 +12,12 @@ export async function CheckOnline(pname: string) {
         return { type: false, code: 500, message: "เซิร์ฟเวอร์ออฟไลน์" }
     }
 }
+
+export async function CheckSumPlayers() {
+    try {
+        const data = await query(SERVER_IP, Number(MC_QUERY_PORT));
+        return `${data.players.length} / ${data.online}`
+    } catch (err) {
+        return String("เซิร์ฟเวอร์ออฟไลน์")
+    }
+}
