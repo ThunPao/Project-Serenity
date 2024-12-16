@@ -66,7 +66,10 @@
 					};
 				}}
 			>
-				<div class="input-group variant-filled grid-cols-[1fr_auto]">
+
+				<div
+					class="input-group variant-form-material grid-cols-[1fr_auto] bg-white dark:text-white"
+				>
 					<input
 						bind:value={inputSearch}
 						class="p-3 max-md:py-6"
@@ -91,6 +94,7 @@
 						ล้าง
 					</button>
 				</div>
+
 				<button hidden title="Submit" type="submit">Send</button>
 				{#if form?.notFound}
 					<p>Item Not Found</p>

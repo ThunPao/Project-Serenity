@@ -85,7 +85,7 @@
 				if (result.type === 'success') {
 					isCooldown = false;
 					tAlert(
-						String(result.data?.message),
+						String(`✅ ${result.data?.message}`),
 						'bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 text-white'
 					);
 				} else {

@@ -6,5 +6,8 @@ export default defineConfig({
 	plugins: [sveltekit(), visualizer({
 		emitFile: true,
 		filename: "stats.html"
-	})]
+	})],
+	// server:{
+	// 	port: 5173
+	// }
 });
