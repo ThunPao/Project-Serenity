@@ -15,7 +15,6 @@ export const load: PageServerLoad = async (e) => {
         }
     )
 
-
     return {
         pAll: String(sumPlayers)
     }

@@ -8,7 +8,13 @@
 	import FooterBar from '$lib/Widgets/FooterBar.svelte';
 
 	import { page } from '$app/stores';
-	import { initializeStores, Drawer, Toast, getDrawerStore, getToastStore } from '@skeletonlabs/skeleton';
+	import {
+		initializeStores,
+		Drawer,
+		Toast,
+		getDrawerStore,
+		getToastStore
+	} from '@skeletonlabs/skeleton';
 	import '../app.css';
 	import type { UserSession } from '$lib/variableStore/interModels';
 	initializeStores();
@@ -18,15 +24,15 @@
 	export const toastStore = getToastStore();
 
 	const usrSession: UserSession | null = $page.data.session?.user
-    ? {
-        name: $page.data.session.user.name,
-        image: $page.data.session.user.image,
-        points: $page.data.session.user.points ?? 0,
-        coins: $page.data.session.user.coins ?? 0,
-      }
-    : null;
-
+		? {
+				name: $page.data.session.user.name,
+				image: $page.data.session.user.image,
+				points: $page.data.session.user.points ?? 0,
+				coins: $page.data.session.user.coins ?? 0
+			}
+		: null;
 </script>
+
 <!-- bg-surface-50-900-token -->
 <main data-theme="julia" class=" select-none font-noto">
 	<Navido />
@@ -34,11 +40,11 @@
 	<Toast />
 	<Drawer>
 		{#if $drawerStore.id === 'ProfilePop'}
-			<ProfilePop usrSession={usrSession} isOnline={$page.data.isOnline}  />
+			<ProfilePop {usrSession} isOnline={$page.data.isOnline} />
 		{/if}
 	</Drawer>
-	<NavTop usrSession={usrSession} isOnline={$page.data.isOnline}/>
+	<NavTop {usrSession} isOnline={$page.data.isOnline} />
 	{@render children()}
-	<NavBottom usrSession={usrSession} isOnline={$page.data.isOnline} />
-	<FooterBar/>
+	<NavBottom {usrSession} isOnline={$page.data.isOnline} />
+	<FooterBar />
 </main>

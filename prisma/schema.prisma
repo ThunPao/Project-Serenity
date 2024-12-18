@@ -46,6 +46,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   agentIp       String?
+  points        Int            @default(0)
+  coins         Int            @default(0)
   createdAt     DateTime?      @default(now())
   UserInfo      UserInfo?      @relation(fields: [userInfoId], references: [id])
   userInfoId    Int?
@@ -55,8 +57,6 @@ model User {
 model UserInfo {
   id            Int             @id @default(autoincrement())
   playerName    String          @unique
-  points        Int             @default(0)
-  coins         Int             @default(0)
   isBanned      Boolean         @default(false)
   User          User[]
   ShopHistory   ShopHistory[]
@@ -69,7 +69,7 @@ model ShopItems {
   description String?
   imageUrl    String
   itemCommand ItemCommands[]
-  checkOnline Boolean @default(false)
+  checkOnline Boolean        @default(false)
   price       Int            @default(0)
   saleCount   Int            @default(0)
   startDate   DateTime?
@@ -81,8 +81,8 @@ model ShopItems {
 }
 
 model ItemCommands {
-  id          Int     @id @default(autoincrement())
-  itemCommand String? @db.Text
+  id          Int        @id @default(autoincrement())
+  itemCommand String?    @db.Text
   ShopItems   ShopItems? @relation(fields: [shopItemsId], references: [id])
   shopItemsId Int?
 }

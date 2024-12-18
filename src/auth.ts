@@ -30,48 +30,33 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
 	callbacks: {
 		async session({ session, token }) {
 			if (session.user) {
-				const userData = await cacheFetch<{ playerName: string; points: number; coins: number; } | null>(
-					`userInfo:${session.user.id}`,
+				const userData = await cacheFetch<{ name: string; points: number; coins: number; } | null>(
+					`layout_session:${session.sessionToken}`,
 					async () => {
-						const userInfo = await db.userInfo.upsert({
+						const userInfo = await db.user.findFirst({
 							where: {
-								playerName: session.user.name || 'Player'
-							},
-							update: {}, // No changes if already exists
-							create: {
-								playerName: session.user.name || 'Player',
-								points: 0,
-								coins: 0,
-								User: {
-									connect: {
-										id: session.user.id
-									}
-								}
+								id: session.userId
 							},
 							select: {
-								playerName: true,
+								name: true,
 								points: true,
 								coins: true
 							}
 						});
-
-						console.log('User query result:', userInfo);
 						return userInfo;
 					},
 					{
 						sec: 60
 					}
 				);
-
 				if (userData) {
-					session.user.pname = userData.playerName;
+					session.user.pname = userData.name;
 					session.user.points = userData.points;
 					session.user.coins = userData.coins;
 				}
 			}
 			return session;
 		},
-		// ... other callbacks
 	},
 	providers: [
 		Discord({

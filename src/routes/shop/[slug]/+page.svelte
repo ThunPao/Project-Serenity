@@ -4,6 +4,7 @@
 	import type { ActionData, PageData } from './$types';
 	import { applyAction, enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
+	import { invalidate } from '$app/navigation';
 
 	const { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -83,6 +84,7 @@
 					tAlert(String(result.data?.message), 'variant-filled-error');
 				}
 				if (result.type === 'success') {
+					invalidate("app:curSession")
 					isCooldown = false;
 					tAlert(
 						String(`✅ ${result.data?.message}`),

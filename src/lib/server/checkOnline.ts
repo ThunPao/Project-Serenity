@@ -2,6 +2,7 @@ import { MC_QUERY_PORT, SERVER_IP } from "$env/static/private";
 import query from "@mcpedb/query";
 
 export async function CheckOnline(pname: string) {
+    if(!pname) return { type: false, code: 404, message: "กรุณาผูกบัญชีกับชื่อในเกมส์" }
     try {
         const data = await query(SERVER_IP, Number(MC_QUERY_PORT));
         if (!data.players.includes(pname)) {

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { db } from '$lib/db';
 import { valla } from '$lib/server/variableList.ts';
 import { error, fail } from '@sveltejs/kit';
-import { cacheFetch, resetCache } from '$lib/server/niceCache';
+import { cacheFetch, resetCache, setCache } from '$lib/server/niceCache';
 import { Rcon } from "rcon-client"
 import { RCON_PORT, RCON_PWD, SERVER_IP } from '$env/static/private';
 
@@ -64,7 +64,6 @@ const rcon = await Rcon.connect({
 
 
 export const actions = {
-
     buyItem: async (event) => {
         const rawShopTitle = event.params.slug;
         // Validate ID format
@@ -74,6 +73,19 @@ export const actions = {
         }
         const shopTitle = parseResult.data;
 
+        const isAuth = event.cookies.get('authjs.session-token');
+        const session = await cacheFetch(
+            `layout_session:${isAuth}`,
+            async () => {
+                return await event.locals.auth();
+            },
+            {
+                sec: 3600,
+            }
+        );
+        // const session = await event.locals.auth();
+        if (!session) return fail(401, { message: "กรุณาเข้าสู่ระบบ" })
+
         const shop = await db.shopItems.findFirst({
             where: {
                 title: shopTitle
@@ -82,6 +94,7 @@ export const actions = {
                 title: true,
                 itemCommand: true,
                 checkOnline: true,
+                price: true
             }
         })
         if (!shop) return fail(404, { message: "Item not found" })
@@ -96,8 +109,47 @@ export const actions = {
                 rcon.send(String(item.itemCommand))
             })
         }
-        console.log("Buy Item")
+        const curPlayer = session.user;
+        if (!curPlayer) return fail(401, { message: "ไม่พบบัญชี" })
+        const playerPoints = curPlayer.points || 0;
+        const shopPrice = shop.price;
 
+        if (playerPoints < shopPrice) {
+            return fail(400, {
+                message: 'Point ไม่พอซื้อ กรุณาเติมเงิน',
+                currentPoints: playerPoints,
+                requiredPoints: shopPrice
+            });
+        }
+        const remainingPoints = playerPoints - shopPrice;
+        const updateUser = await db.user.update({
+            where: {
+                id: curPlayer.id
+            },
+            data: {
+                points: remainingPoints
+            },
+            select: {
+                points: true
+            }
+        })
+        try {
+            const updatedSession = {
+                ...session,
+                user: {
+                    ...session.user,
+                    points: remainingPoints
+                }
+            };
+
+            setCache(`layout_session:${isAuth}`, updatedSession, {
+                ttl: 3600,
+                forceOverwrite: true
+            });
+        } catch (cacheError) {
+            console.error('Failed to update session cache:', cacheError);
+
+        }
         return { status: 200, success: true, message: `ซื้อไอเทม ${shop.title} สำเร็จ` }
 
     }

@@ -112,3 +112,30 @@ export function getCache(key: string) {
 export function clearCache(key: string) {
     return ServerCache.clear(key);
 }
+
+export function setCache<T>(
+    key: string, 
+    data: T, 
+    options?: {
+        ttl?: number;  // Time to live in seconds
+        forceOverwrite?: boolean;  // Option to force overwrite existing cache
+    }
+): void {
+    const {
+        ttl = 300,  // Default 5 minutes
+        forceOverwrite = true  // Default to overwriting existing cache
+    } = options || {};
+
+    // If not force overwriting, check if key already exists
+    if (!forceOverwrite) {
+        const existingEntry = ServerCache.get(key);
+        if (existingEntry) {
+            console.log(`🟠 Cache NOT set: ${key} (already exists and forceOverwrite is false)`);
+            return;
+        }
+    }
+
+    // Set the cache
+    ServerCache.set(key, data, ttl);
+    console.log(`🟢 Cache SET: ${key} (TTL: ${ttl} seconds)`);
+}
