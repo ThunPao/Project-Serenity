@@ -19,10 +19,18 @@ export const load: LayoutServerLoad = async (event) => {
         sec: 3600,
       }
     );
+    const path = event.url.pathname;
     const playerInGameName = session?.user?.pname;
-    if (!playerInGameName) return redirect(303, "/setign")
+    if (!playerInGameName) {
+      if (path !== '/setign' && !path.startsWith('/setign')) {
+        throw redirect(303, '/setign');
+      }
+      return {
+        session: session,
+        isOnline: false
+      };
+    }
     const isOnline = await CheckOnline(playerInGameName);
-
     return {
       session: session,
       isOnline: isOnline.type
@@ -35,7 +43,6 @@ export const load: LayoutServerLoad = async (event) => {
   // const isOnline = await CheckOnline(playerInGameName);
   return {
     session: session,
-    // isOnline: isOnline.type
-
+    isOnline: false
   };
 };

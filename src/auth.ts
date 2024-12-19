@@ -30,7 +30,7 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
 	callbacks: {
 		async session({ session, token }) {
 			if (session.user) {
-				const userData = await cacheFetch<{ name: string; points: number; coins: number; } | null>(
+				const userData = await cacheFetch(
 					`layout_session:${session.sessionToken}`,
 					async () => {
 						const userInfo = await db.user.findFirst({
@@ -40,7 +40,8 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
 							select: {
 								name: true,
 								points: true,
-								coins: true
+								coins: true,
+								playerName: true,
 							}
 						});
 						return userInfo;
@@ -50,7 +51,7 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
 					}
 				);
 				if (userData) {
-					session.user.pname = userData.name;
+					session.user.pname = userData.playerName || "";
 					session.user.points = userData.points;
 					session.user.coins = userData.coins;
 				}

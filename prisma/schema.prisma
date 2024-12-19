@@ -38,30 +38,35 @@ model Session {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  name          String         @unique
-  email         String?        @unique
+  id            String          @id @default(cuid())
+  name          String          @unique
+  email         String?         @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
   agentIp       String?
-  points        Int            @default(0)
-  coins         Int            @default(0)
-  createdAt     DateTime?      @default(now())
-  UserInfo      UserInfo?      @relation(fields: [userInfoId], references: [id])
+  points        Int             @default(0)
+  coins         Int             @default(0)
+  createdAt     DateTime?       @default(now())
   userInfoId    Int?
   TopupHistory  TopupHistory[]
-}
-
-model UserInfo {
-  id            Int             @id @default(autoincrement())
-  playerName    String          @unique
+  // UserInfo      UserInfo
+  playerName    String?          @unique
   isBanned      Boolean         @default(false)
-  User          User[]
   ShopHistory   ShopHistory[]
   RedeemHistory RedeemHistory[]
 }
+
+// model UserInfo {
+//   id            Int             @id @default(autoincrement())
+//   playerName    String          @unique
+//   isBanned      Boolean         @default(false)
+//   User          User            @relation(fields: [userId], references: [id])
+//   ShopHistory   ShopHistory[]
+//   RedeemHistory RedeemHistory[]
+//   userId        String
+// }
 
 model ShopItems {
   id          Int            @id @default(autoincrement())
@@ -100,8 +105,9 @@ model ShopHistory {
   points    Int
   email     String?
   createdAt DateTime @default(now())
-  UserInfo  UserInfo @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
+  // UserInfo  UserInfo @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  User      User     @relation(fields: [userId], references: [id])
 }
 
 model TopupRating {
@@ -138,6 +144,7 @@ model RedeemHistory {
   couponId  Int
   Coupon    RedeemCoupons @relation(fields: [couponId], references: [id])
   createdAt DateTime      @default(now())
-  UserInfo  UserInfo      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
+  // UserInfo  UserInfo      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  User      User          @relation(fields: [userId], references: [id])
 }

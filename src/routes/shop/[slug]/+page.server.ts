@@ -103,12 +103,7 @@ export const actions = {
             const isOnline = await CheckOnline("I3a0")
             if (!isOnline.type) return fail(isOnline.code, { message: isOnline.message })
         }
-        if (shop.itemCommand) {
 
-            shop.itemCommand.forEach((item) => {
-                rcon.send(String(item.itemCommand))
-            })
-        }
         const curPlayer = session.user;
         if (!curPlayer) return fail(401, { message: "ไม่พบบัญชี" })
         const playerPoints = curPlayer.points || 0;
@@ -121,6 +116,13 @@ export const actions = {
                 requiredPoints: shopPrice
             });
         }
+
+        if (shop.itemCommand) {
+            shop.itemCommand.forEach((item) => {
+                rcon.send(String(item.itemCommand))
+            })
+        }
+
         const remainingPoints = playerPoints - shopPrice;
         const updateUser = await db.user.update({
             where: {

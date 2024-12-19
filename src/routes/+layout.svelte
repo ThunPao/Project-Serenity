@@ -43,7 +43,7 @@
 			<ProfilePop {usrSession} isOnline={$page.data.isOnline} />
 		{/if}
 	</Drawer>
-	<NavTop {usrSession} isOnline={$page.data.isOnline} />
+	<NavTop />
 	{@render children()}
 	<NavBottom {usrSession} isOnline={$page.data.isOnline} />
 	<FooterBar />

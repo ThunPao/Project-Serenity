@@ -9,8 +9,6 @@
 	} from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
-	import type { UserSession } from '$lib/variableStore/interModels';
-
 	const drawerStore = getDrawerStore();
 	const drawerSettings: DrawerSettings = {
 		id: 'ProfilePop',
@@ -37,7 +35,8 @@
 	}
 
 	logOnTabPress();
-	const { usrSession = null, isOnline = false }: {usrSession: UserSession | null | undefined,isOnline: Boolean} = $props();
+
+	import { page } from '$app/stores';
 </script>
 
 <AppBar background="bg-white dark:variant-filled-surface" padding="py-4 px-2" shadow="shadow-md">
@@ -53,25 +52,25 @@
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
-		{#if !usrSession}
+		{#if !$page.data.session}
 			<SignIn>
 				<div slot="submitButton" class="buttonPrimary">เข้าสู่ระบบ</div>
 			</SignIn>
-		{:else}
+		{:else if $page.data.session.user}
 			<button
 				onclick={() => drawerStore.open(drawerSettings)}
 				class="flex flex-col items-center justify-center"
 			>
 				<Avatar
-					initials={usrSession.name ? usrSession.name[0] : ''}
-					src={usrSession.image ?? ''}
+					initials={$page.data.session.user.name ? $page.data.session.user.name[0] : ''}
+					src={$page.data.session.user.image ?? ''}
 					background="bg-primary-500"
 					width="w-12"
 					rounded="rounded-full"
-					border={`border-4 ${isOnline ? "border-success-500" : "border-warning-500"}`}
+					border={`border-4 ${$page.data.isOnline ? 'border-success-500' : 'border-warning-500'}`}
 				/>
 				<small>
-					{usrSession.name}
+					ยอดคงเหลือ {$page.data.session.user.points} P
 				</small>
 			</button>
 		{/if}
