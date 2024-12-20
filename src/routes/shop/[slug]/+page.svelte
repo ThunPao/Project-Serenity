@@ -82,6 +82,9 @@
 			return async ({ result }) => {
 				if (result.type === 'failure') {
 					tAlert(String(result.data?.message), 'variant-filled-error');
+					setTimeout(() => {
+					isCooldown = false;
+					}, 300);
 				}
 				if (result.type === 'success') {
 					invalidate('app:curSession');
@@ -108,7 +111,7 @@
 				<span><Icon icon="mdi:coin" width="36" height="36" /></span>
 				<span>BUY ITEM</span>
 			</button>
-			<button
+			<!-- <button
 				title="Refresh"
 				type="button"
 				class="btn btn-icon"
@@ -116,7 +119,7 @@
 				onclick={() => (isCooldown = false)}
 			>
 				<Icon icon="mdi:refresh" width="24" height="24" />
-			</button>
+			</button> -->
 		</div>
 	</form>
 </PrimeLayer>

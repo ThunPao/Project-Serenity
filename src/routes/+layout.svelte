@@ -40,7 +40,7 @@
 	<Toast />
 	<Drawer>
 		{#if $drawerStore.id === 'ProfilePop'}
-			<ProfilePop {usrSession} isOnline={$page.data.isOnline} />
+			<ProfilePop />
 		{/if}
 	</Drawer>
 	<NavTop />

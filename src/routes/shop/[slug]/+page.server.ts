@@ -39,7 +39,7 @@ export const load: PageServerLoad = async (event) => {
     }
 
     const shopInfo = await cacheFetch<{ id: number; title: string; description: string | null; imageUrl: string; checkOnline: boolean, price: number } | null>(
-        `valla.shop.INFO:${title}`,
+        `${valla.shop.INFO}:${title}`,
         () => db.shopItems.findFirst({
             where: { title: { contains: title, mode: "insensitive" } },
             select: {
