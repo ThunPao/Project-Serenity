@@ -3,16 +3,17 @@ import { error } from '@sveltejs/kit';
 import { getLink, useLink } from '$lib/server/linkStore';
 import { db } from '$lib/db';
 import { cacheFetch } from '$lib/server/niceCache.js';
+import { setCache } from '$lib/server/niceCache.js';
 
 export async function load(e) {
     const link = getLink(e.params.code);
-    
+
     if (!link) {
-        throw error(404, 'Link not found or expired');
+        throw error(404, 'ไม่พบลิงก์');
     }
-    
+
     if (link.isUsed) {
-        throw error(410, 'Link already used');
+        throw error(410, 'ท่านเคยผูกบัญชีแล้ว');
     }
     const isAuth = e.cookies.get('authjs.session-token');
     const session = await cacheFetch(
@@ -25,7 +26,7 @@ export async function load(e) {
         }
     );
     if (!session) return error(500, { message: "กรุณาติดต่อแอดมิน" })
-    await db.user.update({
+    const updateUser = await db.user.update({
         where: {
             id: session.user?.id
         },
@@ -33,37 +34,21 @@ export async function load(e) {
             playerName: link.playerName
         }
     })
+    if (!updateUser) return error(500, { message: "เกิดข้อผิดพลาดในการผูกบัญชี" })
+    const updatedSession = {
+        ...session,
+        user: {
+            ...session.user,
+            pname: updateUser.playerName
+        }
+    };
+    setCache(`layout_session:${isAuth}`, updatedSession, {
+        ttl: 3600,
+        forceOverwrite: true
+    });
+    useLink(e.params.code);
     return {
         playerName: link.playerName,
         reward: link.reward
     };
 }
-
-export const actions = {
-    redeem: async ({ params }) => {
-        const success = useLink(params.code);
-        if (!success) {
-            return { success: false };
-        }
-        
-        const link = getLink(params.code);
-        if (!link) {
-            return { success: false };
-        }
-
-        try {
-            // Here you can add your game server communication
-            // For example, using REST API or WebSocket to send reward
-            
-            // await giveRewardToPlayer(link.playerName, link.reward);
-            
-            return { 
-                success: true,
-                playerName: link.playerName,
-                reward: link.reward
-            };
-        } catch (e) {
-            return { success: false };
-        }
-    }
-};

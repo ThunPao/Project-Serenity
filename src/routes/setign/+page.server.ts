@@ -45,7 +45,7 @@ export const actions = {
         const path = e.url;
         const fullUrl = `${path}/${code}`;
         // rcon.send(`say ${path}/${code}`)
-        await rcon.send(`tellraw ${playerName} {"text":" >> 🔑 ACTIVATE ผูกบัญชีกับหน้าเว็บ คลิกลิงก์ที่นี่ <<","color":"green","clickEvent":{"action":"open_url","value":"${fullUrl}"},"underlined":true}`);
+        await rcon.send(`tellraw ${playerName} {"text":" >> 🔑 CLICK HERE คลิกลิ้งที่นี่ เพื่อยืนยันตัวตน <<","color":"green","clickEvent":{"action":"open_url","value":"${fullUrl}"},"underlined":true}`);
         // await rcon.send(`tellraw ${playerName} [
         //     {"text":"➜ ","color":"yellow"},
         //     {"text":"คลิก เพื่อผูกบัญชีคุณกับเว็บไซต์ของเรา","color":"green","clickEvent":{"action":"open_url","value":"${fullUrl}"},"underlined":true},

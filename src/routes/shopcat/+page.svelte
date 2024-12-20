@@ -1,7 +1,7 @@
 <script>
 	import { applyAction, enhance } from '$app/forms';
 
-	let { data } = $props();
+	const { data } = $props();
 </script>
 
 Shop Category Page
