@@ -2,10 +2,7 @@
 	import Icon from '@iconify/svelte';
 	import { Avatar, LightSwitch } from '@skeletonlabs/skeleton';
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
-	import type { UserSession } from '$lib/variableStore/interModels';
 	import { page } from '$app/stores';
-
-
 </script>
 
 <div id="ProfilePop" class="card z-50 h-full bg-white shadow-xl dark:text-white">
@@ -22,7 +19,7 @@
 			</a>
 
 			<div class="flex items-center gap-4 p-4">
-				{#if $page.data.session}
+				{#if $page.data.session && $page.data.session.user}
 					<Avatar
 						src={$page.data.session.user?.image ?? ''}
 						width="w-12"
@@ -30,7 +27,7 @@
 						border={`border-4 ${$page.data.isOnline ? 'border-success-500' : 'border-warning-500'}`}
 					/>
 					<div class="flex flex-col">
-						<div class="font-bold">{$page.data.name}</div>
+						<div class="font-bold">{$page.data.session.user.pname}</div>
 						<small class="font-semibold"
 							>คงเหลือ {$page.data.session.user?.points} Points {$page.data.session.user?.coins} Coins</small
 						>

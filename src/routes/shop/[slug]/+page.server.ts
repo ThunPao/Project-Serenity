@@ -75,7 +75,7 @@ export const actions = {
 
         const isAuth = event.cookies.get('authjs.session-token');
         const session = await cacheFetch(
-            `layout_session:${isAuth}`,
+            `${valla.user.SESSION}:${isAuth}`,
             async () => {
                 return await event.locals.auth();
             },
@@ -124,9 +124,9 @@ export const actions = {
         }
 
         const remainingPoints = playerPoints - shopPrice;
-        const updateUser = await db.user.update({
+        await db.user.update({
             where: {
-                id: curPlayer.id
+                id: session.userId
             },
             data: {
                 points: remainingPoints
@@ -144,7 +144,7 @@ export const actions = {
                 }
             };
 
-            setCache(`layout_session:${isAuth}`, updatedSession, {
+            setCache(`${valla.user.SESSION}:${isAuth}`, updatedSession, {
                 ttl: 3600,
                 forceOverwrite: true
             });

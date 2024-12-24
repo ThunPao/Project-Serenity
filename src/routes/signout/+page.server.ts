@@ -1,4 +1,5 @@
 import { clearCache, resetCache } from "$lib/server/niceCache";
+import { valla } from "$lib/server/variableList";
 import { signOut } from "../../auth";
 import type { Actions } from "./$types";
 
@@ -9,7 +10,7 @@ export const actions: Actions = {
             // event.cookies.delete("isAuth", {
             //     path: "/",
             // });
-            clearCache("layout_session:anonymous")
+            clearCache(`${valla.user.SESSION}:${isAuth}`)
             console.log("perform signout")
         }
         

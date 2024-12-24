@@ -4,12 +4,21 @@ import Discord from '@auth/sveltekit/providers/discord';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { db } from '$lib/db';
 import { cacheFetch } from '$lib/server/niceCache';
+import { valla } from '$lib/server/variableList';
 declare module '@auth/sveltekit' {
-	interface User {
-		pname: string;
-		points: number;
-		coins: number;
-	}
+	// interface User {
+	// 	pname: string;
+	// 	points: number;
+	// 	coins: number;
+	// }
+	interface Session extends DefaultSession {
+		userId: string;
+        user: {
+            pname: string
+            points: number
+            coins: number
+        } & DefaultSession['user']
+    }
 }
 
 // const originalSignOut = SvelteKitAuth.signOut;
@@ -26,37 +35,32 @@ declare module '@auth/sveltekit' {
 
 
 export const { handle, signIn, signOut } = SvelteKitAuth({
-	adapter: PrismaAdapter(db),
-	callbacks: {
-		async session({ session, token }) {
-			if (session.user) {
-				const userData = await cacheFetch(
-					`layout_session:${session.sessionToken}`,
-					async () => {
-						const userInfo = await db.user.findFirst({
-							where: {
-								id: session.userId
-							},
-							select: {
-								name: true,
-								points: true,
-								coins: true,
-								playerName: true,
-							}
-						});
-						return userInfo;
-					},
-					{
-						sec: 60
-					}
-				);
+    adapter: PrismaAdapter(db),
+    callbacks: {
+        async session({ session, user }) {
+            const userData = await db.user.findUnique({
+                        where: { id: user.id },
+                        select: {
+                            name: true,
+                            image: true,
+                            points: true,
+                            coins: true,
+                            playerName: true,
+                        }
+                    });
 				if (userData) {
-					session.user.pname = userData.playerName || "";
-					session.user.points = userData.points;
-					session.user.coins = userData.coins;
+					return {
+						...session,
+						user: {
+							name: userData.name,
+							image: session.user.image,
+							pname: userData.playerName || '',
+							points: userData.points,
+							coins: userData.coins
+						}
+					};
 				}
-			}
-			return session;
+				return session;
 		},
 	},
 	providers: [
