@@ -14,9 +14,9 @@ class RconManager {
             return this.instance;
         }
 
-        if (this.isConnecting) {
-            throw new Error('Connection attempt already in progress');
-        }
+        // if (this.isConnecting) {
+        //     throw new Error('Connection attempt already in progress');
+        // }
 
         this.isConnecting = true;
 

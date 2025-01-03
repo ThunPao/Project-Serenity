@@ -6,6 +6,7 @@ import { redirect } from '@sveltejs/kit';
 import { valla } from '$lib/server/variableList';
 export const load: LayoutServerLoad = async (event) => {
   await limiter.cookieLimiter?.preflight(event);
+  
   event.depends("app:curSession")
   const isAuth = event.cookies.get('authjs.session-token');
   if (isAuth) {
@@ -15,12 +16,13 @@ export const load: LayoutServerLoad = async (event) => {
         return await event.locals.auth();
       },
       {
-        sec: 3600,
+        sec: 60,
       }
     );
     const playerInGameName = session?.user?.pname;
     const path = event.url.pathname;
     const isSetignPath = path === '/setign' || path.startsWith('/setign/');
+
 
     if (!playerInGameName) {
       if (!isSetignPath) {

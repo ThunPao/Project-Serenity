@@ -84,11 +84,13 @@
 					tAlert(String(result.data?.message), 'variant-filled-error');
 					setTimeout(() => {
 					isCooldown = false;
-					}, 300);
+					}, 1050);
 				}
 				if (result.type === 'success') {
 					invalidate('app:curSession');
+					setTimeout(() => {
 					isCooldown = false;
+					}, 1050);
 					tAlert(
 						String(`✅ ${result.data?.message}`),
 						'bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 text-white'

@@ -6,7 +6,7 @@ import { valla } from '$lib/server/variableList.ts';
 import { error, fail } from '@sveltejs/kit';
 import { cacheFetch, resetCache, setCache } from '$lib/server/niceCache';
 import { RconManager } from '$lib/server/rconMinecraft';
-
+import { limiter } from '$lib/services/rateLimiter';
 // Zod schema for ID validation
 const titleSchema = z.string().max(64);
 
@@ -117,9 +117,17 @@ const processQueue = async () => {
     }
 };
 
+// async function sleep(ms: number): Promise<void> {
+//     return new Promise((resolve) => setTimeout(resolve, ms));
+// }
+const COOLDOWN_MS = 1000; // Cooldown period in milliseconds
+const userCooldowns: Record<string, number> = {}; // Store timestamps for each user (use session/user ID in production)
+
+
 
 export const actions = {
     buyItem: async (event) => {
+        // if (await limiter.isLimited(event)) throw error(429);
         const rawShopTitle = event.params.slug;
         // Validate ID format
         const parseResult = titleSchema.safeParse(rawShopTitle);
@@ -139,10 +147,19 @@ export const actions = {
             }
         );
         if (!session) return fail(401, { message: "กรุณาเข้าสู่ระบบ" })
+
+        const now = Date.now();
+        const lastAction = userCooldowns[session.userId] || 0;
+        if (now - lastAction < COOLDOWN_MS) {
+            return fail(400, { message: "รอคูลดาวน์นะจ๊ะ" })
+        }
+        // Update the last action timestamp
+        userCooldowns[session.userId] = now;
+
+
         if (!RconManager) return fail(404, {
             message: "เซิร์ฟเวอร์ออฟไลน์"
         })
-
 
         interface CachedShopInfo {
             title: string;
