@@ -5,8 +5,7 @@ import { db } from '$lib/db';
 import { valla } from '$lib/server/variableList.ts';
 import { error, fail } from '@sveltejs/kit';
 import { cacheFetch, resetCache, setCache } from '$lib/server/niceCache';
-import { Rcon } from "rcon-client"
-import { RCON_PORT, RCON_PWD, SERVER_IP } from '$env/static/private';
+import { RconManager } from '$lib/server/rconMinecraft';
 
 // Zod schema for ID validation
 const titleSchema = z.string().max(64);
@@ -57,10 +56,6 @@ export const load: PageServerLoad = async (event) => {
     if (!shopInfo) return error(404)
     return { colla: shopInfo }
 }
-const rcon = await Rcon.connect({
-    host: SERVER_IP, port: Number(RCON_PORT), password: RCON_PWD
-})
-
 
 
 export const actions = {
@@ -85,7 +80,9 @@ export const actions = {
         );
         // const session = await event.locals.auth();
         if (!session) return fail(401, { message: "กรุณาเข้าสู่ระบบ" })
-
+        if (!RconManager) return fail(404, {
+            message: "เซิร์ฟเวอร์ออฟไลน์"
+        })
         const shop = await db.shopItems.findFirst({
             where: {
                 title: shopTitle
@@ -116,10 +113,9 @@ export const actions = {
                 requiredPoints: shopPrice
             });
         }
-
         if (shop.itemCommand) {
             shop.itemCommand.forEach((item) => {
-                rcon.send(String(item.itemCommand))
+                RconManager.executeCommand(String(item.itemCommand))
             })
         }
 

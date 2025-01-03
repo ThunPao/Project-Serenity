@@ -6,8 +6,8 @@ import { z } from "zod";
 import { createLink } from "$lib/server/linkStore.ts";
 import { CheckOnline } from "$lib/server/checkOnline.js";
 import { fail } from "@sveltejs/kit";
-import { Rcon } from "rcon-client"
-import { RCON_PORT, RCON_PWD, SERVER_IP } from "$env/static/private";
+
+import { RconManager } from "$lib/server/rconMinecraft";
 
 export const load: PageServerLoad = async (e) => {
     // const { playerName, reward } = await e.request.json();
@@ -18,9 +18,7 @@ export const load: PageServerLoad = async (e) => {
     // });
 
 }
-const rcon = await Rcon.connect({
-    host: SERVER_IP, port: Number(RCON_PORT), password: RCON_PWD
-})
+
 export const actions = {
     default: async (e) => {
         const formData = await e.request.formData();
@@ -41,11 +39,14 @@ export const actions = {
 
         const isOnline = await CheckOnline(playerName)
         if (!isOnline) return fail(404, { message: "ไม่พบผู้เล่น" })
+        if (!RconManager) return fail(404, {
+            message: "เซิร์ฟเวอร์ออฟไลน์"
+        })
         const code = createLink(playerName, "1234");
         const path = e.url;
         const fullUrl = `${path}/${code}`;
         // rcon.send(`say ${path}/${code}`)
-        await rcon.send(`tellraw ${playerName} {"text":" >> 🔑 CLICK HERE คลิกลิ้งที่นี่ เพื่อยืนยันตัวตน <<","color":"green","clickEvent":{"action":"open_url","value":"${fullUrl}"},"underlined":true}`);
+        await RconManager.executeCommand(`tellraw ${playerName} {"text":" >> 🔑 CLICK HERE คลิกลิ้งที่นี่ เพื่อยืนยันตัวตน <<","color":"green","clickEvent":{"action":"open_url","value":"${fullUrl}"},"underlined":true}`);
         // await rcon.send(`tellraw ${playerName} [
         //     {"text":"➜ ","color":"yellow"},
         //     {"text":"คลิก เพื่อผูกบัญชีคุณกับเว็บไซต์ของเรา","color":"green","clickEvent":{"action":"open_url","value":"${fullUrl}"},"underlined":true},
@@ -53,7 +54,7 @@ export const actions = {
         //     {"text":"LINK","color":"aqua"},
         //     {"text":"]","color":"gray"}
         // ]`);
-        
+
 
         console.log(code)
     }
