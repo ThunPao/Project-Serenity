@@ -57,6 +57,66 @@ export const load: PageServerLoad = async (event) => {
     return { colla: shopInfo }
 }
 
+interface QueueItem {
+    userId: string;
+    points: number;
+    timestamp: number;
+}
+
+const updateQueue = new Map<string, QueueItem>();
+const QUEUE_PROCESS_INTERVAL = 10000; // 10 seconds
+let queueProcessorRunning = false;
+
+
+
+const queueDatabaseUpdate = (userId: string, points: number) => {
+    updateQueue.set(userId, {
+        userId,
+        points,
+        timestamp: Date.now()
+    });
+
+    // Start queue processor if not running
+    setTimeout(processQueue, QUEUE_PROCESS_INTERVAL);
+};
+
+
+const processQueue = async () => {
+    if (queueProcessorRunning) return;
+    queueProcessorRunning = true;
+
+    try {
+        const now = Date.now();
+        const itemsToProcess = new Map<string, QueueItem>();
+
+        // Get items older than QUEUE_PROCESS_INTERVAL
+        updateQueue.forEach((item, key) => {
+            if (now - item.timestamp >= QUEUE_PROCESS_INTERVAL) {
+                itemsToProcess.set(key, item);
+                updateQueue.delete(key);
+            }
+        });
+
+        // Process queued items
+        for (const [_, item] of itemsToProcess) {
+            await db.user.update({
+                where: { id: item.userId },
+                data: { points: item.points },
+                select: { points: true }
+            });
+        }
+    } catch (error) {
+        console.error('Queue processing error:', error);
+    } finally {
+        queueProcessorRunning = false;
+
+        // Continue processing if queue not empty
+        if (updateQueue.size > 0) {
+            setTimeout(processQueue, 1000);
+        }
+    }
+};
+
 
 export const actions = {
     buyItem: async (event) => {
@@ -78,22 +138,34 @@ export const actions = {
                 sec: 3600,
             }
         );
-        // const session = await event.locals.auth();
         if (!session) return fail(401, { message: "กรุณาเข้าสู่ระบบ" })
         if (!RconManager) return fail(404, {
             message: "เซิร์ฟเวอร์ออฟไลน์"
         })
-        const shop = await db.shopItems.findFirst({
-            where: {
-                title: shopTitle
-            },
-            select: {
-                title: true,
-                itemCommand: true,
-                checkOnline: true,
-                price: true
-            }
-        })
+
+
+        interface CachedShopInfo {
+            title: string;
+            itemCommand: Array<{ itemCommand: string | null }>;
+            checkOnline: boolean;
+            price: number;
+        }
+
+        const shop = await cacheFetch<CachedShopInfo | null>(
+            `${valla.shop.INFO}:${shopTitle}`,
+            () => db.shopItems.findFirst({
+                where: { title: { contains: shopTitle, mode: "insensitive" } },
+                select: {
+                    title: true,
+                    itemCommand: true,
+                    checkOnline: true,
+                    price: true
+                }
+            }), {
+            sec: 60
+        }
+        );
+
         if (!shop) return fail(404, { message: "Item not found" })
         if (shop.checkOnline) {
             // Check Online
@@ -120,17 +192,7 @@ export const actions = {
         }
 
         const remainingPoints = playerPoints - shopPrice;
-        await db.user.update({
-            where: {
-                id: session.userId
-            },
-            data: {
-                points: remainingPoints
-            },
-            select: {
-                points: true
-            }
-        })
+
         try {
             const updatedSession = {
                 ...session,
@@ -139,14 +201,31 @@ export const actions = {
                     points: remainingPoints
                 }
             };
-
+            // cachedData this data will be used
             setCache(`${valla.user.SESSION}:${isAuth}`, updatedSession, {
                 ttl: 3600,
                 forceOverwrite: true
             });
         } catch (cacheError) {
             console.error('Failed to update session cache:', cacheError);
-
+        }
+        // Store data into Server
+        try {
+            // implement this part to have queue of data so it will call it after period of time to prevent user from spamming server query
+            // await db.user.update({
+            //     where: {
+            //         id: session.userId
+            //     },
+            //     data: {
+            //         points: remainingPoints
+            //     },
+            //     select: {
+            //         points: true
+            //     }
+            // })
+            queueDatabaseUpdate(session.userId, remainingPoints);
+        } catch (error) {
+            return fail(500, { message: "เกิดข้อผิดพลาด" })
         }
         return { status: 200, success: true, message: `ซื้อไอเทม ${shop.title} สำเร็จ` }
 
