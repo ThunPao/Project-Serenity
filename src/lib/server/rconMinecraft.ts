@@ -30,7 +30,7 @@ class RconManager {
 
             this.instance = rcon;
             return rcon;
-        } catch (error) {
+        } catch (error: any) {
             console.error('RCON connection failed:', error?.message);
             return null;
         } finally {
@@ -52,7 +52,7 @@ class RconManager {
 
             const response = await rcon.send(command);
             return response;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to execute RCON command:', error?.message);
             throw error;
         } finally {
@@ -68,7 +68,7 @@ class RconManager {
             if (this.instance?.authenticated) {
                 await this.instance.end();
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error disconnecting from RCON:', error?.message);
         } finally {
             this.instance = null;

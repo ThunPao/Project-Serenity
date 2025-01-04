@@ -1,6 +1,6 @@
 import { db } from "$lib/db";
 import { error, fail } from "@sveltejs/kit";
-import { cache, cacheFetch } from "$lib/server/niceCache.ts";
+import { cacheFetch } from "$lib/server/niceCache.ts";
 import type { ShopCategories } from "@prisma/client";
 import type { PageServerLoad } from "./$types.ts";
 

@@ -1,4 +1,4 @@
-import { clearCache, resetCache } from "$lib/server/niceCache";
+import { clearCache } from "$lib/server/niceCache";
 import { valla } from "$lib/server/variableList";
 import { signOut } from "../../auth";
 import type { Actions } from "./$types";
