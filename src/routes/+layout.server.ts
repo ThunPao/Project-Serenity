@@ -1,6 +1,6 @@
 import type { LayoutServerLoad } from './$types';
 import { limiter } from '$lib/services/rateLimiter';
-import { cacheFetch, resetCache } from '$lib/server/niceCache';
+import { cacheFetch } from '$lib/server/niceCache';
 import { CheckOnline } from '$lib/server/checkOnline.ts';
 import { redirect } from '@sveltejs/kit';
 import { valla } from '$lib/server/variableList';
