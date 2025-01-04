@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { db } from '$lib/db';
 import { valla } from '$lib/server/variableList.ts';
 import { error, fail } from '@sveltejs/kit';
-import { cacheFetch, resetCache, setCache } from '$lib/server/niceCache';
+import { cacheFetch, setCache } from '$lib/server/niceCache';
 import { RconManager } from '$lib/server/rconMinecraft';
 import { limiter } from '$lib/services/rateLimiter';
 // Zod schema for ID validation
@@ -36,13 +36,20 @@ export const load: PageServerLoad = async (event) => {
     if (!title || !allItemTitles.includes(title)) {
         return error(404);
     }
-
-    const shopInfo = await cacheFetch<{ id: number; title: string; description: string | null; imageUrl: string; checkOnline: boolean, price: number } | null>(
+    interface ShopInfo {
+        // id: number;
+        title: string;
+        description: string | null;
+        imageUrl: string;
+        checkOnline: boolean;
+        price: number
+    }
+    const shopInfo = await cacheFetch<ShopInfo | null>(
         `${valla.shop.INFO}:${title}`,
         () => db.shopItems.findFirst({
             where: { title: { contains: title, mode: "insensitive" } },
             select: {
-                id: true,
+                // id: true,
                 title: true,
                 description: true,
                 imageUrl: true,
@@ -117,9 +124,7 @@ const processQueue = async () => {
     }
 };
 
-// async function sleep(ms: number): Promise<void> {
-//     return new Promise((resolve) => setTimeout(resolve, ms));
-// }
+
 const COOLDOWN_MS = 1000; // Cooldown period in milliseconds
 const userCooldowns: Record<string, number> = {}; // Store timestamps for each user (use session/user ID in production)
 
@@ -127,7 +132,7 @@ const userCooldowns: Record<string, number> = {}; // Store timestamps for each u
 
 export const actions = {
     buyItem: async (event) => {
-        // if (await limiter.isLimited(event)) throw error(429);
+        if (await limiter.isLimited(event)) throw error(429);
         const rawShopTitle = event.params.slug;
         // Validate ID format
         const parseResult = titleSchema.safeParse(rawShopTitle);

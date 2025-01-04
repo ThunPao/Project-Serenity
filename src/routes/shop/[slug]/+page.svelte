@@ -84,7 +84,7 @@
 					tAlert(String(result.data?.message), 'variant-filled-error');
 					setTimeout(() => {
 					isCooldown = false;
-					}, 1050);
+					}, 3000);
 				}
 				if (result.type === 'success') {
 					invalidate('app:curSession');
