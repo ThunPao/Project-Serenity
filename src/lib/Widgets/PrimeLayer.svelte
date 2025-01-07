@@ -13,8 +13,10 @@
 		title,
 		subTitle,
 		linkPaths,
-		children
-	}: { title: String; subTitle: string; linkPaths: LinkPath[]; children: any } = $props();
+		children,
+		bgContent = "card bg-white hover:shadow-md"
+	}: { title: String; subTitle: string; linkPaths: LinkPath[]; children: any; bgContent?: string } =
+		$props();
 </script>
 
 <!-- <style>
@@ -45,7 +47,7 @@
 						<div class="text-lg">{subTitle}</div>
 					</div>
 				{/if}
-				<div class="card col-span-full rounded-xl bg-white p-3 duration-200 hover:shadow-md">
+				<div class="{bgContent} col-span-full rounded-xl p-3 duration-200">
 					{@render children()}
 				</div>
 			</div>

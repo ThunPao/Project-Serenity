@@ -37,16 +37,24 @@
 	logOnTabPress();
 
 	import { page } from '$app/stores';
+
+	const tabSize = 36;
 </script>
 
 <AppBar background="bg-white dark:variant-filled-surface" padding="py-4 px-2" shadow="shadow-md">
 	<svelte:fragment slot="lead"
-		><a href="/" class="btn text-2xl font-bold">SERENITY</a>
-		<div class="pl-4">
+		><a href="/" class="btn text-4xl font-bold">SERENITY</a>
+		<div class="flex pl-4 gap-10 max-md:hidden">
 			<a href="/shop">
-				<div class="flex flex-col items-center">
-					<div><Icon icon="mdi:cart" width="24" height="24" /></div>
-					<div>สินค้า</div>
+				<div class="flex flex-col items-center hover:scale-105 duration-200 active:scale-110">
+					<div><Icon icon="mdi:cart" width={tabSize} height={tabSize} /></div>
+					<div>รายการสินค้า</div>
+				</div></a
+			>
+			<a href="/topup">
+				<div class="flex flex-col items-center hover:scale-105 duration-200 active:scale-110">
+					<div><Icon icon="mdi:hand-coin" width={tabSize} height={tabSize} /></div>
+					<div>เติมเงิน</div>
 				</div></a
 			>
 		</div>

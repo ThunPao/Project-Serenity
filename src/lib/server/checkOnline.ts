@@ -17,7 +17,8 @@ export async function CheckOnline(pname: string) {
 export async function CheckSumPlayers() {
     try {
         const data = await query(SERVER_IP, Number(MC_QUERY_PORT));
-        return `${data.players.length} / ${data.online}`
+        return `${data.players.length}`
+        // / ${data.online
     } catch (err) {
         return String("เซิร์ฟเวอร์ออฟไลน์")
     }

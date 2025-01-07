@@ -9,6 +9,7 @@ export const valla = {
         ALL_IDS: "ALL_IDS",
         ALL_TITLES: "ALL_TITLES",
         ITEMCAT: "ITEM_CATEGORY",
+        SEARCH: "ITEM_SEARCH"
     },
     user:{
         SESSION: "USER_SESSION"

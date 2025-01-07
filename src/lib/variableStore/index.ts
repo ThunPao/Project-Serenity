@@ -2,17 +2,17 @@ const sideBarList = [
     {
         title: 'หน้าหลัก',
         goto: '/',
-        icon: 'mdi:house-circle'
+        icon: 'mdi:house'
     },
     {
-        title: 'ร้านค้า',
+        title: 'ไอเทม',
         goto: '/shop',
-        icon: 'mdi:house-circle'
+        icon: 'mdi:dots-grid'
     },
     {
         title: 'เติมเงิน',
         goto: '/topup',
-        icon: 'mdi:gold'
+        icon: 'mdi:hand-coin'
     },
     {
         title: 'กรอกรหัสคูปอง',

@@ -9,7 +9,6 @@ export const load: PageServerLoad = async (event) => {
 
     const title = event.url.searchParams.get('title') || '';
 
-
     const allItemTitles = await cacheFetch<string[]>(
         valla.shop.ALL_TITLES,
         async () => {
@@ -39,7 +38,8 @@ export const load: PageServerLoad = async (event) => {
                 select: {
                     id: true,
                     title: true,
-                    price: true
+                    price: true,
+                    imageUrl: true
                 }
             });
 
@@ -68,10 +68,11 @@ export const load: PageServerLoad = async (event) => {
     };
 }
 
-let filters = {
-    title: "",
-    page: 0,
-}
+// let filters = {
+//     title: "",
+//     page: 0,
+// }
+
 export const actions = {
     searchItem: async (e) => {
         const formData = await e.request.formData();
@@ -81,19 +82,21 @@ export const actions = {
             async () => {
                 console.log('🔍 Fetching all item titles from database');
                 const titles = await db.shopItems.findMany({
-                    select: { title: true },
+                    select: { title: true, catId: true },
                 });
                 return titles.map((item) => item.title.toLowerCase());
             },
             { sec: 3600 } // 1 hour cache
         );
-
-        if (!title || !allItemTitles.includes(title)) {
+        const hasMatch = allItemTitles.some(data =>
+            data.includes(title)
+        );
+        if (!hasMatch) {
             return fail(404, { notFound: true });
         }
 
         const result = await cacheFetch<{ id: number; title: string; price: number }[]>(
-            `shopSearch${title}`,
+            `${valla.shop.SEARCH}:${title}`,
             async () => {
                 console.log(`🔍 Fetching search results for title: ${title}`);
                 return await db.shopItems.findMany({
@@ -105,8 +108,10 @@ export const actions = {
                     },
                 });
             },
+            { sec: 3600 }
         );
         if (!result) return fail(404, { notFound: true });
         return result
     }
 }
+

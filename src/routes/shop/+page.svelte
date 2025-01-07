@@ -1,17 +1,21 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import Icon from '@iconify/svelte';
-	import { enhance, applyAction } from '$app/forms';
 	import PrimeLayer from '$lib/Widgets/PrimeLayer.svelte';
 	import type { ActionData, PageData } from './$types';
+	import { enhance, applyAction } from '$app/forms';
+	import { goto } from '$app/navigation';
+	let formSearch: HTMLFormElement;
+
+	let inputSearch = $state('');
+
+	let selectedCategory = $state('all');
+
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 	let colla = $state(data.colla);
-	let isGrid = $state(true);
-	let inputSearch = $state('');
-	let formSearch: HTMLFormElement;
+	let catta = $state(data.catta);
 </script>
 
 <PrimeLayer
+	bgContent=""
 	title="Shop Items"
 	subTitle="รายการสินค้า"
 	linkPaths={[
@@ -21,124 +25,117 @@
 		}
 	]}
 >
-	<!-- Filter -->
-	<div class="flex justify-between p-3 dark:text-white">
-		<div class="font-noto text-xl">รายการสินค้า</div>
-		<div class="group text-surface-300 hover:text-surface-500">
-			<button
-				title="Toggle Grid/List View"
-				class="duration-200 group-hover:scale-105 group-active:scale-125"
-				onclick={() => {
-					isGrid = !isGrid;
-				}}
-			>
-				<Icon
-					icon={`lucide:${isGrid ? 'grid-2x2' : 'layout-list'}`}
-					width="1.75em"
-					height="1.75em"
-				/>
-			</button>
-		</div>
-	</div>
-	<div class="flex">
-		<div class="space-y-2 max-md:w-full">
-			<form
-				bind:this={formSearch}
-				method="POST"
-				action="?/searchItem"
-				use:enhance={({ formElement, formData, action, cancel }) => {
-					return async ({ result }) => {
-						console.log(result);
-						if (result.type === 'failure') {
-							console.log('Error: ' + result.status);
-						}
-						if (
-							result.type === 'success' &&
-							Array.isArray(result.data) &&
-							result.data.every((item) => 'id' in item && 'title' in item && 'price' in item)
-						) {
-							colla = result.data.map(({ id, title, price }) => ({ id, title, price }));
-							console.log('Res D', colla);
-						} else {
-							console.error('Invalid data or fetch failure');
-						}
-						await applyAction(result);
-					};
-				}}
-			>
-
-				<div
-					class="input-group variant-form-material grid-cols-[1fr_auto] bg-white dark:text-white"
+	<div class="">
+		<!-- Search and Filter Section -->
+		<div class="mb-8 space-y-4">
+			<!-- Search Input -->
+			<div class="flex max-w-md gap-2">
+				<form
+					bind:this={formSearch}
+					method="POST"
+					action="?/searchItem"
+					use:enhance={({ formElement, formData, action, cancel }) => {
+						return async ({ result }) => {
+							console.log(result);
+							if (result.type === 'failure') {
+								console.log('Error: ' + result.status);
+							}
+							if (result.type === 'success') {
+								if (
+									Array.isArray(result.data) &&
+									result.data.every((item) => 'id' in item && 'title' in item && 'price' in item)
+								) {
+									colla = result.data.map(({ id, title, price, imageUrl }) => ({
+										id,
+										title,
+										price,
+										imageUrl
+									}));
+									console.log('Res D', colla);
+								}
+								console.log('SUCCESS');
+							} else {
+								console.error('Invalid data or fetch failure');
+							}
+							await applyAction(result);
+						};
+					}}
 				>
 					<input
-						bind:value={inputSearch}
-						class="p-3 max-md:py-6"
-						type="text"
+						autocomplete="off"
 						name="title"
-						placeholder="🔍ค้นหาไอเทม"
+						type="text"
+						bind:value={inputSearch}
 						onkeydown={(e) => {
 							if (e.key === 'Enter') {
 								e.preventDefault();
 								formSearch.requestSubmit();
 							}
 						}}
+						placeholder="🔍ค้นหาไอเทม..."
+						class="w-full rounded-lg border border-gray-300 px-4 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
 					/>
+					<button hidden type="submit">Search</button>
+				</form>
+				<button
+					class="-ml-12 text-surface-400"
+					type="button"
+					onclick={(e) => {
+						e.stopPropagation();
+						inputSearch = '';
+						colla = data.colla;
+					}}
+					title="Clear"
+				>
+					ล้าง
+				</button>
+			</div>
+
+			<!-- Category Selection -->
+			<div class="flex flex-wrap gap-2">
+				{#each catta as cat}
 					<button
-						type="button"
-						onclick={() => {
-							inputSearch = '';
-							colla = data.colla;
-						}}
-						title="Clear"
+						class="rounded-full px-4 py-2 {selectedCategory === cat.title
+							? 'bg-blue-500 text-white'
+							: 'bg-gray-200 text-gray-700'} transition-opacity hover:opacity-90"
+						onclick={() => (selectedCategory = cat.title)}
 					>
-						ล้าง
+						{cat.title}
 					</button>
-				</div>
-
-				<button hidden title="Submit" type="submit">Send</button>
-				{#if form?.notFound}
-					<p>Item Not Found</p>
-				{/if}
-			</form>
-			ประเภทสินค้า
-			{#each data.catta as cat}
-				<div class="variant-filled-surface badge">
-					{cat.title} ({cat.count})
-				</div>
-			{/each}
+				{/each}
+			</div>
 		</div>
-	</div>
-	<!-- Item -->
-	<div class="py-4">
-		<hr class="!border-t-1" />
-	</div>
-	<div
-		class="max-h-[80dvh] gap-4 overflow-hidden overflow-y-auto pb-10"
-		class:grid={isGrid}
-		class:grid-cols-6={isGrid}
-	>
-		{#each colla as row}
-			<button
-				onclick={() => goto('/shop/' + encodeURIComponent(row.title))}
-				class="col-span-3 rounded-lg hover:scale-[101%] lg:col-span-1"
-				class:flex={!isGrid}
-			>
-				<div class="card-header">
-					<!-- src={'/items/' + row.imageUrl} -->
-					<!-- src={row.imageUrl} -->
 
+		<!-- Products Grid -->
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			{#each colla as row}
+				<button
+					title={row.title}
+					onclick={() => goto('/shop/' + encodeURIComponent(row.title))}
+					class="overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-lg"
+				>
 					<img
 						src="/items/coalore.webp"
+						alt={row.title}
 						draggable="false"
-						class="rounded-md duration-100 active:scale-105"
-						alt="1"
+						class="w-full rounded-md p-3 duration-100 active:scale-105"
 					/>
-				</div>
-				<div class="card-footer grid justify-center p-4 text-surface-400">
-					<div>{row.title}</div>
-					<div class="text-surface-400">{row.price}$</div>
-				</div>
-			</button>
-		{/each}
+					<div class="p-4">
+						<h3 class="mb-2 text-lg font-semibold">{row.title}</h3>
+						<p class="mb-2 text-gray-600">${row.price.toFixed(2)}</p>
+						<!-- <button
+							class="w-full rounded-lg bg-blue-500 py-2 text-white transition-colors hover:bg-blue-600"
+						>
+							Add to Cart
+						</button> -->
+					</div>
+				</button>
+			{/each}
+		</div>
+
+		<!-- No Results Message -->
+		{#if form?.notFound}
+			<p>Item Not Found</p>
+		{/if}
 	</div>
 </PrimeLayer>

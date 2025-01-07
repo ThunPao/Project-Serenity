@@ -60,8 +60,13 @@
 				<!-- Online -->
 				<div class="btn h-full min-h-32 w-full bg-surface-500 text-center shadow-md">
 					<div class="flex h-full flex-col items-center justify-center text-white">
-						<h1>🍀{data.pAll}</h1>
-						<h5 class="font-bold">ผู้เล่นออนไลน์</h5>
+						<div
+						class="text-3xl"
+						class:text-error-400={data.pAll === "เซิร์ฟเวอร์ออฟไลน์"}
+						>{data.pAll}</div>
+						{#if data.pAll != 'เซิร์ฟเวอร์ออฟไลน์'}
+							<h5 class="font-bold">ผู้เล่นออนไลน์</h5>
+						{/if}
 					</div>
 				</div>
 				<!--  -->

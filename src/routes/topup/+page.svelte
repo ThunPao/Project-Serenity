@@ -3,11 +3,11 @@
 </script>
 
 <PrimeLayer
-	title="Donate"
+	title="Topup"
     subTitle="เติมเงิน"
 	linkPaths={[
 		{
-			title: 'โดเนท',
+			title: 'เติมเงิน',
 			link: ''
 		}
 	]}
