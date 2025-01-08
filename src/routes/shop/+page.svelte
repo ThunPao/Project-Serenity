@@ -73,7 +73,7 @@
 							}
 						}}
 						placeholder="🔍ค้นหาไอเทม..."
-						class="w-full rounded-lg border border-gray-300 px-4 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+						class="input-white"
 					/>
 					<button hidden type="submit">Search</button>
 				</form>
@@ -112,7 +112,7 @@
 				<button
 					title={row.title}
 					onclick={() => goto('/shop/' + encodeURIComponent(row.title))}
-					class="overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-lg"
+					class="overflow-hidden rounded-lg bg-white bg-opacity-95 shadow-md transition-shadow hover:shadow-lg"
 				>
 					<img
 						src="/items/coalore.webp"
@@ -121,8 +121,8 @@
 						class="w-full rounded-md p-3 duration-100 active:scale-105"
 					/>
 					<div class="p-4">
-						<h3 class="mb-2 text-lg font-semibold">{row.title}</h3>
-						<p class="mb-2 text-gray-600">${row.price.toFixed(2)}</p>
+						<h3 class="text-surface-400-500-token mb-2 text-lg font-semibold">{row.title}</h3>
+						<p class="mb-2 text-surface-600">${row.price.toFixed(2)}</p>
 						<!-- <button
 							class="w-full rounded-lg bg-blue-500 py-2 text-white transition-colors hover:bg-blue-600"
 						>

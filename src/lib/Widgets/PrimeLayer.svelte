@@ -30,7 +30,7 @@
 		<div class="grid gap-4 xl:grid-cols-4">
 			<div class="order-2 space-y-4 xl:order-1 xl:col-span-3">
 				{#if title}
-					<div class="card rounded-md bg-white p-6 dark:text-white">
+					<div class="card border-line bg-white p-6 dark:text-white">
 						<ol class="breadcrumb">
 							<li class="crumb"><a class="anchor" href="/">หน้าหลัก</a></li>
 							{#each linkPaths as data}
@@ -83,3 +83,8 @@
 		</div>
 	</div>
 </main>
+<style>
+	.border-line{
+		border-bottom-right-radius: 80px;
+	}
+</style>

@@ -5,20 +5,33 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { db } from '$lib/db';
 import { cacheFetch } from '$lib/server/niceCache';
 import { valla } from '$lib/server/variableList';
+// declare module '@auth/sveltekit' {
+// 	// interface User {
+// 	// 	pname: string;
+// 	// 	points: number;
+// 	// 	coins: number;
+// 	// }
+// 	interface Session extends DefaultSession {
+// 		userId: string;
+// 		user: {
+// 			name: string
+// 			pname: string
+// 			points: number
+// 			coins: number
+// 		} & DefaultSession['user']
+// 	}
+// }
 declare module '@auth/sveltekit' {
-	// interface User {
-	// 	pname: string;
-	// 	points: number;
-	// 	coins: number;
-	// }
 	interface Session extends DefaultSession {
 		userId: string;
-        user: {
-            pname: string
-            points: number
-            coins: number
-        } & DefaultSession['user']
-    }
+		user: {
+			name: string | null;
+			playerName: string | null;
+			image: string | null;
+			points: number;
+			coins: number;
+		}
+	}
 }
 
 // const originalSignOut = SvelteKitAuth.signOut;
@@ -35,33 +48,21 @@ declare module '@auth/sveltekit' {
 
 
 export const { handle, signIn, signOut } = SvelteKitAuth({
-    adapter: PrismaAdapter(db),
-    callbacks: {
-        async session({ session, user }) {
-            const userData = await db.user.findUnique({
-                        where: { id: user.id },
-                        select: {
-                            name: true,
-                            image: true,
-                            points: true,
-                            coins: true,
-                            playerName: true,
-                        }
-                    });
-				if (userData) {
-					return {
-						...session,
-						user: {
-							name: userData.name,
-							image: session.user.image,
-							pname: userData.playerName || '',
-							points: userData.points,
-							coins: userData.coins
-						}
-					};
-				}
-				return session;
-		},
+	adapter: PrismaAdapter(db),
+	callbacks: {
+		async session({ session, user }) {
+			return {
+				userId: session.userId,
+				user: {
+					name: user.name,
+					playerName: session.user?.playerName ?? "",
+					image: session.user?.image ?? null,
+					points: session.user?.points ?? 0,
+					coins: session.user?.coins ?? 0
+				},
+				expires: session.expires
+			};
+		}
 	},
 	providers: [
 		Discord({

@@ -7,8 +7,10 @@
 	import { invalidate } from '$app/navigation';
 
 	const { data, form }: { data: PageData; form: ActionData } = $props();
-
 	const { title, imageUrl, description, price } = data.colla;
+
+	const toastStore = getToastStore();
+
 	const tAlert = (msg: string, bgColor: string) => {
 		if (msg) {
 			const t: ToastSettings = {
@@ -20,7 +22,6 @@
 			toastStore.trigger(t);
 		}
 	};
-	const toastStore = getToastStore();
 	let isCooldown = $state(false);
 </script>
 
@@ -83,13 +84,13 @@
 				if (result.type === 'failure') {
 					tAlert(String(result.data?.message), 'variant-filled-error');
 					setTimeout(() => {
-					isCooldown = false;
+						isCooldown = false;
 					}, 3000);
 				}
 				if (result.type === 'success') {
 					invalidate('app:curSession');
 					setTimeout(() => {
-					isCooldown = false;
+						isCooldown = false;
 					}, 1050);
 					tAlert(
 						String(`✅ ${result.data?.message}`),

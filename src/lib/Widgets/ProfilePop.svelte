@@ -27,7 +27,7 @@
 						border={`border-4 ${$page.data.isOnline ? 'border-success-500' : 'border-warning-500'}`}
 					/>
 					<div class="flex flex-col">
-						<div class="font-bold">{$page.data.session.user.pname}</div>
+						<div class="font-bold">{$page.data.session.user.playerName}</div>
 						<small class="font-semibold"
 							>คงเหลือ {$page.data.session.user?.points} Points {$page.data.session.user?.coins} Coins</small
 						>
