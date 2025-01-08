@@ -57,7 +57,7 @@ export const load: PageServerLoad = async (event) => {
                 price: true
             },
         }), {
-        sec: 60
+        sec: 1800
     }
     );
     if (!shopInfo) return error(404)
