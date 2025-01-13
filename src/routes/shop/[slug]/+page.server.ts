@@ -131,7 +131,7 @@ const userCooldowns: Record<string, number> = {}; // Store timestamps for each u
 
 
 export const actions = {
-    buyItem: async (event) => {
+    default: async (event) => {
         if (await limiter.isLimited(event)) throw error(429);
         const rawShopTitle = event.params.slug;
         // Validate ID format

@@ -76,7 +76,6 @@
 		{description}
 	</h5>
 	<form
-		action="?/buyItem"
 		method="post"
 		use:enhance={({ formElement, formData, action, cancel }) => {
 			isCooldown = true;
