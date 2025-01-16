@@ -45,6 +45,6 @@
 	</Drawer>
 	<NavTop />
 	{@render children()}
-	<NavBottom {usrSession} isOnline={$page.data.isOnline} />
+	<NavBottom />
 	<FooterBar />
 </main>

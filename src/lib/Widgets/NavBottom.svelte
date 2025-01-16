@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { UserSession } from '$lib/variableStore/interModels';
 	import Icon from '@iconify/svelte';
 	import { Avatar, type DrawerSettings } from '@skeletonlabs/skeleton';
 	import { getDrawerStore } from '@skeletonlabs/skeleton';
+	import { page } from '$app/stores';
 
 	const drawerStore = getDrawerStore();
 	const drawerSettings: DrawerSettings = {
@@ -10,10 +10,7 @@
 		position: 'bottom',
 		meta: { foo: 'bar', fizz: 'buzz', age: 40 }
 	};
-	const {
-		usrSession = null,
-		isOnline = false
-	}: { usrSession: UserSession | null | undefined; isOnline: Boolean } = $props();
+
 </script>
 
 <div class="fixed bottom-4 z-30 w-full p-1">
@@ -27,10 +24,10 @@
 		<div class="grid w-full items-center justify-center -mt-6">
 			<button onclick={() => drawerStore.open(drawerSettings)}>
 				<Avatar
-						src={usrSession?.image ?? ''}
+						src={$page.data.session && $page.data.session.user?.image || ''}
 						width="w-20"
 						rounded="rounded-full"
-						border={`border-4 ${isOnline ? 'border-success-500' : 'border-warning-500'}`}
+						border={`border-4 ${true ? 'border-success-500' : 'border-warning-500'}`}
 					/>
 			</button>
 		</div>

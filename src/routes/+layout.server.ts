@@ -6,7 +6,6 @@ import { redirect } from '@sveltejs/kit';
 import { valla } from '$lib/server/variableList';
 export const load: LayoutServerLoad = async (event) => {
   await limiter.cookieLimiter?.preflight(event);
-  
   event.depends("app:curSession")
   const isAuth = event.cookies.get('authjs.session-token');
   if (isAuth) {
@@ -29,14 +28,11 @@ export const load: LayoutServerLoad = async (event) => {
       }
       return {
         session: session,
-        isOnline: false
       };
     }
-    const isOnline = await CheckOnline(playerInGameName);
     // console.log(session)
     return {
       session: session,
-      isOnline: isOnline.type
     };
   }
 
