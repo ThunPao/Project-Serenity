@@ -30,8 +30,20 @@ export const load: LayoutServerLoad = async (event) => {
         session: session,
       };
     }
+
+    const isBusy = await cacheFetch<Boolean>(
+      `${valla.server.IS_BUSY}`,
+      async () => {
+        return false
+      },
+      {
+        sec: 3,
+      }
+    );
+
     // console.log(session)
     return {
+      isBusy: isBusy,
       session: session,
     };
   }

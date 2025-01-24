@@ -17,6 +17,7 @@
 	} from '@skeletonlabs/skeleton';
 	import '../app.css';
 	import type { UserSession } from '$lib/variableStore/interModels';
+	import MaintenancePage from '../Components/MaintenancePage.svelte';
 	initializeStores();
 
 	let { children } = $props();
@@ -33,18 +34,22 @@
 		: null;
 </script>
 
-<!-- bg-surface-50-900-token -->
-<main data-theme="julia" class=" select-none font-noto">
-	<Navido />
-	<NaviNim />
-	<Toast />
-	<Drawer>
-		{#if $drawerStore.id === 'ProfilePop'}
-			<ProfilePop />
-		{/if}
-	</Drawer>
-	<NavTop />
-	{@render children()}
-	<NavBottom />
-	<FooterBar />
-</main>
+{#if !$page.data.isBusy}
+	<!-- bg-surface-50-900-token -->
+	<main data-theme="julia" class=" select-none font-noto">
+		<Navido />
+		<NaviNim />
+		<Toast />
+		<Drawer>
+			{#if $drawerStore.id === 'ProfilePop'}
+				<ProfilePop />
+			{/if}
+		</Drawer>
+		<NavTop />
+		{@render children()}
+		<NavBottom />
+		<FooterBar />
+	</main>
+{:else}
+	<MaintenancePage />
+{/if}

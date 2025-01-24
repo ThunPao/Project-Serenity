@@ -1,6 +1,7 @@
 // valla = variable colla
 export const valla = {
     server: {
+        IS_BUSY: "SERVER_ISBUSY",
         PLAYER_COUNT: "PLAYER_COUNT",
     },
     shop: {

@@ -4,6 +4,7 @@ import { RCON_PORT, RCON_PWD, SERVER_IP } from '$env/static/private';
 class RconManager {
     private static instance: Rcon | null = null;
     private static isConnecting: boolean = false;
+    private static isDisconnecting: boolean = false;
 
     /**
      * Establishes a connection to the RCON server
@@ -14,9 +15,13 @@ class RconManager {
             return this.instance;
         }
 
-        // if (this.isConnecting) {
-        //     throw new Error('Connection attempt already in progress');
-        // }
+        if (this.isConnecting) {
+            // Wait until the connection is established by another call
+            while (this.isConnecting) {
+                await new Promise((resolve) => setTimeout(resolve, 100));
+            }
+            return this.instance;
+        }
 
         this.isConnecting = true;
 
@@ -25,7 +30,7 @@ class RconManager {
                 host: SERVER_IP,
                 port: Number(RCON_PORT),
                 password: RCON_PWD,
-                timeout: 5000 // 5 second timeout
+                timeout: 5000, // 5 second timeout
             });
 
             this.instance = rcon;
@@ -55,8 +60,6 @@ class RconManager {
         } catch (error: any) {
             console.error('Failed to execute RCON command:', error?.message);
             throw error;
-        } finally {
-            await this.disconnect();
         }
     }
 
@@ -64,27 +67,23 @@ class RconManager {
      * Safely disconnects from the RCON server
      */
     static async disconnect(): Promise<void> {
+        if (this.isDisconnecting || !this.instance) {
+            return;
+        }
+
+        this.isDisconnecting = true;
+
         try {
-            if (this.instance?.authenticated) {
+            if (this.instance.authenticated) {
                 await this.instance.end();
             }
         } catch (error: any) {
             console.error('Error disconnecting from RCON:', error?.message);
         } finally {
             this.instance = null;
+            this.isDisconnecting = false;
         }
     }
 }
-
-/**
- * Example usage:
- * 
- * try {
- *     const response = await RconManager.executeCommand('list'); // Lists online players
- *     console.log(response);
- * } catch (error) {
- *     console.error('Command failed:', error);
- * }
- */
 
 export { RconManager };
