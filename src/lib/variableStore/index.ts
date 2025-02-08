@@ -25,4 +25,4 @@ const sideBarList = [
         icon: 'mdi:book-open-page-variant'
     },
 ];
-export {sideBarList}
+export { sideBarList }

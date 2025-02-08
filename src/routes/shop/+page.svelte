@@ -112,7 +112,7 @@
 				<button
 					title={row.title}
 					onclick={() => goto('/shop/' + encodeURIComponent(row.title))}
-					class="overflow-hidden rounded-lg bg-white bg-opacity-95 shadow-md transition-shadow hover:shadow-lg"
+					class="overflow-hidden rounded-lg bg-slate-50 shadow-md transition-shadow hover:shadow-lg"
 				>
 					<img
 						src="/items/coalore.webp"

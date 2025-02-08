@@ -7,8 +7,6 @@
 
 <div id="ProfilePop" class="card z-50 h-full bg-white shadow-xl dark:text-white">
 	<div class="flex h-full w-full flex-col justify-between">
-		<div></div>
-
 		<div>
 			<a
 				href="/tradepoints"
@@ -49,9 +47,7 @@
 					</div>
 				{/if}
 			</div>
-
 			<hr class="opacity-40" />
-
 			<hr class="opacity-40" />
 			<div class="grid gap-4 p-3">
 				<div class="flex gap-4">
