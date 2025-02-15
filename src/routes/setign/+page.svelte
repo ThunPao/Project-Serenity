@@ -13,7 +13,7 @@
 	subTitle="กรุณาตั้งชื่อในเกมส์"
 >
 	<form method="post">
-		<input type="text" name="playerName" placeholder="พิมพ์ชื่อในเกมส์" />
-        <button type="submit" class="variant-filled-primary">Send</button>
+		<input class="input" type="text" name="playerName" placeholder="พิมพ์ชื่อในเกมส์" />
+		<button type="submit" class="btn variant-filled-primary">Send</button>
 	</form>
 </PrimeLayer>

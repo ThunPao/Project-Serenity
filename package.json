@@ -42,6 +42,7 @@
     "@floating-ui/dom": "^1.6.12",
     "@mcpedb/query": "^1.0.3",
     "@prisma/client": "^6.0.1",
+    "@vincjo/datatables": "^2.5.0",
     "rcon-client": "^4.2.5",
     "redis": "^4.7.0",
     "rollup-plugin-visualizer": "^5.12.0",

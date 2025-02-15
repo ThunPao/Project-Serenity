@@ -17,7 +17,7 @@
 	} from '@skeletonlabs/skeleton';
 	import '../app.css';
 	import type { UserSession } from '$lib/variableStore/interModels';
-	import MaintenancePage from '../Components/MaintenancePage.svelte';
+	import MaintenancePage from '../lib/Components/MaintenancePage.svelte';
 	initializeStores();
 
 	let { children } = $props();
