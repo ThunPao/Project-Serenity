@@ -13,31 +13,33 @@
 </script>
 
 <dialog bind:this={editMenu}>
-	<div class="p-4">
+	<div class="bg-surface-50-900-token p-4">
 		<h3>แก้ไข</h3>
-		<form
-			method="post"
-			action="?/editItem"
-			use:enhance={() => {
-				return async ({ result }) => {
-					if (result.type === 'failure') {
-						console.log('Error: ' + result.status);
-						alert('Oh no');
-					}
-					if (result.type === 'success') {
-						alert('Yay!');
-					} else {
-						console.error('Invalid data or fetch failure');
-					}
-					await applyAction(result);
-				};
-			}}
-		>
+		<!-- use:enhance={() => {
+			return async ({ result }) => {
+				if (result.type === 'failure') {
+					console.log('Error: ' + result.status);
+					alert('Oh no');
+				}
+				if (result.type === 'success') {
+					alert('Yay!');
+				} else {
+					console.error('Invalid data or fetch failure');
+				}
+				await applyAction(result);
+			};
+		}} -->
+		<form method="post" action="?/editItem">
 			<input type="hidden" name="shopId" value={formData.id} />
-			<input type="text" class="input p-3" name="title" value={formData.title} />
+			<input
+				type="text"
+				class="input variant-filled-primary p-3"
+				name="title"
+				value={formData.title}
+			/>
 			<button type="submit" class="variant-filled-primary btn">แก้ไข</button>
 		</form>
-		<button onclick={() => editMenu?.close()} class="btn">Close</button>
+		<button onclick={() => editMenu?.close()} class="btn via-fuchsia-100">Close</button>
 	</div>
 </dialog>
 <div class="px-4">
