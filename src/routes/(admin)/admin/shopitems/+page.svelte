@@ -43,7 +43,7 @@
 	</div>
 </dialog>
 <div class="px-4">
-	<div class="flex gap-4 py-4">
+	<div class="flex gap-4 py-10">
 		<div class="w-96 rounded-md bg-white">
 			<ul class="prose p-4">
 				<li>Home</li>
@@ -51,7 +51,11 @@
 				<li>ShopCategory</li>
 			</ul>
 		</div>
-		<div class="w-full bg-white p-4">
+		<div class="h-full w-full rounded-md bg-white">
+			<div class="flex items-center justify-between p-4">
+				<div class="text-lg">จำนวนสินค้าทั้งหมด {table.rows.length} รายการ</div>
+				<button class="variant-filled-primary btn">+ เพิ่มสินค้า</button>
+			</div>
 			<Datatable basic {table}>
 				<table>
 					<thead>
