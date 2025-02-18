@@ -14,9 +14,14 @@
 		subTitle,
 		linkPaths,
 		children,
-		bgContent = "card bg-white hover:shadow-md"
-	}: { title: String; subTitle: string; linkPaths: LinkPath[]; children: any; bgContent?: string } =
-		$props();
+		bgContent = 'card bg-white hover:shadow-md'
+	}: {
+		title: String;
+		subTitle: string;
+		linkPaths: LinkPath[];
+		children: any;
+		bgContent?: string;
+	} = $props();
 </script>
 
 <!-- <style>
@@ -30,21 +35,11 @@
 		<div class="grid gap-4 xl:grid-cols-4">
 			<div class="order-2 space-y-4 xl:order-1 xl:col-span-3">
 				{#if title}
-					<div class="card border-line  p-6 dark:text-white">
-						<ol class="breadcrumb">
-							<li class="crumb"><a class="anchor" href="/">หน้าหลัก</a></li>
-							{#each linkPaths as data}
-								<li class="crumb-separator" aria-hidden="true">/</li>
-								<button disabled={!data.link} onclick={() => goto(`${data.link}`)}>
-									{data.title}
-								</button>
-							{/each}
-						</ol>
-
-						<article class="prose py-4 lg:prose-xl">
-							<h2>{title}</h2>
+					<div class="border-line p-6">
+						<article class="prose-lg">
+							<h2>{subTitle}</h2>
 						</article>
-						<div class="text-lg">{subTitle}</div>
+						<div class="text-lg">{title}</div>
 					</div>
 				{/if}
 				<div class="{bgContent} col-span-full rounded-xl p-3 duration-200">
@@ -53,7 +48,7 @@
 			</div>
 			<!-- มุมขวา -->
 			<div class="order-1 col-span-full xl:order-2 xl:col-span-1">
-				<div class="card bg-white p-3 duration-200 hover:shadow-md dark:text-white">
+				<div class="card bg-white p-3 duration-200 hover:shadow-md">
 					<div class="p-4">
 						<div class="text-2xl font-semibold">Menu</div>
 						<div class="text-sm font-light">Lorem ipsum dolor sit amet.</div>
@@ -83,8 +78,9 @@
 		</div>
 	</div>
 </main>
+
 <style>
-	.border-line{
+	.border-line {
 		border-bottom-right-radius: 80px;
 	}
 </style>

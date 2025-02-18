@@ -37,6 +37,7 @@
 	logOnTabPress();
 
 	import { page } from '$app/stores';
+	import DarkSwitch from '$lib/Components/DarkSwitch.svelte';
 
 	const tabSize = 36;
 </script>
@@ -86,7 +87,8 @@
 			>กด <kbd class="kbd variant-filled-primary">Tab</kbd> เพื่อเปิดเมนู</button
 		> -->
 		<div class="hidden">
-			<LightSwitch />
+			<!-- <LightSwitch /> -->
+			 <DarkSwitch/>
 		</div>
 	</svelte:fragment>
 </AppBar>

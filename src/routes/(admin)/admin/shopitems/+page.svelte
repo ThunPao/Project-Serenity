@@ -2,6 +2,7 @@
 	import { TableHandler, Datatable } from '@vincjo/datatables';
 	import type { PageData, ActionData } from './$types';
 	import { applyAction, enhance } from '$app/forms';
+	import Icon from '@iconify/svelte';
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	const table = new TableHandler(data.colla, { rowsPerPage: 50 });
@@ -43,33 +44,33 @@
 	</div>
 </dialog>
 <div class="px-4">
-	<div class="flex gap-4 py-10">
-		<div class="w-96 rounded-md bg-white">
-			<ul class="prose p-4">
-				<li>Home</li>
-				<li>ShopItems</li>
-				<li>ShopCategory</li>
+	<div class="gap-4 py-10 lg:flex">
+		<div class="bg-base rounded-md">
+			<ul class="p-4 max-lg:flex items-center gap-4">
+				<li><Icon icon="mdi:house" width="50" height="50" /></li>
+				<li><Icon icon="mdi:shopping" width="50" height="50" /></li>
+				<li><Icon icon="mdi:cart" width="50" height="50" /></li>
 			</ul>
 		</div>
-		<div class="h-full w-full rounded-md bg-white">
+		<div class="h-full w-full rounded-md">
 			<div class="flex items-center justify-between p-4">
 				<div class="text-lg">จำนวนสินค้าทั้งหมด {table.rows.length} รายการ</div>
 				<button class="variant-filled-primary btn">+ เพิ่มสินค้า</button>
 			</div>
-			<Datatable basic {table}>
-				<table>
+			<Datatable basic headless {table}>
+				<table class="table-compact pl-4">
 					<thead>
 						<tr>
 							<th>รายการสินค้า</th>
 							<th>ราคา</th>
 							<th>Command</th>
-							<th>กระทำ</th>
+							<th colspan="2">กระทำ</th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each table.rows as row}
 							<tr>
-								<td class="w-full">{row.title}</td>
+								<td class="">{row.title}</td>
 								<td>${row.price.toFixed(2)}</td>
 								<td
 									>{#each row.itemCommand as item}
@@ -119,3 +120,32 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		transition: box-shadow 0.3s ease; /* Transition for the table itself */
+	}
+
+	th,
+	td {
+		padding: 12px;
+		text-align: left;
+		border-bottom: 1px solid #ddd;
+		transition:
+			background-color 0.3s ease,
+			color 0.3s ease; /* Transition for cells */
+	}
+
+	tr:hover td {
+		/* Target data cells specifically */
+		@apply bg-surface-100;
+	}
+
+	tr:hover th {
+		/* Target header cells specifically */
+		/* background-color: #bbdefb; */
+		@apply bg-surface-100;
+	}
+</style>

@@ -4,34 +4,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans+Thai:wght@100..900&display=swap');
 @layer base {
 	h1 {
-		@apply text-2xl dark:text-white;
+		@apply text-2xl ;
 	}
 	h2 {
-		@apply text-xl dark:text-white;
+		@apply text-xl ;
 	}
 	h3 {
-		@apply text-lg dark:text-white;
+		@apply text-lg ;
 	}
 	h4 {
-		@apply text-base dark:text-white;
+		@apply text-base ;
 	}
 	h5 {
-		@apply text-sm dark:text-white;
+		@apply text-sm ;
 	}
 	article {
 		a {
-			@apply text-blue-600 underline dark:text-teal-300;
+			@apply text-blue-300 underline dark:text-teal-300;
 		}
 	}
 	.input-white{
 		@apply rounded-lg border border-gray-300 px-4 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500
 	}
+	.bg-base{
+		@apply bg-white dark:bg-surface-500 
+	}
 }
-body {
+/* body {
 	background: rgb(221, 221, 222);
-}
+} */
 .dark body {
 	background: rgb(12, 12, 17);
+	color: white
 }
 :root [data-theme='julia'] {
 	--theme-font-family-base: 'Noto Sans Thai', serif;

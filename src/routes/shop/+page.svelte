@@ -15,7 +15,7 @@
 </script>
 
 <PrimeLayer
-	bgContent="bg-white dark:bg-black"
+	bgContent=""
 	title="Shop Items"
 	subTitle="รายการสินค้า"
 	linkPaths={[
@@ -95,9 +95,9 @@
 			<div class="flex flex-wrap gap-2">
 				{#each catta as cat}
 					<button
-						class="rounded-full px-4 py-2 {selectedCategory === cat.title
-							? 'bg-blue-500 text-white'
-							: 'bg-gray-200 text-gray-700'} transition-opacity hover:opacity-90"
+						class="rounded-full p-2 px-3 {selectedCategory === cat.title
+							? 'bg-primary-500 text-white'
+							: 'bg-gray-200 text-gray-700'} transition-opacity hover:opacity-90 text-sm"
 						onclick={() => (selectedCategory = cat.title)}
 					>
 						{cat.title}

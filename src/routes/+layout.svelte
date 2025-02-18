@@ -36,7 +36,7 @@
 
 {#if !$page.data.isBusy}
 	<!-- bg-surface-50-900-token -->
-	<main data-theme="julia" class=" select-none font-noto">
+	<main data-theme="julia" class="font-noto">
 		<Navido />
 		<NaviNim />
 		<Toast />

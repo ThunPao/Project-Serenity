@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 </script>
 
-<div id="ProfilePop" class="card z-50 h-full bg-white shadow-xl dark:text-white">
+<div id="ProfilePop" class="card z-50 h-full bg-white shadow-xl ">
 	<div class="flex h-full w-full flex-col justify-between">
 		<div>
 			<a
