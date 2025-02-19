@@ -24,6 +24,7 @@
 			link: ''
 		}
 	]}
+	icon={'mdi:cart'}
 >
 	<div class="">
 		<!-- Search and Filter Section -->
@@ -73,7 +74,7 @@
 							}
 						}}
 						placeholder="🔍ค้นหาไอเทม..."
-						class="input-white"
+						class="input-white rounded-full"
 					/>
 					<button hidden type="submit">Search</button>
 				</form>
@@ -95,9 +96,9 @@
 			<div class="flex flex-wrap gap-2">
 				{#each catta as cat}
 					<button
-						class="rounded-full p-2 px-3 {selectedCategory === cat.title
+						class="rounded-full p-2 px-3 font-semibold {selectedCategory === cat.title
 							? 'bg-primary-500 text-white'
-							: 'bg-gray-200 text-gray-700'} transition-opacity hover:opacity-90 text-sm"
+							: 'bg-gray-200 text-gray-700'} text-sm transition-opacity hover:opacity-90"
 						onclick={() => (selectedCategory = cat.title)}
 					>
 						{cat.title}
@@ -112,13 +113,13 @@
 				<button
 					title={row.title}
 					onclick={() => goto('/shop/' + encodeURIComponent(row.title))}
-					class="overflow-hidden rounded-lg shadow-md transition-shadow hover:shadow-lg"
+					class="overflow-hidden rounded-lg duration-200 hover:scale-105"
 				>
 					<img
 						src="/items/coalore.webp"
 						alt={row.title}
 						draggable="false"
-						class="w-full rounded-md p-3 duration-100 active:scale-105"
+						class="rounded-md w-full p-3 duration-100 active:scale-105"
 					/>
 					<div class="p-4">
 						<h3 class="mb-2 font-semibold text-surface-400">{row.title}</h3>

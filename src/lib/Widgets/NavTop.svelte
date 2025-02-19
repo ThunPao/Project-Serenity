@@ -15,7 +15,8 @@
 		position: 'right',
 		width: 'w-[280px] md:w-[480px]',
 		bgBackdrop: 'bg-gradient-to-tr from-indigo-500/50 via-purple-500/50 to-pink-500/50',
-		meta: { foo: 'bar', fizz: 'buzz', age: 40 }
+		meta: { foo: 'bar', fizz: 'buzz', age: 40 },
+		rounded: 'rounded-none'
 	};
 	let isTabOpen = $state(false);
 	function logOnTabPress() {
@@ -42,23 +43,9 @@
 	const tabSize = 36;
 </script>
 
-<AppBar background="bg-white dark:variant-filled-surface" padding="py-4 px-2" shadow="shadow-md">
+<AppBar background="bg-white dark:variant-filled-surface max-lg:hidden" padding="py-4 px-2" shadow="shadow-md">
 	<svelte:fragment slot="lead"
 		><a href="/" class="btn text-4xl font-bold">SERENITY</a>
-		<div class="flex pl-4 gap-10 max-md:hidden">
-			<a href="/shop">
-				<div class="flex flex-col items-center hover:scale-105 duration-200 active:scale-110">
-					<div><Icon icon="mdi:cart" width={tabSize} height={tabSize} /></div>
-					<div>รายการสินค้า</div>
-				</div></a
-			>
-			<a href="/topup">
-				<div class="flex flex-col items-center hover:scale-105 duration-200 active:scale-110">
-					<div><Icon icon="mdi:hand-coin" width={tabSize} height={tabSize} /></div>
-					<div>เติมเงิน</div>
-				</div></a
-			>
-		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
 		{#if !$page.data.session}
@@ -88,7 +75,7 @@
 		> -->
 		<div class="hidden">
 			<!-- <LightSwitch /> -->
-			 <DarkSwitch/>
+			<DarkSwitch />
 		</div>
 	</svelte:fragment>
 </AppBar>

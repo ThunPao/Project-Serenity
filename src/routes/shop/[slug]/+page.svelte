@@ -26,8 +26,9 @@
 </script>
 
 <PrimeLayer
-	{title}
-	subTitle="รายละเอียดสินค้า"
+	icon={'mdi:cart'}
+	title="รายละเอียดสินค้า"
+	subTitle={title}
 	linkPaths={[
 		{
 			title: 'ร้านค้า',
@@ -61,7 +62,7 @@
 		/>
 		{data.colla.checkOnline ? 'ไอเทมนี้ ต้องเข้าเซิฟก่อนซื้อ' : 'ไม่อยู่ในเซิฟก็ซื้อได้'}
 	</div>
-	<article class="prose py-2">
+	<article class="prose-sm py-2">
 		<h1>
 			{title}
 		</h1>

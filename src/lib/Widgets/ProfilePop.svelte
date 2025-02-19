@@ -3,19 +3,23 @@
 	import { Avatar, LightSwitch } from '@skeletonlabs/skeleton';
 	import { SignIn, SignOut } from '@auth/sveltekit/components';
 	import { page } from '$app/stores';
+	import { sideBarList } from '$lib/variableStore';
 </script>
 
-<div id="ProfilePop" class="card z-50 h-full bg-white shadow-xl ">
-	<div class="flex h-full w-full flex-col justify-between">
+<div id="ProfilePop" class="card z-50 h-full bg-white shadow-xl">
+	<div class="flex h-full w-full flex-col justify-end">
 		<div>
-			<a
-				href="/tradepoints"
-				class="flex items-center space-x-2 p-3 pt-4 hover:bg-surface-50-900-token"
-			>
-				<Icon icon="mdi:account-switch" width="24" height="24" />
-				<div>แลกเปลี่ยนพ้อย</div>
-			</a>
-
+			{#each sideBarList as row}
+				<a
+					href={row.goto}
+					class="flex items-center space-x-2 p-3 pt-4 hover:bg-surface-50-900-token"
+				>
+					<Icon icon={row.icon} width="50" height="50" />
+					<div>{row.title}</div>
+				</a>
+			{/each}
+		</div>
+		<div>
 			<div class="flex items-center gap-4 p-4">
 				{#if $page.data.session && $page.data.session.user}
 					<Avatar

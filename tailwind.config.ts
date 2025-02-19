@@ -18,8 +18,8 @@ const config = {
     extend: {
       fontFamily: {
         noto: ["'Noto Sans Thai'", 'serif'],
-        noto2: ["'Noto Sans Thai Looped'", 'serif']
-
+        noto2: ["'Noto Sans Thai Looped'", 'serif'],
+        pixel: ["'Pixelify Sans'", 'serif']
       }
     }
   },

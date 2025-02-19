@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
+	import { sideBarList } from '$lib/variableStore';
 	import PrimeLayer from '$lib/Widgets/PrimeLayer.svelte';
 	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 	let isCooldown = $state(true);
@@ -24,10 +25,11 @@
 	subTitle="เติมเงิน"
 	linkPaths={[
 		{
-			title: 'เติมเงิน',
-			link: ''
+			title: sideBarList[2].title,
+			link: sideBarList[2].goto
 		}
 	]}
+	icon={sideBarList[2].icon}
 >
 	<div class="flex min-h-60 items-center justify-center">
 		<form

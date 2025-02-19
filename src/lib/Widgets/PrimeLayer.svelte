@@ -14,13 +14,15 @@
 		subTitle,
 		linkPaths,
 		children,
-		bgContent = 'card bg-white hover:shadow-md'
+		bgContent = 'card bg-white hover:shadow-md',
+		icon
 	}: {
 		title: String;
 		subTitle: string;
 		linkPaths: LinkPath[];
 		children: any;
 		bgContent?: string;
+		icon?: string;
 	} = $props();
 </script>
 
@@ -31,24 +33,32 @@
 	}
 </style> -->
 <main>
-	<div class="container mx-auto min-h-screen pt-8">
+	<div class="container mx-auto min-h-screen lg:pt-8">
 		<div class="grid gap-4 xl:grid-cols-4">
 			<div class="order-2 space-y-4 xl:order-1 xl:col-span-3">
 				{#if title}
-					<div class="border-line p-6">
-						<article class="prose-lg">
-							<h2>{subTitle}</h2>
-						</article>
-						<div class="text-lg">{title}</div>
+					<div class="border-line">
+						<!-- bg-gradient-to-r from-tertiary-500 to-primary-500 p-4 pr-40 text-white -->
+						<div class="flex items-center gap-4">
+							<!-- {#if icon}
+								<Icon {icon} width="50" height="50" />
+							{/if} -->
+							<div class="p-6 space-y-2">
+								<article class="prose-lg">
+									<h1>{title}</h1>
+								</article>
+								<p class="text-surface-400">{subTitle}</p>
+							</div>
+						</div>
 					</div>
 				{/if}
-				<div class="{bgContent} col-span-full rounded-xl p-3 duration-200">
+				<div class="{bgContent} col-span-full rounded-xl p-3 duration-200 mx-4">
 					{@render children()}
 				</div>
 			</div>
 			<!-- มุมขวา -->
-			<div class="order-1 col-span-full xl:order-2 xl:col-span-1">
-				<div class="card bg-white p-3 duration-200 hover:shadow-md">
+			<div class="order-1 col-span-full max-lg:hidden xl:order-2 xl:col-span-1">
+				<div class="card bg-white p-3 shadow-lg duration-200 hover:shadow-md">
 					<div class="p-4">
 						<div class="text-2xl font-semibold">Menu</div>
 						<div class="text-sm font-light">Lorem ipsum dolor sit amet.</div>
