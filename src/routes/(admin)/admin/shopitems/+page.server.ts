@@ -18,6 +18,7 @@ const purifyEditData = z.object({
 	// )
 })
 
+
 export const load: PageServerLoad = async () => {
 	const shopItems = await db.shopItems.findMany({
 		select: {
@@ -34,11 +35,8 @@ export const load: PageServerLoad = async () => {
 
 export const actions = {
 	editItem: async ({ request }) => {
-		console.log("first")
 		const form = await superValidate(request, zod(purifyEditData));
-		console.log(form)
 		if (!form.valid) {
-			console.log(form)
 			return fail(400, { form });
 		}
 		try {
@@ -60,18 +58,20 @@ export const actions = {
 			return fail(500, { form, message: 'Database Error' });
 		}
 	},
-	delItem: async (e) => {
-		const formData = await e.request.formData();
-		const shopId = Number(formData.get('shopId'));
-		if (!shopId) {
-			return fail(400, { message: 'ไม่มีได้ไง' })
+	delItem: async ({ request }) => {
+		const form = await superValidate(request, zod(purifyEditData));
+		if (!form.valid) {
+			return fail(400, { form });
 		}
-		const delData = await db.shopItems.delete({
-			where: {
-				id: shopId
-			}
-		})
-		if (!delData) return fail(400, { message: 'Delete Failed' });
+		try {
+			await db.shopItems.delete({
+				where: {
+					id: form.data.id
+				}
+			})
+		} catch (error) {
+			fail(400, { message: 'Delete Failed' });
+		}
 
 	}
 };

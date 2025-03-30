@@ -29,7 +29,7 @@
 				await applyAction(result);
 			};
 		}} -->
-		<form use:enhance method="POST" action="?/editItem">
+		<form method="POST" action="?/editItem">
 			<input type="hidden" name="id" bind:value={$form.id} />
 			<input
 				type="text"
@@ -98,24 +98,25 @@
 									>
 								</td>
 								<td>
+									<!-- use:enhance={() => {
+										return async ({ result }) => {
+											if (result.type === 'failure') {
+												console.log('Error: ' + result.status);
+											}
+											if (result.type === 'success') {
+												alert('Yay!');
+											} else {
+												console.error('Invalid data or fetch failure');
+											}
+											await applyAction(result);
+										};
+									}} -->
 									<form
 										method="post"
 										action="?/delItem"
-										use:enhance={() => {
-											return async ({ result }) => {
-												if (result.type === 'failure') {
-													console.log('Error: ' + result.status);
-												}
-												if (result.type === 'success') {
-													alert('Yay!');
-												} else {
-													console.error('Invalid data or fetch failure');
-												}
-												await applyAction(result);
-											};
-										}}
+										
 									>
-										<input type="hidden" name="shopId" value={row.id} />
+										<input type="hidden" name="id" bind:value={row.id} />
 										<button type="submit" class="variant-filled-error btn">ลบแม่งเลย</button>
 									</form>
 								</td>
