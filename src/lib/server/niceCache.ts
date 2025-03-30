@@ -134,7 +134,7 @@ class RedisCache {
             await this.client.set(key, serializedData, {
                 EX: sec
             });
-            console.log(`🟢 Redis SET: ${key} (TTL: ${sec}s)`);
+            // console.log(`🟢 Redis SET: ${key} (TTL: ${sec}s)`);
         } catch (e) {
             // console.error('Redis SET error:', e);
             return null;
@@ -148,7 +148,7 @@ class RedisCache {
             const result = await this.client.get(key);
 
             if (!result) {
-                console.log(`🔴 Redis MISS: ${key}`);
+                // console.log(`🔴 Redis MISS: ${key}`);
                 return null;
             }
 

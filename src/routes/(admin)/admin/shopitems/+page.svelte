@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { TableHandler, Datatable } from '@vincjo/datatables';
+	import { superForm } from 'sveltekit-superforms';
 	import type { PageData, ActionData } from './$types';
 	import { applyAction, enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let { data }: { data: PageData } = $props();
+
+	const { form } = superForm(data.form);
 
 	const table = new TableHandler(data.colla, { rowsPerPage: 50 });
 	let editMenu: HTMLDialogElement | null = null;
-	let formData = $state({
-		id: 0,
-		title: ''
-	});
 </script>
 
 <dialog bind:this={editMenu}>
@@ -30,13 +29,19 @@
 				await applyAction(result);
 			};
 		}} -->
-		<form method="post" action="?/editItem">
-			<input type="hidden" name="shopId" value={formData.id} />
+		<form use:enhance method="POST" action="?/editItem">
+			<input type="hidden" name="id" bind:value={$form.id} />
 			<input
 				type="text"
 				class="input variant-filled-primary p-3"
 				name="title"
-				value={formData.title}
+				bind:value={$form.title}
+			/>
+			<input
+				type="text"
+				class="input variant-filled-primary p-3"
+				name="price"
+				bind:value={$form.price}
 			/>
 			<button type="submit" class="variant-filled-primary btn">แก้ไข</button>
 		</form>
@@ -46,7 +51,7 @@
 <div class="px-4">
 	<div class="gap-4 py-10 lg:flex">
 		<div class="bg-base rounded-md">
-			<ul class="p-4 max-lg:flex items-center gap-4">
+			<ul class="items-center gap-4 p-4 max-lg:flex">
 				<li><Icon icon="mdi:house" width="50" height="50" /></li>
 				<li><Icon icon="mdi:shopping" width="50" height="50" /></li>
 				<li><Icon icon="mdi:cart" width="50" height="50" /></li>
@@ -63,7 +68,7 @@
 						<tr>
 							<th>รายการสินค้า</th>
 							<th>ราคา</th>
-							<th>Command</th>
+							<!-- <th>Command</th> -->
 							<th colspan="2">กระทำ</th>
 						</tr>
 					</thead>
@@ -72,20 +77,22 @@
 							<tr>
 								<td class="">{row.title}</td>
 								<td>${row.price.toFixed(2)}</td>
-								<td
+								<!-- <td
 									>{#each row.itemCommand as item}
 										{item.itemCommand}
 									{/each}
-								</td>
+								</td> -->
 								<td>
 									<button
 										type="submit"
 										class="variant-filled-primary btn"
-										onclick={(e) => {
-											formData = {
-												id: row.id,
-												title: row.title
-											};
+										onclick={() => {
+											// $form = {
+											// 	...row,
+											// 	$form.id = row.id
+											// }
+											$form = row;
+
 											editMenu?.showModal();
 										}}>แก้ไข</button
 									>

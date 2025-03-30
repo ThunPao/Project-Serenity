@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { readReplicas } from '@prisma/extension-read-replicas';
-const replicaDb = process.env.DATABASE_URL_REPLICA;
+// import { readReplicas } from '@prisma/extension-read-replicas';
+// const replicaDb = process.env.DATABASE_URL_REPLICA;
 
 const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error'], // Enable query logging

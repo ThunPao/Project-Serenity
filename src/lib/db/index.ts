@@ -11,7 +11,7 @@ import { PrismaClient } from "@prisma/client"
 // replicaClient.$on('query', (event: any) => console.log('Replica event', event))
 
 export const db = new PrismaClient({
-  log: ['query', 'info', 'warn', 'error'],
+  // log: ['query', 'info', 'warn', 'error'],
 })
 // .$extends(
 //   readReplicas({
