@@ -3,7 +3,6 @@
 	import { superForm } from 'sveltekit-superforms';
 	import type { PageData, ActionData } from './$types';
 	import { applyAction, enhance } from '$app/forms';
-	import Icon from '@iconify/svelte';
 	import IconButton from '$lib/Components/IconButton.svelte';
 	let { data }: { data: PageData } = $props();
 

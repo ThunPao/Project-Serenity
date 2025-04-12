@@ -3,8 +3,10 @@ import { z } from "zod";
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from "../$types";
 import { error, fail } from "@sveltejs/kit";
-import { superValidate } from "sveltekit-superforms/server";
+import { superValidate } from "sveltekit-superforms";
 
+
+// Define outside the load function so the adapter can be cached
 const purifyEditData = z.object({
 	id: z.number({ required_error: "ไม่มีได้ไง" }),
 	title: z.string({ required_error: "ต้องการชื่อสินค้า" }).max(64),
