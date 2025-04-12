@@ -43,9 +43,9 @@
 	const tabSize = 36;
 </script>
 
-<AppBar background="bg-white dark:variant-filled-surface max-lg:hidden" padding="py-4 px-2" shadow="shadow-md">
+<AppBar background="bg-white dark:variant-filled-surface max-lg:hidden" padding="p-2" shadow="shadow-md">
 	<svelte:fragment slot="lead"
-		><a href="/" class="btn text-4xl font-bold">SERENITY</a>
+		><a href="/" class="btn text-2xl font-bold">SERENITY</a>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
 		{#if !$page.data.session}

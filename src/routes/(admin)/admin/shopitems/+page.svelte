@@ -4,6 +4,7 @@
 	import type { PageData, ActionData } from './$types';
 	import { applyAction, enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
+	import IconButton from '$lib/Components/IconButton.svelte';
 	let { data }: { data: PageData } = $props();
 
 	const { form } = superForm(data.form);
@@ -50,14 +51,14 @@
 </dialog>
 <div class="px-4">
 	<div class="gap-4 py-10 lg:flex">
-		<div class="bg-base rounded-md">
-			<ul class="items-center gap-4 p-4 max-lg:flex">
-				<li><Icon icon="mdi:house" width="50" height="50" /></li>
-				<li><Icon icon="mdi:shopping" width="50" height="50" /></li>
-				<li><Icon icon="mdi:cart" width="50" height="50" /></li>
-			</ul>
+		<div class="bg-base h-full rounded-md shadow-lg">
+			<div class="hidden lg:flex items-center gap-4 p-4 text-center lg:flex-col">
+				<IconButton width={50} height={50} icon="mdi:house-outline" text="Home"/>
+				<IconButton width={50} height={50} icon="mdi:shopping-outline" text="Shop Items"/>
+				<IconButton width={50} height={50} icon="mdi:cart-outline" text="Shop Cart"/>
+			</div>
 		</div>
-		<div class="h-full w-full rounded-md">
+		<div class="h-full w-full rounded-md shadow-md p-2">
 			<div class="flex items-center justify-between p-4">
 				<div class="text-lg">จำนวนสินค้าทั้งหมด {table.rows.length} รายการ</div>
 				<button class="variant-filled-primary btn">+ เพิ่มสินค้า</button>
@@ -111,11 +112,7 @@
 											await applyAction(result);
 										};
 									}} -->
-									<form
-										method="post"
-										action="?/delItem"
-										
-									>
+									<form method="post" action="?/delItem">
 										<input type="hidden" name="id" bind:value={row.id} />
 										<button type="submit" class="variant-filled-error btn">ลบแม่งเลย</button>
 									</form>

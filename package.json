@@ -10,6 +10,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
     "lint": "prettier --check .",
+    "gen": "prisma generate",
     "prisma:seed": "node --loader ts-node/esm prisma/seed.ts"
   },
   "devDependencies": {
@@ -26,7 +27,7 @@
     "prettier": "^3.3.2",
     "prettier-plugin-svelte": "^3.2.6",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "prisma": "^6.0.1",
+    "prisma": "^6.6.0",
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",
     "svelte-loading-spinners": "^0.3.6",
@@ -42,8 +43,9 @@
     "@auth/sveltekit": "^1.7.3",
     "@floating-ui/dom": "^1.6.12",
     "@mcpedb/query": "^1.0.3",
-    "@prisma/client": "^6.0.1",
+    "@prisma/client": "^6.6.0",
     "@vincjo/datatables": "^2.5.0",
+    "caniuse-lite": "^1.0.30001713",
     "rcon-client": "^4.2.5",
     "redis": "^4.7.0",
     "rollup-plugin-visualizer": "^5.12.0",
