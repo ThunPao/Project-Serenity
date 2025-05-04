@@ -14,7 +14,7 @@
 		subTitle,
 		linkPaths,
 		children,
-		bgContent = 'card bg-white hover:shadow-md',
+		bgContent = 'card bg-white hover:shadow-md p-3',
 		icon
 	}: {
 		title: String;
@@ -33,9 +33,9 @@
 	}
 </style> -->
 <main>
-	<div class="container mx-auto min-h-screen lg:pt-8">
-		<div class="grid gap-4 xl:grid-cols-4">
-			<div class="order-2 space-y-4 xl:order-1 xl:col-span-3">
+	<div class="container min-h-screen lg:pt-8">
+		<div class="flex gap-8">
+			<div class="order-1 col-span-3 w-full space-y-4 xl:order-2">
 				{#if title}
 					<div class="border-line">
 						<!-- bg-gradient-to-r from-tertiary-500 to-primary-500 p-4 pr-40 text-white -->
@@ -43,7 +43,7 @@
 							<!-- {#if icon}
 								<Icon {icon} width="50" height="50" />
 							{/if} -->
-							<div class="p-6 space-y-2">
+							<div class="space-y-2 p-6">
 								<article class="prose-lg">
 									<h1>{title}</h1>
 								</article>
@@ -52,12 +52,12 @@
 						</div>
 					</div>
 				{/if}
-				<div class="{bgContent} col-span-full rounded-xl p-3 duration-200 mx-4">
+				<div class="{bgContent} col-span-full rounded-xl duration-200">
 					{@render children()}
 				</div>
 			</div>
 			<!-- มุมขวา -->
-			<div class="order-1 col-span-full max-lg:hidden xl:order-2 xl:col-span-1">
+			<div class="order-2 min-w-64 flex-grow-0 max-lg:hidden xl:order-1">
 				<div class="card bg-white p-3 shadow-lg duration-200 hover:shadow-md">
 					<div class="p-4">
 						<div class="text-2xl font-semibold">Menu</div>
@@ -77,7 +77,7 @@
 									if (row.goto) goto(row.goto);
 								}}
 							>
-								<Icon icon={row.icon} width="1.5em" height="1.5em" />
+								<Icon icon={row.icon} width="2.5em" height="2.5em" />
 								<span class="flex-auto">{row.title}</span>
 							</button>
 							<hr class="mx-4 bg-surface-50 opacity-40" />

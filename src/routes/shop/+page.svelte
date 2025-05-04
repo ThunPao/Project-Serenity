@@ -112,7 +112,7 @@
 			{#each colla as row}
 				<button
 					title={row.title}
-					onclick={() => goto('/shop/' + encodeURIComponent(row.title))}
+					 onclick={() => goto('/shop/' + encodeURIComponent(row.title))}
 					class="overflow-hidden rounded-lg duration-200 hover:scale-105"
 				>
 					<img
