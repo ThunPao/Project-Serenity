@@ -45,6 +45,7 @@
     "@floating-ui/dom": "^1.6.12",
     "@mcpedb/query": "^1.0.3",
     "@prisma/client": "^6.6.0",
+    "@unpic/svelte": "^1.0.0",
     "@vincjo/datatables": "^2.5.0",
     "caniuse-lite": "^1.0.30001713",
     "rcon-client": "^4.2.5",

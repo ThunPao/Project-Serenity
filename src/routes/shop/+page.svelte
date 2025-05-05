@@ -108,7 +108,7 @@
 		</div>
 
 		<!-- Products Grid -->
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-8">
 			{#each colla as row}
 				<button
 					title={row.title}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import { Image } from '@unpic/svelte';
 	import {
 		AppBar,
 		Avatar,
@@ -43,9 +44,19 @@
 	const tabSize = 36;
 </script>
 
-<AppBar background="bg-white dark:variant-filled-surface max-lg:hidden" padding="p-2" shadow="shadow-md">
+<AppBar
+	background="bg-white dark:variant-filled-surface max-lg:hidden"
+	padding="p-2"
+	shadow="shadow-md"
+>
 	<svelte:fragment slot="lead"
-		><a href="/" class="btn text-2xl font-bold">SERENITY</a>
+		><Image
+			src="quartzblock.png"
+			layout="constrained"
+			width={64}
+			height={64}
+			alt="A lovely bath"
+		/><a href="/" class="btn text-2xl font-bold">SERENITY</a>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
 		{#if !$page.data.session}

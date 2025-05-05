@@ -15,7 +15,8 @@
 		linkPaths,
 		children,
 		bgContent = 'card bg-white hover:shadow-md p-3',
-		icon
+		icon,
+		menuGap = "gap-4"
 	}: {
 		title: String;
 		subTitle: string;
@@ -23,7 +24,16 @@
 		children: any;
 		bgContent?: string;
 		icon?: string;
+		menuGap?: string;
 	} = $props();
+	const activePath = (targetPath: string) => {
+	if (targetPath === '/') {
+		return currentPath === '/';
+	}
+	return currentPath.startsWith(targetPath + '/')
+		|| currentPath === targetPath;
+};
+
 </script>
 
 <!-- <style>
@@ -33,8 +43,8 @@
 	}
 </style> -->
 <main>
-	<div class="container min-h-screen lg:pt-8">
-		<div class="flex gap-8">
+	<div class="min-h-screen lg:pt-8">
+		<div class="xl:flex {menuGap}">
 			<div class="order-1 col-span-3 w-full space-y-4 xl:order-2">
 				{#if title}
 					<div class="border-line">
@@ -56,32 +66,35 @@
 					{@render children()}
 				</div>
 			</div>
-			<!-- มุมขวา -->
-			<div class="order-2 min-w-64 flex-grow-0 max-lg:hidden xl:order-1">
-				<div class="card bg-white p-3 shadow-lg duration-200 hover:shadow-md">
-					<div class="p-4">
-						<div class="text-2xl font-semibold">Menu</div>
-						<div class="text-sm font-light">Lorem ipsum dolor sit amet.</div>
-					</div>
-					<hr class="!border-t-2 opacity-40" />
-					<div class="flex flex-col space-y-2 rounded-lg p-3 py-2">
-						{#each sideBarList as row, index}
-							<button
-								class="inline-flex w-full items-center gap-2 rounded-lg p-2 text-start duration-100 hover:bg-surface-100"
-								type="button"
-								class:bg-surface-50-900-token={currentPath === row.goto}
-								class:text-base={currentPath === row.goto}
-								class:font-bold={currentPath === row.goto}
-								class:text-sm={currentPath !== row.goto}
-								onclick={() => {
-									if (row.goto) goto(row.goto);
-								}}
-							>
-								<Icon icon={row.icon} width="2.5em" height="2.5em" />
-								<span class="flex-auto">{row.title}</span>
-							</button>
-							<hr class="mx-4 bg-surface-50 opacity-40" />
-						{/each}
+			<!-- Menu -->
+			<div class="sticky top-0 order-2 min-w-64 flex-grow-0 max-lg:hidden xl:order-1">
+				<div class="fixed left-2 top-40 space-y-2">
+					<div class="menucard">SERENITY | เมนู</div>
+					<div class="menucard">
+						<!-- <div class="p-4">
+							<div class="text-2xl font-semibold">Menu</div>
+							<div class="text-sm font-light">Lorem ipsum dolor sit amet.</div>
+						</div> -->
+						<hr class="!border-t-2 opacity-40" />
+						<div class="flex flex-col space-y-2 rounded-lg px-3 py-2">
+							{#each sideBarList as row, index}
+								<button
+									class="inline-flex w-full items-center gap-2 rounded-lg border-white p-2 text-start duration-100 active:variant-filled-secondary hover:border-2"
+									type="button"
+									class:variant-filled-secondary={activePath(row.goto)}
+									class:text-base={activePath(row.goto)}
+									class:font-bold={activePath(row.goto)}
+									class:text-sm={currentPath != row.goto}
+									onclick={() => {
+										if (row.goto) goto(row.goto);
+									}}
+								>
+									<Icon icon={row.icon} width="2.5em" height="2.5em" />
+									<span class="flex-auto">{row.title}</span>
+								</button>
+								<hr class="mx-4 bg-surface-50 opacity-40" />
+							{/each}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -92,5 +105,8 @@
 <style>
 	.border-line {
 		border-bottom-right-radius: 80px;
+	}
+	.menucard {
+		@apply bg-white p-3 shadow-lg duration-200 max-xl:variant-glass-surface hover:shadow-md max-xl:text-surface-100;
 	}
 </style>

@@ -17,6 +17,7 @@
 	bgContent=""
 	title=""
 	subTitle=""
+	menuGap=""
 	linkPaths={[
 		{
 			title: 'ร้านค้า',
@@ -27,14 +28,16 @@
 >
 	<!-- Content -->
 	<div class="">
-		<div class="xl:flex justify-center items-center">
-			<div class="relative max-w-screen-lg duration-300" class:xl:max-w-screen-md={curVert > 30}>
+		<div class="items-center justify-center xl:flex">
+			<div
+				class="relative w-full max-w-screen-xl duration-300"
+				class:xl:max-w-screen-md={curVert > 30}
+			>
+				<!-- set height to control aspect ratio -->
 				<img
-					class="border-br-2 border-primary-500 lg:rounded-md"
+					class="border-br-2  border-primary-500 lg:rounded-md"
 					src="/background/bg.webp"
 					alt=""
-					width="1024"
-					height="500"
 					draggable="false"
 				/>
 				<div
@@ -50,8 +53,7 @@
 				</div>
 			</div>
 
-
-			<div class="grid min-w-96 text-center bg-surface-500">
+			<div class="grid min-w-96 bg-surface-500 text-center">
 				<!-- Topup No1 -->
 				<div class="h-full min-h-32 w-full text-center shadow-md">
 					<div class="flex h-full flex-col items-center justify-center text-white">
@@ -63,10 +65,7 @@
 				<hr class="hr mx-4" />
 				<!-- --- -->
 				<!-- Online Ingame -->
-				<a
-					href="#topOnline"
-					class="h-full min-h-32 w-full text-center no-underline shadow-md"
-				>
+				<a href="#topOnline" class="h-full min-h-32 w-full text-center no-underline shadow-md">
 					<div class="flex h-full flex-col items-center justify-center text-white">
 						<h1>🕛Player</h1>
 						<h5 class="font-bold">ออนไลน์สูงสุด 10 ชั่วโมง</h5>
