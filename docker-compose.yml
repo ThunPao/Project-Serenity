@@ -1,0 +1,39 @@
+services:
+  app:
+    build: .
+    container_name: svelte_app
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://serenity:myseritinere209@db:5432/postgres
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: serenity
+      POSTGRES_PASSWORD: myseritinere209
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+    container_name: redis_cache
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
