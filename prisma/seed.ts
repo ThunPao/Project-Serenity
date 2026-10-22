@@ -30,7 +30,7 @@ async function main() {
       data: {
         title: `Item ${i}`,
         description: `Description for item ${i}`,
-        imageUrl: `https://via.placeholder.com/150?text=Item+${i}`,
+        imageUrl: ``,
         price: i * 100,
         saleCount: Math.floor(Math.random() * 50),
         startDate: new Date(),

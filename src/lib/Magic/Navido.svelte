@@ -53,7 +53,7 @@
 	class:hidden={!isVisible}
 >
 	<div class="flex w-full flex-col justify-center">
-		<div class="flex h-full items-center justify-center">
+		<div class="z-50 flex h-full items-center justify-center">
 			<Circle3 size="60" unit="px" duration="1s" />
 		</div>
 		<div class="flex items-end justify-center text-center">

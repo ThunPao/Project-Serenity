@@ -1,5 +1,6 @@
 import { Rcon } from "rcon-client";
 import { RCON_PORT, RCON_PWD, SERVER_IP } from '$env/static/private';
+import { resolveMinecraftHost } from "$lib/server/checkOnline";
 
 class RconManager {
     private static instance: Rcon | null = null;
@@ -26,8 +27,9 @@ class RconManager {
         this.isConnecting = true;
 
         try {
+            const target = await resolveMinecraftHost(SERVER_IP);
             const rcon = await Rcon.connect({
-                host: SERVER_IP,
+                host: target.host,
                 port: Number(RCON_PORT),
                 password: RCON_PWD,
                 timeout: 5000, // 5 second timeout

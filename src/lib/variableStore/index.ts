@@ -2,27 +2,27 @@ const sideBarList = [
     {
         title: 'หน้าหลัก',
         goto: '/',
-        icon: 'mdi:house'
+        icon: 'lucide:home'
     },
     {
         title: 'ไอเทม',
         goto: '/shop',
-        icon: 'mdi:dots-grid'
+        icon: 'lucide:shopping-bag'
     },
     {
         title: 'เติมเงิน',
         goto: '/topup',
-        icon: 'mdi:hand-coin'
+        icon: 'lucide:wallet'
     },
     {
         title: 'กรอกรหัสคูปอง',
         goto: '/redeem',
-        icon: 'mdi:ticket-confirmation'
+        icon: 'lucide:ticket'
     },
     {
         title: 'ประวัติความเป็นมา',
         goto: '/aboutus',
-        icon: 'mdi:book-open-page-variant'
+        icon: 'lucide:book-open'
     },
 ];
 export { sideBarList }

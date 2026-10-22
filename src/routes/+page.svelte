@@ -54,19 +54,19 @@
 
 	const serverFeatures = [
 		{
-			icon: 'mdi:sword-cross',
+			icon: 'lucide:swords',
 			title: 'ระบบเอาชีวิตรอด & กิลด์',
 			desc: 'สร้างอาณาจักร ตั้งกิลด์ร่วมกับเพื่อน และเข้าร่วมศึกชิงดินแดนสุดเข้มข้น',
 			color: 'text-secondary-500 bg-secondary-500/10 dark:bg-secondary-500/20'
 		},
 		{
-			icon: 'mdi:scale-balance',
+			icon: 'lucide:coins',
 			title: 'ระบบเศรษฐกิจสมดุล',
 			desc: 'ตลาดกลาง Player Market ซื้อขายแลกเปลี่ยนผลผลิต ทุกสายอาชีพเติบโตได้',
 			color: 'text-tertiary-500 bg-tertiary-500/10 dark:bg-tertiary-500/20'
 		},
 		{
-			icon: 'mdi:shield-check',
+			icon: 'lucide:shield-check',
 			title: 'ระบบป้องกันแลนด์ปลอดภัย',
 			desc: 'ระบบเคลมพื้นที่และล็อกหีบ ปกป้องบ้านและไอเทมสำคัญของคุณตลอด 24 ชม.',
 			color: 'text-success-500 bg-success-500/10 dark:bg-success-500/20'
@@ -118,14 +118,14 @@
 			link: '/'
 		}
 	]}
-	icon="mdi:house"
+	icon="lucide:home"
 >
 	<div class="space-y-10 px-2 lg:px-4">
 		<!-- Bento Hero Section -->
 		<div class="grid grid-cols-1 gap-6 xl:grid-cols-12">
 			<!-- Main Hero Banner (xl: 8 cols) -->
 			<div
-				class="group relative -mx-2 flex min-h-[460px] flex-col justify-end overflow-hidden border-y border-surface-200/80 bg-surface-100 shadow-xl transition-all duration-300 sm:mx-0 sm:min-h-[480px] sm:rounded-2xl sm:border dark:border-surface-700/60 dark:bg-surface-800 xl:col-span-8 xl:h-full xl:min-h-full"
+				class="group relative -mx-2 flex min-h-[460px] flex-col justify-end overflow-hidden border-y border-surface-200/80 bg-surface-100 shadow-xl transition-all duration-300 dark:border-surface-700/60 dark:bg-surface-800 sm:mx-0 sm:min-h-[480px] sm:rounded-2xl sm:border xl:col-span-8 xl:h-full xl:min-h-full"
 			>
 				<img
 					class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
@@ -136,7 +136,7 @@
 
 				<!-- Ambient gradient backdrop to ensure full banner readability -->
 				<div
-					class="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface-950 via-surface-950/70 to-surface-950/25"
+					class="from-surface-950 via-surface-950/70 to-surface-950/25 pointer-events-none absolute inset-0 bg-gradient-to-t"
 				></div>
 
 				<!-- Top Glass Badges -->
@@ -177,7 +177,7 @@
 							title="คลิกเพื่อคัดลอก IP เซิร์ฟเวอร์"
 						>
 							<Icon
-								icon={copied ? 'mdi:check-circle' : 'mdi:content-copy'}
+								icon={copied ? 'lucide:check-check' : 'lucide:copy'}
 								class="h-4 w-4 text-secondary-400"
 							/>
 							<span>IP: <strong class="text-white">{serverIp}</strong></span>
@@ -190,7 +190,7 @@
 							href="#how-to-join"
 							class="btn btn-sm rounded-xl border border-white/20 bg-surface-800/80 font-semibold text-white shadow-md backdrop-blur-md hover:bg-surface-700/80"
 						>
-							<Icon icon="mdi:help-circle-outline" class="h-4 w-4" />
+							<Icon icon="lucide:book-open" class="h-4 w-4" />
 							<span>วิธีเข้าเล่น</span>
 						</a>
 
@@ -198,7 +198,7 @@
 							href="/shop"
 							class="variant-filled-secondary btn btn-sm rounded-xl font-bold shadow-md transition-transform active:scale-95"
 						>
-							<Icon icon="mdi:shopping" class="h-4 w-4" />
+							<Icon icon="lucide:shopping-bag" class="h-4 w-4" />
 							<span>ร้านค้าไอเทม</span>
 						</a>
 					</div>
@@ -236,11 +236,13 @@
 						<span
 							class="text-4xl font-extrabold tracking-tight {data.pAll === 'เซิร์ฟเวอร์ออฟไลน์'
 								? 'text-error-500'
-								: 'text-surface-900 dark:text-white'}"
+								: data.pAll === '0'
+									? 'text-success-600 dark:text-success-400'
+									: 'text-surface-900 dark:text-white'}"
 						>
-							{data.pAll}
+							{data.pAll === '0' ? 'ออนไลน์' : data.pAll}
 						</span>
-						{#if data.pAll !== 'เซิร์ฟเวอร์ออฟไลน์'}
+						{#if data.pAll !== 'เซิร์ฟเวอร์ออฟไลน์' && data.pAll !== '0'}
 							<span class="text-sm font-medium text-surface-500 dark:text-surface-400"
 								>คนออนไลน์</span
 							>
@@ -263,7 +265,7 @@
 				>
 					<div class="flex items-center gap-3">
 						<div class="rounded-xl bg-amber-500/10 p-3 text-amber-500 dark:bg-amber-500/20">
-							<Icon icon="mdi:trophy" class="h-6 w-6" />
+							<Icon icon="lucide:crown" class="h-6 w-6" />
 						</div>
 						<div>
 							<span
@@ -282,7 +284,7 @@
 						class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-secondary-600 hover:underline dark:text-secondary-400"
 					>
 						<span>สนับสนุนเซิร์ฟเวอร์ / เติมเงิน</span>
-						<Icon icon="mdi:arrow-right" class="h-3.5 w-3.5" />
+						<Icon icon="lucide:arrow-right" class="h-3.5 w-3.5" />
 					</a>
 				</div>
 
@@ -296,7 +298,7 @@
 							<div
 								class="rounded-xl bg-secondary-500/10 p-3 text-secondary-500 dark:bg-secondary-500/20"
 							>
-								<Icon icon="mdi:clock-fast" class="h-6 w-6" />
+								<Icon icon="lucide:flame" class="h-6 w-6" />
 							</div>
 							<div>
 								<span
@@ -309,10 +311,6 @@
 								</h3>
 							</div>
 						</div>
-						<Icon
-							icon="mdi:chevron-right"
-							class="h-5 w-5 text-surface-400 transition-transform group-hover:translate-x-1"
-						/>
 					</div>
 				</a>
 			</div>
@@ -321,7 +319,7 @@
 		<!-- How to Join Section (Intuitive & Easy to Use) -->
 		<div id="how-to-join" class="space-y-4">
 			<div class="flex items-center gap-2">
-				<Icon icon="mdi:gamepad-variant-outline" class="h-6 w-6 text-secondary-500" />
+				<Icon icon="lucide:gamepad-2" class="h-6 w-6 text-secondary-500" />
 				<h2 class="text-xl font-extrabold text-surface-900 dark:text-surface-50 sm:text-2xl">
 					วิธีเข้าร่วมเล่น {serverName}
 				</h2>
@@ -349,39 +347,11 @@
 			</div>
 		</div>
 
-		<!-- Server Highlights / Features (Informative) -->
-		<div class="space-y-4">
-			<div class="flex items-center gap-2">
-				<Icon icon="mdi:star-four-points-outline" class="h-6 w-6 text-amber-500" />
-				<h2 class="text-xl font-extrabold text-surface-900 dark:text-surface-50 sm:text-2xl">
-					จุดเด่นและระบบในเซิร์ฟเวอร์
-				</h2>
-			</div>
-
-			<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-				{#each serverFeatures as feature}
-					<div
-						class="card rounded-2xl border border-surface-200/80 bg-white/95 p-6 text-surface-900 shadow-md backdrop-blur-md transition-all hover:shadow-lg dark:border-surface-700/60 dark:bg-surface-800/90 dark:text-surface-50"
-					>
-						<div class="inline-flex rounded-xl p-3 {feature.color}">
-							<Icon icon={feature.icon} class="h-6 w-6" />
-						</div>
-						<h3 class="mt-4 text-base font-bold text-surface-900 dark:text-surface-50">
-							{feature.title}
-						</h3>
-						<p class="mt-2 text-xs leading-relaxed text-surface-500 dark:text-surface-400">
-							{feature.desc}
-						</p>
-					</div>
-				{/each}
-			</div>
-		</div>
-
 		<!-- Leaderboard Section -->
 		<div id="topOnline" class="space-y-6 pt-2">
 			<div>
 				<div class="flex items-center gap-2">
-					<Icon icon="mdi:medal-outline" class="h-6 w-6 text-amber-500" />
+					<Icon icon="lucide:trophy" class="h-6 w-6 text-amber-500" />
 					<h2 class="text-xl font-extrabold text-surface-900 dark:text-surface-50 sm:text-2xl">
 						อันดับเวลาผู้เล่นออนไลน์สะสมสูงสุด
 					</h2>

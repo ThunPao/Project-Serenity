@@ -43,10 +43,14 @@
 		<div class="xl:flex {menuGap}">
 			<div class="order-1 col-span-3 w-full space-y-4 xl:order-2">
 				{#if title}
-					<div class="border-line border border-surface-200/60 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-surface-700/60 dark:bg-surface-800/80">
+					<div
+						class="border-line border-surface-200/60 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-surface-700/60 dark:bg-surface-800/80"
+					>
 						<div class="flex items-center gap-4">
 							{#if icon}
-								<div class="rounded-xl bg-secondary-500/10 p-3 text-secondary-500 dark:bg-secondary-500/20">
+								<div
+									class="rounded-xl bg-secondary-500/10 p-3 text-secondary-500 dark:bg-secondary-500/20"
+								>
 									<Icon {icon} width="36" height="36" />
 								</div>
 							{/if}
