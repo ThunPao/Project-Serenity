@@ -1,6 +1,8 @@
 import { createClient } from 'redis';
 import type { RedisClientType } from 'redis';
 
+const isRedisDisabled = () => process.env.ENABLE_REDIS === 'false';
+
 class RedisCache {
     private static client: RedisClientType;
     private static isInitialized = false;
@@ -13,6 +15,7 @@ class RedisCache {
     private static reconnectTimeout: NodeJS.Timeout | null = null;
 
     private static async initialize() {
+        if (isRedisDisabled()) return;
         if (this.isInitialized) return;
         if (this.isConnecting) {
             await this.waitForConnection();
@@ -124,6 +127,7 @@ class RedisCache {
     }
 
     static async set(key: string, data: any, sec = 60) {
+        if (isRedisDisabled()) return null;
         try {
             await this.initialize();
             const serializedData = JSON.stringify({
@@ -143,6 +147,7 @@ class RedisCache {
     }
 
     static async get(key: string) {
+        if (isRedisDisabled()) return null;
         try {
             await this.initialize();
             const result = await this.client.get(key);
@@ -161,6 +166,7 @@ class RedisCache {
     }
 
     static async clear(key?: string) {
+        if (isRedisDisabled()) return;
         try {
             await this.initialize();
             if (key) {
@@ -177,6 +183,7 @@ class RedisCache {
     }
 
     static async disconnect() {
+        if (isRedisDisabled()) return;
         if (this.reconnectTimeout) {
             clearTimeout(this.reconnectTimeout);
             this.reconnectTimeout = null;
@@ -197,6 +204,7 @@ class RedisCache {
     }
 
     static async getTTL(key: string): Promise<number> {
+        if (isRedisDisabled()) return -2;
         try {
             await this.initialize();
             return this.client.ttl(key);
@@ -215,6 +223,9 @@ export async function cacheFetch<T>(
         sec?: number
     }
 ): Promise<T> {
+    if (isRedisDisabled()) {
+        return fetchCallback();
+    }
     const { sec = 300 } = options || {};
 
     try {
@@ -245,6 +256,7 @@ export async function setCache<T>(
         forceOverwrite?: boolean;
     }
 ): Promise<void> {
+    if (isRedisDisabled()) return;
     const {
         ttl = 300,
         forceOverwrite = true

@@ -50,13 +50,10 @@
 	shadow="shadow-md"
 >
 	<svelte:fragment slot="lead"
-		><Image
-			src="quartzblock.png"
-			layout="constrained"
-			width={64}
-			height={64}
-			alt="A lovely bath"
-		/><a href="/" class="btn text-2xl font-bold">SERENITY</a>
+		><Image src="minecha.png" layout="constrained" width={64} height={64} alt="A lovely bath" /><a
+			href="/"
+			class="btn text-2xl font-black tracking-wide text-surface-900 dark:text-surface-50">MineCha</a
+		>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
 		{#if !$page.data.session}

@@ -8,6 +8,7 @@
 	import FooterBar from '$lib/Widgets/FooterBar.svelte';
 
 	import { page } from '$app/stores';
+	import { onNavigate } from '$app/navigation';
 	import {
 		initializeStores,
 		Drawer,
@@ -23,6 +24,17 @@
 	let { children } = $props();
 	const drawerStore = getDrawerStore();
 	export const toastStore = getToastStore();
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 
 	const usrSession: UserSession | null = $page.data.session?.user
 		? {

@@ -37,19 +37,19 @@ export const load: PageServerLoad = async (event) => {
         return error(404);
     }
     interface ShopInfo {
-        // id: number;
+        id: number;
         title: string;
         description: string | null;
         imageUrl: string;
         checkOnline: boolean;
-        price: number
+        price: number;
     }
     const shopInfo = await cacheFetch<ShopInfo | null>(
         `${valla.shop.INFO}:${title}`,
         () => db.shopItems.findFirst({
             where: { title: { contains: title, mode: "insensitive" } },
             select: {
-                // id: true,
+                id: true,
                 title: true,
                 description: true,
                 imageUrl: true,
@@ -60,9 +60,9 @@ export const load: PageServerLoad = async (event) => {
         sec: 1800
     }
     );
-    if (!shopInfo) return error(404)
-    return { colla: shopInfo }
-}
+    if (!shopInfo) return error(404);
+    return { colla: shopInfo };
+};
 
 interface QueueItem {
     userId: string;
@@ -74,8 +74,6 @@ const updateQueue = new Map<string, QueueItem>();
 const QUEUE_PROCESS_INTERVAL = 10000; // 10 seconds
 let queueProcessorRunning = false;
 
-
-
 const queueDatabaseUpdate = (userId: string, points: number) => {
     updateQueue.set(userId, {
         userId,
@@ -86,7 +84,6 @@ const queueDatabaseUpdate = (userId: string, points: number) => {
     // Start queue processor if not running
     setTimeout(processQueue, QUEUE_PROCESS_INTERVAL);
 };
-
 
 const processQueue = async () => {
     if (queueProcessorRunning) return;
@@ -124,11 +121,8 @@ const processQueue = async () => {
     }
 };
 
-
 const COOLDOWN_MS = 1000; // Cooldown period in milliseconds
 const userCooldowns: Record<string, number> = {}; // Store timestamps for each user (use session/user ID in production)
-
-
 
 export const actions = {
     default: async (event) => {
@@ -151,20 +145,19 @@ export const actions = {
                 sec: 3600,
             }
         );
-        if (!session) return fail(401, { message: "กรุณาเข้าสู่ระบบ" })
+        if (!session) return fail(401, { message: "กรุณาเข้าสู่ระบบ" });
 
         const now = Date.now();
         const lastAction = userCooldowns[session.userId] || 0;
         if (now - lastAction < COOLDOWN_MS) {
-            return fail(400, { message: "รอคูลดาวน์นะจ๊ะ" })
+            return fail(400, { message: "รอคูลดาวน์นะจ๊ะ" });
         }
         // Update the last action timestamp
         userCooldowns[session.userId] = now;
 
-
         if (!RconManager) return fail(404, {
             message: "เซิร์ฟเวอร์ออฟไลน์"
-        })
+        });
 
         interface CachedShopInfo {
             title: string;
@@ -188,15 +181,15 @@ export const actions = {
         }
         );
 
-        if (!shop) return fail(404, { message: "Item not found" })
+        if (!shop) return fail(404, { message: "Item not found" });
         if (shop.checkOnline) {
             // Check Online
-            const isOnline = await CheckOnline("I3a0")
-            if (!isOnline.type) return fail(isOnline.code, { message: isOnline.message })
+            const isOnline = await CheckOnline("I3a0");
+            if (!isOnline.type) return fail(isOnline.code, { message: isOnline.message });
         }
 
         const curPlayer = session.user;
-        if (!curPlayer) return fail(401, { message: "ไม่พบบัญชี" })
+        if (!curPlayer) return fail(401, { message: "ไม่พบบัญชี" });
         const playerPoints = curPlayer.points || 0;
         const shopPrice = shop.price;
 
@@ -209,8 +202,8 @@ export const actions = {
         }
         if (shop.itemCommand) {
             shop.itemCommand.forEach((item) => {
-                RconManager.executeCommand(String(item.itemCommand))
-            })
+                RconManager.executeCommand(String(item.itemCommand));
+            });
         }
 
         const remainingPoints = playerPoints - shopPrice;
@@ -233,23 +226,10 @@ export const actions = {
         }
         // Store data into Server
         try {
-            // implement this part to have queue of data so it will call it after period of time to prevent user from spamming server query
-            // await db.user.update({
-            //     where: {
-            //         id: session.userId
-            //     },
-            //     data: {
-            //         points: remainingPoints
-            //     },
-            //     select: {
-            //         points: true
-            //     }
-            // })
             queueDatabaseUpdate(session.userId, remainingPoints);
         } catch (error) {
-            return fail(500, { message: "เกิดข้อผิดพลาด" })
+            return fail(500, { message: "เกิดข้อผิดพลาด" });
         }
-        return { status: 200, success: true, message: `ซื้อไอเทม ${shop.title} สำเร็จ` }
-
+        return { status: 200, success: true, message: `ซื้อไอเทม ${shop.title} สำเร็จ` };
     }
-}
+};

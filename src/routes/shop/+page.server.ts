@@ -39,7 +39,8 @@ export const load: PageServerLoad = async (event) => {
                     id: true,
                     title: true,
                     price: true,
-                    imageUrl: true
+                    imageUrl: true,
+                    catId: true
                 }
             });
 
@@ -62,16 +63,12 @@ export const load: PageServerLoad = async (event) => {
     return {
         colla: data,
         catta: shopCat.map((cat) => ({
+            id: cat.id,
             title: cat.title,
             count: cat._count.shopItem,
         }))
     };
 }
-
-// let filters = {
-//     title: "",
-//     page: 0,
-// }
 
 export const actions = {
     searchItem: async (e) => {
@@ -95,7 +92,7 @@ export const actions = {
             return fail(404, { notFound: true });
         }
 
-        const result = await cacheFetch<{ id: number; title: string; price: number }[]>(
+        const result = await cacheFetch<{ id: number; title: string; price: number; imageUrl?: string; catId?: number }[]>(
             `${valla.shop.SEARCH}:${title}`,
             async () => {
                 console.log(`🔍 Fetching search results for title: ${title}`);
@@ -105,13 +102,14 @@ export const actions = {
                         id: true,
                         title: true,
                         price: true,
+                        imageUrl: true,
+                        catId: true
                     },
                 });
             },
             { sec: 3600 }
         );
         if (!result) return fail(404, { notFound: true });
-        return result
+        return result;
     }
-}
-
+};
